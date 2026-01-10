@@ -24,12 +24,6 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v6
 
-      - name: Build Lean files
-        uses: leanprover/lean-action@v1.3.0
-        with:
-          mk_all-check: true
-          lake-package-directory: Lean
-
       - name: Remove annotations
         run: |
           find . -type f -name "*.lean" -print0 | while IFS= read -r -d $'\0' file; do
@@ -47,6 +41,12 @@ jobs:
           git commit -m "Deploy: Sync clean code from main branch" --allow-empty
           git push -f origin HEAD:refs/heads/release
         if: github.ref == 'refs/heads/main'
+
+      - name: Build Lean files
+        uses: leanprover/lean-action@v1.3.0
+        with:
+          mk_all-check: true
+          lake-package-directory: Lean
 
       - name: Cache Mathlib Docs
         uses: actions/cache@v4

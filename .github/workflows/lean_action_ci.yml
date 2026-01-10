@@ -35,7 +35,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Lean/Dicksons
+          git add Lean/Dicksons Lean/Dicksons.lean
           git rm --cached -r Verso site
           git commit -m "Deploy: Sync clean code from main branch" --allow-empty
           git push -f origin HEAD:refs/heads/release

@@ -1,14 +1,13 @@
-# Polychromatic Repository - Copilot Instructions
+# Dicksons Repository - Copilot Instructions
 
 ## Repository Overview
 
-This repository contains a formalization of polychromatic colourings of integers in the Lean theorem prover. Given a finite set S of integers, a colouring is S-polychromatic if every translate of S contains an element of each colour class. The primary goal is to prove that for any set S of size 4, there exists an S-polychromatic colouring in 3 colours.
+This repository contains a formalisation of Dickson's classification theorem for finite subgroups of PGL(2,F) over algebraically closed fields in the Lean theorem prover. The classification divides finite subgroups into several families based on the relationship between the group order and the characteristic of the field.
 
 **Project Type**: Mathematical theorem proving + Website generation  
 **Primary Language**: Lean 4 (formal proof)  
-**Supporting Languages**: C++, Python, Ruby/Jekyll  
-**Repository Size**: ~1.7GB (includes dependencies)  
-**Source Code**: ~1,122 lines of Lean proofs
+**Supporting Languages**: Ruby/Jekyll  
+**Primary Dependencies**: Mathlib, Subverso, Verso
 
 ## Critical Build Requirements
 
@@ -35,17 +34,17 @@ lake build          # Only after cache is downloaded
   ├── workflows/
   │   └── lean_action_ci.yml  # Main CI pipeline
   └── dependabot.yml    # Dependency update config
-Generation/             # C++ code generation tools
 Lean/                   # Main Lean 4 proof code
 Verso/                  # Website generation code (Lean)
 site/                   # Jekyll website source
-requirements.txt        # Python dependencies (z3-solver, tqdm)
-README.md              # Project documentation
+scripts/                # Build scripts
+requirements.txt        # Python dependencies
+README.md               # Project documentation
 ```
 
 ### Lean Directory (`Lean/`)
 **Location**: `/Lean`  
-**Purpose**: Main Lean 4 formalization code  
+**Purpose**: Main Lean 4 formalisation code  
 **Toolchain**: `leanprover/lean4:v4.25.0-rc2`  
 **Build System**: Lake (Lean's build tool)
 
@@ -54,21 +53,27 @@ Lean/
 ├── lakefile.toml           # Lake build configuration
 ├── lean-toolchain          # Specifies Lean version
 ├── lake-manifest.json      # Dependency lock file
-├── Polychromatic.lean      # Root module (imports all)
-└── Polychromatic/          # Source files
-    ├── Basic.lean          # Basic definitions
-    ├── Colouring.lean      # Colouring definitions
-    ├── DiscreteProbability.lean
-    ├── Existence.lean
-    ├── ForMathlib/         # Utilities for mathlib
-    │   └── Misc.lean
-    ├── LocalLemma.lean
-    ├── LovaszFunction.lean
-    └── Main.lean           # Main theorem (currently sorry)
+├── Dicksons.lean           # Root module (imports all)
+└── Dicksons/               # Source files
+    ├── Ch4_PGLIsoPSLOverAlgClosedField/
+    │   └── ProjectiveGeneralLinearGroup.lean  # PGL ≃ PSL isomorphism
+    ├── Ch5_PropertiesOfSLOverAlgClosedField/
+    │   ├── S1_SpecialMatrices.lean      # Shear, diagonal, rotation matrices
+    │   ├── S2_SpecialSubgroups.lean     # Important subgroups
+    │   ├── S3_JordanNormalFormOfSL.lean # Jordan normal form
+    │   ├── S4_PropertiesOfCentralizers.lean
+    │   └── S5_PropertiesOfNormalizers.lean
+    ├── Ch6_MaximalAbelianSubgroupClassEquation/
+    │   ├── S1_ElementaryAbelian.lean    # Elementary abelian groups
+    │   ├── S2_A_MaximalAbelianSubgroup.lean
+    │   ├── S2_B_MaximalAbelianSubgroup.lean
+    │   └── S3_NoncenterClassEquation.lean
+    ├── Ch7_DicksonsClassificationTheorem.lean  # Main theorem (with sorry)
+    └── draft.lean
 ```
 
 **Key Configuration** (`lakefile.toml`):
-- Project name: `polychromatic`
+- Project name: `dicksons`
 - Dependencies: mathlib, subverso
 - Linter rules enabled: line length (100 chars), multiGoal, flexible tactics
 
@@ -81,11 +86,13 @@ Lean/
 Verso/
 ├── lakefile.toml           # Separate Lake config
 ├── lean-toolchain          # Different Lean version!
-├── PolychromaticMain.lean  # Entry point for docs generation
-├── PolychromaticSite.lean  # Site content definitions
-├── PolychromaticSite/      # Site content modules
+├── DicksonsMain.lean       # Entry point for docs generation
+├── DicksonsSite.lean       # Site content definitions
+├── DicksonsSite/           # Site content modules
+│   ├── Expanders.lean      # Custom expanders (e.g., Mermaid diagrams)
+│   └── Main.lean
 └── Berso/                  # Blog generation framework
-    └── BersoBlog/
+    └── Main.lean
 ```
 
 **Important**: Verso uses a **different Lean version** (nightly-2025-07-06) than the main project.
@@ -102,14 +109,10 @@ site/
 ├── _includes/              # HTML partials
 ├── _layouts/               # Page templates
 ├── _sass/                  # Stylesheets
+├── _pages/                 # Verso-generated content
 ├── -verso-css/             # Verso-generated CSS
 └── -verso-js/              # Verso-generated JS
 ```
-
-### Generation Directory (`Generation/`)
-**Location**: `/Generation`  
-**Purpose**: C++ code for generating explicit colourings  
-**File**: `coloring-integers.cpp` - Generates periodic colourings for quadruples
 
 ## Build and Validation Workflow
 
@@ -125,7 +128,7 @@ lake exe cache get
 lake build
 
 # STEP 3: Build specific module (faster)
-lake build Polychromatic
+lake build Dicksons
 ```
 
 **Common Issues**:
@@ -153,7 +156,7 @@ cd site
 bundle install
 
 # Build site
-bundle exec jekyll build --destination ../_site --baseurl "/Polychromatic"
+bundle exec jekyll build --destination ../_site --baseurl "/Dicksons"
 
 # Or serve locally for development
 bundle exec jekyll serve
@@ -205,14 +208,14 @@ g++ -O3 -fopenmp coloring-integers.cpp -o coloring-integers
 
 ### Modifying Lean Proofs
 
-1. Edit `.lean` files in `Lean/Polychromatic/`
+1. Edit `.lean` files in `Lean/Dicksons/`
 2. Check syntax: Files should type-check in your editor (VS Code with Lean extension)
 3. Build to verify: `cd Lean && lake build`
 4. **Do not** remove `-- ANCHOR:` comments - they're used for documentation extraction
 
 ### Modifying Website Content
 
-1. Edit Lean documentation in `Verso/PolychromaticSite/`
+1. Edit Lean documentation in `Verso/DicksonsSite.lean` or `Verso/DicksonsSite/`
 2. Regenerate: `cd Verso && lake exe docs`
 3. Check output in `site/_pages/`
 4. Build site: `cd site && bundle exec jekyll build`
@@ -221,7 +224,7 @@ g++ -O3 -fopenmp coloring-integers.cpp -o coloring-integers
 
 1. Edit files in `site/_layouts/`, `site/_includes/`, or `site/_sass/`
 2. Test locally: `cd site && bundle exec jekyll serve`
-3. View at `http://localhost:4000/Polychromatic/`
+3. View at `http://localhost:4000/Dicksons/`
 
 ## Common Pitfalls and Workarounds
 
@@ -248,7 +251,6 @@ g++ -O3 -fopenmp coloring-integers.cpp -o coloring-integers
 **Solution**: Install elan (Lean version manager):
 ```bash
 curl https://elan.lean-lang.org/elan-init.sh -sSf | sh
-# Or on Ubuntu: sudo apt-get install elan
 ```
 
 ### 6. Git Ignores
@@ -275,23 +277,14 @@ Configured in `Lean/lakefile.toml`:
 - No multiple active goals in tactics
 - No rigid tactics after flexible tactics
 
-### Python Dependencies
-File: `requirements.txt`
-```
-tqdm==4.67.1        # Progress bars
-z3-solver==4.15.0.0 # SMT solver
-```
-
-Install: `pip install -r requirements.txt`
-
 ## Key Architectural Notes
 
-1. **Main Theorem**: Located in `Lean/Polychromatic/Main.lean`, currently contains `sorry` (unfinished proof)
-2. **Mathlib Dependency**: Heavy use of mathlib for basic mathematics
+1. **Main Theorem**: Located in `Lean/Dicksons/Ch7_DicksonsClassificationTheorem.lean`
+2. **Mathlib Dependency**: Heavy use of mathlib for linear algebra and group theory
 3. **Subverso**: Used for documentation generation (literate programming)
 4. **Annotation System**: `-- ANCHOR:` and `-- ANCHOR_END:` mark code sections for documentation
 5. **Release Branch**: The `release` branch contains cleaned code without annotations
-6. **GitHub Pages**: Published from artifacts, available at `https://b-mehta.github.io/Polychromatic/`
+6. **GitHub Pages**: Published from artifacts via GitHub Actions, available at `https://AlexBrodbelt.github.io/Dicksons
 
 ## Quick Reference Commands
 
@@ -303,7 +296,7 @@ cd Lean && lake exe cache get && lake build
 cd Lean && lake build
 
 # Build single module
-cd Lean && lake build Polychromatic.Colouring
+cd Lean && lake build Dicksons.Ch4_PGLisoPSLOverAlgClosedField.ProjectiveGeneralLinearGroup
 
 # Generate documentation
 cd Verso && lake exe docs
@@ -321,6 +314,31 @@ cd Lean && lake clean
 cd Lean && lake update
 ```
 
+## Mathematical Content
+
+### Dickson's Classification Theorem
+
+The theorem classifies finite subgroups of SL(2,F) over algebraically closed fields:
+
+**Class I** (characteristic coprime to group order):
+- Cyclic groups
+- Dihedral groups
+- SL(2, F₃) - Binary tetrahedral group
+- SL(2, F₅) - Binary icosahedral group
+- GL(2, F₃) - Extended binary octahedral group
+
+**Class II** (characteristic divides group order):
+- Elementary abelian p-groups with normal structure
+- Dihedral groups (when p = 2)
+- SL(2, F_q) for finite fields
+- Extensions of SL(2, F_q)
+
+### Key Definitions
+
+- **Special Matrices**: Shear `s(σ)`, diagonal `d(δ)`, rotation `w`
+- **Elementary Abelian**: Subgroups where every non-identity element has order p
+- **Maximal Abelian Subgroups**: Used in the classification structure
+
 ## Trust These Instructions
 
-This documentation has been tested and validated. If something doesn't work as described, verify you're running commands in the correct directory and have run prerequisites (especially `lake exe cache get`). Only search for additional information if these instructions are incomplete or produce errors you cannot resolve by following the troubleshooting steps.
+This documentation has been validated for the Dicksons project. If something doesn't work as described, verify you're running commands in the correct directory and have run prerequisites (especially `lake exe cache get`). Only search for additional information if these instructions are incomplete or produce errors you cannot resolve by following the troubleshooting steps.

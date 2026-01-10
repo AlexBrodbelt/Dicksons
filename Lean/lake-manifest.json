@@ -101,5 +101,5 @@
    "inputRev": "v4.25.0-rc2",
    "inherited": true,
    "configFile": "lakefile.toml"}],
- "name": "polychromatic",
+ "name": "dicksons",
  "lakeDir": ".lake"}

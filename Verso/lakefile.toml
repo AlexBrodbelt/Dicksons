@@ -1,4 +1,4 @@
-name = "polychromaticSite"
+name = "dicksonsSite"
 defaultTargets = ["docs"]
 
 [[require]]
@@ -15,8 +15,8 @@ rev = "main"
 name = "Berso"
 
 [[lean_lib]]
-name = "PolychromaticSite"
+name = "DicksonsSite"
 
 [[lean_exe]]
 name = "docs"
-root = "PolychromaticMain"
+root = "DicksonsMain"

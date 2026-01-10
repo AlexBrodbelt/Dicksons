@@ -18,7 +18,7 @@ version = "0.1.0"
 packagesDir = "../.lake/packages"
 
 [[require]]
-name = "Polychromatic"
+name = "Dicksons"
 path = "../"
 
 [[require]]
@@ -34,4 +34,4 @@ cd docbuild
 MATHLIB_NO_CACHE_ON_UPDATE=1 ~/.elan/bin/lake update doc-gen4
 
 # Build the docs
-DISABLE_EQUATIONS=1 ~/.elan/bin/lake build Polychromatic:docs
+DISABLE_EQUATIONS=1 ~/.elan/bin/lake build Dicksons:docs

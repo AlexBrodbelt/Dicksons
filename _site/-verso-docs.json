@@ -1,0 +1,151 @@
+{"9":
+ "<code>PGL.{u_1, u_2} (n : Type u_1) [DecidableEq n] [Fintype n] (R : Type u_2) [CommRing R] : Type (max (max u_1 u_2) u_2 u_1)</code><span class=\"sep\"></span><code class=\"docstring\">`PGL n R` is the projective special linear group `(GL n R)/ Z(GL(n R))`. </code>",
+ "88": "<code>Finite 𝕂</code>",
+ "87": "<code>CharP 𝕂 p</code>",
+ "86": "<code>Field 𝕂</code>",
+ "85":
+ "<code>Equiv.Perm.{u_1} (α : Sort u_1) : Sort (max 1 u_1)</code><span class=\"sep\"></span><code class=\"docstring\">`Perm α` is the type of bijections from `α` to itself. </code>",
+ "84":
+ "<code>alternatingGroup.{u_1} (α : Type u_1) [Fintype α] [DecidableEq α] : Subgroup (Equiv.Perm α)</code><span class=\"sep\"></span><code class=\"docstring\">The alternating group on a finite type, realized as a subgroup of `Equiv.Perm`.\nFor $A_n$, use `alternatingGroup (Fin n)`. </code>",
+ "83":
+ "<code>AlgebraicClosure.{u} (k : Type u) [Field k] : Type u</code><span class=\"sep\"></span><code class=\"docstring\">The canonical algebraic closure of a field, the direct limit of adding roots to the field for\neach polynomial over the field. </code>",
+ "82": "<code>Subgroup (PGL (Fin 2) (AlgebraicClosure (ZMod p)))</code>",
+ "81": "<code>Type u_3</code>",
+ "80":
+ "<code>FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod.{u_3} {p : ℕ} [Fact (Nat.Prime p)] (𝕂 : Type u_3)\n  [Field 𝕂] [CharP 𝕂 p] [Finite 𝕂] (G : Subgroup (PGL (Fin 2) (AlgebraicClosure (ZMod p)))) [hG : Finite ↥G] :\n  IsCyclic ↥G ∨\n    ∃ n,\n      Isomorphic (↥G) (DihedralGroup n) ∨\n        Isomorphic ↥G ↥(alternatingGroup (Fin 4)) ∨\n          Isomorphic (↥G) (Equiv.Perm (Fin 5)) ∨\n            Isomorphic ↥G ↥(alternatingGroup (Fin 5)) ∨\n              Isomorphic (↥G) (PSL (Fin 2) 𝕂) ∨ Isomorphic (↥G) (PGL (Fin 2) 𝕂)</code>",
+ "8":
+ "<code>PSL.{u_1, u_2} (n : Type u_1) [DecidableEq n] [Fintype n] (R : Type u_2) [CommRing R] : Type (max (max u_1 u_2) u_2 u_1)</code><span class=\"sep\"></span><code class=\"docstring\">`PSL(n, R)` is the projective special linear group `SL(n, R)/Z(SL(n, R))`. </code>",
+ "79":
+ "<code>HPow.hPow.{u, v, w} {α : Type u} {β : Type v} {γ : outParam (Type w)} [self : HPow α β γ] : α → β → γ</code><span class=\"sep\"></span><code class=\"docstring\">`a ^ b` computes `a` to the power of `b`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `^` in identifiers is `pow`.</code>",
+ "78":
+ "<code>And (a b : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`And a b`, or `a ∧ b`, is the conjunction of propositions. It can be\nconstructed and destructed like a pair: if `ha : a` and `hb : b` then\n`⟨ha, hb⟩ : a ∧ b`, and if `h : a ∧ b` then `h.left : a` and `h.right : b`.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∧` in identifiers is `and`.\n\n * The recommended spelling of `/\\` in identifiers is `and` (prefer `∧` over `/\\`).</code>",
+ "77":
+ "<code>Dvd.dvd.{u_1} {α : Type u_1} [self : Dvd α] : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">Divisibility. `a ∣ b` (typed as `\\|`) means that there is some `c` such that `b = a * c`. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∣` in identifiers is `dvd`.</code>",
+ "76": "<code>Fact (Nat.Prime p)</code>",
+ "75":
+ "<code>True : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`True` is a proposition and has only an introduction rule, `True.intro : True`.\nIn other words, `True` is simply true, and has a canonical proof, `True.intro`\nFor more information: [Propositional Logic](https://lean-lang.org/theorem_proving_in_lean4/propositions_and_proofs.html#propositional-logic)\n</code>",
+ "74": "<code>↥G ≃* SL(2, GaloisField p ↑k)</code>",
+ "73": "<code>GaloisField p (2 * ↑k)</code>",
+ "72":
+ "<code>GaloisField (p : ℕ) [Fact (Nat.Prime p)] (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">A finite field with `p ^ n` elements.\nEvery field with the same cardinality is (non-canonically)\nisomorphic to this field. </code>",
+ "71":
+ "<code>Odd.{u_2} {α : Type u_2} [Semiring α] (a : α) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">An element `a` of a semiring is odd if there exists `k` such `a = 2*k + 1`. </code>",
+ "70":
+ "<code>Subgroup.Normal.{u_1} {G : Type u_1} [Group G] (H : Subgroup G) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">A subgroup `H` is normal if whenever `n ∈ H`, then `g * n * g⁻¹ ∈ H` for every `g : G` </code>",
+ "7":
+ "<code>IsAlgClosed.{u} (k : Type u) [Field k] : Prop</code><span class=\"sep\"></span><code class=\"docstring\">Typeclass for algebraically closed fields.\n\nTo show `Polynomial.Splits p f` for an arbitrary ring homomorphism `f`,\nsee `IsAlgClosed.splits_codomain` and `IsAlgClosed.splits_domain`.\n</code>",
+ "69": "<code>p ∣ Nat.card ↥G</code>",
+ "68":
+ "<code>Nat.Prime (p : ℕ) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Nat.Prime p` means that `p` is a prime number, that is, a natural number\nat least 2 whose only divisors are `p` and `1`.\nThe theorem `Nat.prime_def` witnesses this description of a prime number. </code>",
+ "67":
+ "<code>Fact (p : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">Wrapper for adding elementary propositions to the type class systems.\nWarning: this can easily be abused. See the rest of this docstring for details.\n\nCertain propositions should not be treated as a class globally,\nbut sometimes it is very convenient to be able to use the type class system\nin specific circumstances.\n\nFor example, `ZMod p` is a field if and only if `p` is a prime number.\nIn order to be able to find this field instance automatically by type class search,\nwe have to turn `p.prime` into an instance implicit assumption.\n\nOn the other hand, making `Nat.prime` a class would require a major refactoring of the library,\nand it is questionable whether making `Nat.prime` a class is desirable at all.\nThe compromise is to add the assumption `[Fact p.prime]` to `ZMod.field`.\n\nIn particular, this class is not intended for turning the type class system\ninto an automated theorem prover for first-order logic. </code>",
+ "66":
+ "<code>dicksons_classification_theorem_class_II.{u_1} {F : Type u_1} [Field F] [IsAlgClosed F] {p : ℕ} [Fact (Nat.Prime p)]\n  [CharP F p] (G : Subgroup SL(2, F)) [Finite ↥G] (hp : p ∣ Nat.card ↥G) :\n  ∃ Q,\n    IsElementaryAbelian p Q ∧ Q.Normal ∧ Isomorphic ↥G ↥Q ∨\n      (p = 2 ∧ ∃ n, Odd n ∧ Isomorphic (↥G) (DihedralGroup n)) ∨\n        Isomorphic ↥G SL(2, ZMod 5) ∨\n          ∃ k, Isomorphic ↥G SL(2, GaloisField p ↑k) ∨ ∃ k x, orderOf x ^ 2 = p ^ ↑k ∧ ∃ φ, True</code>",
+ "65":
+ "<code class=\"docstring\">The `sorry` tactic is a temporary placeholder for an incomplete tactic proof,\nclosing the main goal using `exact sorry`.\n\nThis is intended for stubbing-out incomplete parts of a proof while still having a syntactically correct proof skeleton.\nLean will give a warning whenever a proof uses `sorry`, so you aren't likely to miss it,\nbut you can double check if a theorem depends on `sorry` by looking for `sorryAx` in the output\nof the `#print axioms my_thm` command, the axiom used by the implementation of `sorry`.\n</code>",
+ "64":
+ "<code>Matrix.GeneralLinearGroup.{u, v} (n : Type u) (R : Type v) [DecidableEq n] [Fintype n] [Semiring R] : Type (max v u)</code><span class=\"sep\"></span><code class=\"docstring\">`GL n R` is the group of `n` by `n` `R`-matrices with unit determinant.\nDefined as a subtype of matrices </code>",
+ "63":
+ "<code>Or (a b : Prop) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`Or a b`, or `a ∨ b`, is the disjunction of propositions. There are two\nconstructors for `Or`, called `Or.inl : a → a ∨ b` and `Or.inr : b → a ∨ b`,\nand you can use `match` or `cases` to destruct an `Or` assumption into the\ntwo cases.\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `∨` in identifiers is `or`.\n\n * The recommended spelling of `\\/` in identifiers is `or` (prefer `∨` over `\\/`).</code>",
+ "62": "<code>Finite ↥G</code>",
+ "61":
+ "<code>Matrix.SpecialLinearGroup.{u, v} (n : Type u) [DecidableEq n] [Fintype n] (R : Type v) [CommRing R] : Type (max 0 u v)</code><span class=\"sep\"></span><code class=\"docstring\">`SpecialLinearGroup n R` is the group of `n` by `n` `R`-matrices with determinant equal to 1.\n</code>",
+ "60": "<code>CharP F p</code>",
+ "6":
+ "<code>Field.{u} (K : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">A `Field` is a `CommRing` with multiplicative inverses for nonzero elements.\n\nAn instance of `Field K` includes maps `ratCast : ℚ → K` and `qsmul : ℚ → K → K`.\nThose two fields are needed to implement the `DivisionRing K → Algebra ℚ K` instance since we need\nto control the specific definitions for some special cases of `K` (in particular `K = ℚ` itself).\nSee also note [forgetful inheritance].\n\nIf the field has positive characteristic `p`, our division by zero convention forces\n`ratCast (1 / p) = 1 / 0 = 0`. </code>",
+ "59":
+ "<code>Nat : Type</code><span class=\"sep\"></span><code class=\"docstring\">The natural numbers, starting at zero.\n\nThis type is special-cased by both the kernel and the compiler, and overridden with an efficient\nimplementation. Both use a fast arbitrary-precision arithmetic library (usually\n[GMP](https://gmplib.org/)); at runtime, `Nat` values that are sufficiently small are unboxed.\n</code>",
+ "58": "<code>IsAlgClosed F</code>",
+ "57":
+ "<code>PNat : Type</code><span class=\"sep\"></span><code class=\"docstring\">`ℕ+` is the type of positive natural numbers. It is defined as a subtype,\nand the VM representation of `ℕ+` is the same as `ℕ` because the proof\nis not stored. </code>",
+ "56":
+ "<code>Fin (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">Natural numbers less than some upper bound.\n\nIn particular, a `Fin n` is a natural number `i` with the constraint that `i &lt; n`. It is the\ncanonical type with `n` elements.\n</code>",
+ "55":
+ "<code class=\"docstring\">`GL n R` is the group of `n` by `n` `R`-matrices with unit determinant.\nDefined as a subtype of matrices </code>",
+ "54":
+ "<code>ZMod : ℕ → Type</code><span class=\"sep\"></span><code class=\"docstring\">The integers modulo `n : ℕ`. </code>",
+ "53": "<code>ℕ+</code>",
+ "52":
+ "<code>DihedralGroup (n : ℕ) : Type</code><span class=\"sep\"></span><code class=\"docstring\">For `n ≠ 0`, `DihedralGroup n` represents the symmetry group of the regular `n`-gon.\n`r i` represents the rotations of the `n`-gon by `2πi/n`, and `sr i` represents the reflections of\nthe `n`-gon. `DihedralGroup 0` corresponds to the infinite dihedral group.\n</code>",
+ "51":
+ "<code>Isomorphic.{u_1, u_2} (G : Type u_1) (H : Type u_2) [Group G] [Group H] : Prop</code>",
+ "50":
+ "<code>IsCyclic.{u} (G : Type u) [Pow G ℤ] : Prop</code><span class=\"sep\"></span><code class=\"docstring\">A group is called *cyclic* if it is generated by a single element. </code>",
+ "5":
+ "<code>DecidableEq.{u} (α : Sort u) : Sort (max 1 u)</code><span class=\"sep\"></span><code class=\"docstring\">Propositional equality is `Decidable` for all elements of a type.\n\nIn other words, an instance of `DecidableEq α` is a means of deciding the proposition `a = b` is\nfor all `a b : α`.\n</code>",
+ "49":
+ "<code>Nat.card.{u_3} (α : Type u_3) : ℕ</code><span class=\"sep\"></span><code class=\"docstring\">`Nat.card α` is the cardinality of `α` as a natural number.\nIf `α` is infinite, `Nat.card α = 0`. </code>",
+ "48":
+ "<code>Nat.Coprime (m n : ℕ) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">`m` and `n` are coprime, or relatively prime, if their `gcd` is 1. </code>",
+ "47": "<code>p = 0 ∨ (Nat.card ↥G).Coprime p</code>",
+ "46":
+ "<code>Finite.{u_3} (α : Sort u_3) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">A type is `Finite` if it is in bijective correspondence to some `Fin n`.\n\nThis is similar to `Fintype`, but `Finite` is a proposition rather than data.\nA particular benefit to this is that `Finite` instances are definitionally equal to one another\n(due to proof irrelevance) rather than being merely propositionally equal,\nand, furthermore, `Finite` instances generally avoid the need for `Decidable` instances.\nOne other notable difference is that `Finite` allows there to be `Finite p` instances\nfor all `p : Prop`, which is not allowed by `Fintype` due to universe constraints.\nAn application of this is that `Finite (x ∈ s → β x)` follows from the general instance for pi\ntypes, assuming `[∀ x, Finite (β x)]`.\nImplementation note: this is a reason `Finite α` is not defined as `Nonempty (Fintype α)`.\n\nEvery `Fintype` instance provides a `Finite` instance via `Finite.of_fintype`.\nConversely, one can noncomputably create a `Fintype` instance from a `Finite` instance\nvia `Fintype.ofFinite`. In a proof one might write\n```lean\n  have := Fintype.ofFinite α\n```\nto obtain such an instance.\n\nDo not write noncomputable `Fintype` instances; instead write `Finite` instances\nand use this `Fintype.ofFinite` interface.\nThe `Fintype` instances should be relied upon to be computable for evaluation purposes.\n\nTheorems should use `Finite` instead of `Fintype`, unless definitions in the theorem statement\nrequire `Fintype`.\nDefinitions should prefer `Finite` as well, unless it is important that the definitions\nare meant to be computable in the reduction or `#eval` sense.\n</code>",
+ "45": "<code>Subgroup SL(2, F)</code>",
+ "44":
+ "<code>Prime.{u_1} {M : Type u_1} [CommMonoidWithZero M] (p : M) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">An element `p` of a commutative monoid with zero (e.g., a ring) is called *prime*,\nif it's not zero, not a unit, and `p ∣ a * b → p ∣ a ∨ p ∣ b` for all `a`, `b`. </code>",
+ "43": "<code>Prime p</code>",
+ "42":
+ "<code>CharP.{u_2} (R : Type u_2) [AddMonoidWithOne R] (p : outParam ℕ) : Prop</code><span class=\"sep\"></span><code class=\"docstring\">The generator of the kernel of the unique homomorphism ℕ → R for a semiring R.\n\n*Warning*: for a semiring `R`, `CharP R 0` and `CharZero R` need not coincide.\n* `CharP R 0` asks that only `0 : ℕ` maps to `0 : R` under the map `ℕ → R`;\n* `CharZero R` requires an injection `ℕ ↪ R`.\n\nFor instance, endowing `{0, 1}` with addition given by `max` (i.e. `1` is absorbing), shows that\n`CharZero {0, 1}` does not hold and yet `CharP {0, 1} 0` does.\nThis example is formalized in `Counterexamples/CharPZeroNeCharZero.lean`.\n</code>",
+ "41":
+ "<code>dicksons_classification_theorem_class_I.{u_1} {n : ℕ+} {F : Type u_1} [Field F] [IsAlgClosed F] {p : ℕ} [CharP F p]\n  (hp : Prime p) (G : Subgroup SL(2, F)) [Finite ↥G] (hp' : p = 0 ∨ (Nat.card ↥G).Coprime p) :\n  IsCyclic ↥G ∨\n    Isomorphic (↥G) (DihedralGroup ↑n) ∨\n      Isomorphic ↥G SL(2, ZMod 3) ∨ Isomorphic ↥G SL(2, ZMod 5) ∨ Isomorphic (↥G) (GL (Fin 2) (ZMod 3))</code>",
+ "40":
+ "<code>orderOf.{u_1} {G : Type u_1} [Monoid G] (x : G) : ℕ</code><span class=\"sep\"></span><code class=\"docstring\">`orderOf x` is the order of the element `x`, i.e. the `n ≥ 1`, s.t. `x ^ n = 1` if it exists.\nOtherwise, i.e. if `x` is of infinite order, then `orderOf x` is `0` by convention. </code>",
+ "4":
+ "<code>Fintype.{u_4} (α : Type u_4) : Type u_4</code><span class=\"sep\"></span><code class=\"docstring\">`Fintype α` means that `α` is finite, i.e. there are only\nfinitely many distinct elements of type `α`. The evidence of this\nis a finset `elems` (a list up to permutation without duplicates),\ntogether with a proof that everything of type `α` is in the list. </code>",
+ "39": "<code>↥H</code>",
+ "38":
+ "<code>IsMulCommutative.{u_2} (M : Type u_2) [Mul M] : Prop</code><span class=\"sep\"></span><code class=\"docstring\">A Prop stating that the multiplication is commutative. </code>",
+ "37":
+ "<code class=\"docstring\">The universe of propositions. `Prop ≡ Sort 0`.\n\nEvery proposition is propositionally equal to either `True` or `False`. </code>",
+ "36":
+ "<code>Subgroup.{u_3} (G : Type u_3) [Group G] : Type u_3</code><span class=\"sep\"></span><code class=\"docstring\">A subgroup of a group `G` is a subset containing 1, closed under multiplication\nand closed under multiplicative inverse. </code>",
+ "35": "<code>Subgroup G</code>",
+ "34":
+ "<code>Group.{u} (G : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">A `Group` is a `Monoid` with an operation `⁻¹` satisfying `a⁻¹ * a = 1`.\n\nThere is also a division operation `/` such that `a / b = a * b⁻¹`,\nwith a default so that `a / b = a * b⁻¹` holds by definition.\n\nUse `Group.ofLeftAxioms` or `Group.ofRightAxioms` to define a group structure\non a type with the minimum proof obligations.\n</code>",
+ "33":
+ "<code>IsElementaryAbelian.{u_1} {G : Type u_1} [Group G] (p : ℕ) (H : Subgroup G) : Prop</code>",
+ "32": "<code>SpecialMatrices.w.{u} {F : Type u} [Field F] : SL(2, F)</code>",
+ "31":
+ "<code class=\"docstring\">Normalize numerical expressions. Supports the operations `+` `-` `*` `/` `⁻¹` `^` and `%`\nover numerical types such as `ℕ`, `ℤ`, `ℚ`, `ℝ`, `ℂ` and some general algebraic types,\nand can prove goals of the form `A = B`, `A ≠ B`, `A &lt; B` and `A ≤ B`, where `A` and `B` are\nnumerical expressions. It also has a relatively simple primality prover.\n</code>",
+ "30":
+ "<code>Inv.inv.{u} {α : Type u} [self : Inv α] : α → α</code><span class=\"sep\"></span><code class=\"docstring\">`a⁻¹` computes the inverse of `a`.\nThe meaning of this notation is type-dependent. \n\nConventions for notations in identifiers:\n\n * The recommended spelling of `⁻¹` in identifiers is `inv`.</code>",
+ "3":
+ "<code class=\"docstring\">The syntax `variable (X Y ... Z : Type*)` creates a new distinct implicit universe variable\n`&gt; 0` for each variable in the sequence. </code>",
+ "29":
+ "<code>Units.{u} (α : Type u) [Monoid α] : Type u</code><span class=\"sep\"></span><code class=\"docstring\">Units of a `Monoid`, bundled version. Notation: `αˣ`.\n\nAn element of a `Monoid` is a unit if it has a two-sided inverse.\nThis version bundles the inverse element so that it can be computed.\nFor a predicate see `IsUnit`. </code>",
+ "28": "<code>Fˣ</code>",
+ "27":
+ "<code>SpecialMatrices.d.{u} {F : Type u} [Field F] (δ : Fˣ) : SL(2, F)</code>",
+ "26":
+ "<code class=\"docstring\">The `simp` tactic uses lemmas and hypotheses to simplify the main goal target or\nnon-dependent hypotheses. It has many variants:\n- `simp` simplifies the main goal target using lemmas tagged with the attribute `[simp]`.\n- `simp [h₁, h₂, ..., hₙ]` simplifies the main goal target using the lemmas tagged\n  with the attribute `[simp]` and the given `hᵢ`'s, where the `hᵢ`'s are expressions.-\n- If an `hᵢ` is a defined constant `f`, then `f` is unfolded. If `f` has equational lemmas associated\n  with it (and is not a projection or a `reducible` definition), these are used to rewrite with `f`.\n- `simp [*]` simplifies the main goal target using the lemmas tagged with the\n  attribute `[simp]` and all hypotheses.\n- `simp only [h₁, h₂, ..., hₙ]` is like `simp [h₁, h₂, ..., hₙ]` but does not use `[simp]` lemmas.\n- `simp [-id₁, ..., -idₙ]` simplifies the main goal target using the lemmas tagged\n  with the attribute `[simp]`, but removes the ones named `idᵢ`.\n- `simp at h₁ h₂ ... hₙ` simplifies the hypotheses `h₁ : T₁` ... `hₙ : Tₙ`. If\n  the target or another hypothesis depends on `hᵢ`, a new simplified hypothesis\n  `hᵢ` is introduced, but the old one remains in the local context.\n- `simp at *` simplifies all the hypotheses and the target.\n- `simp [*] at *` simplifies target and all (propositional) hypotheses using the\n  other hypotheses.\n</code>",
+ "25":
+ "<code>Eq.{u_1} {α : Sort u_1} : α → α → Prop</code><span class=\"sep\"></span><code class=\"docstring\">The equality relation. It has one introduction rule, `Eq.refl`.\nWe use `a = b` as notation for `Eq a b`.\nA fundamental property of equality is that it is an equivalence relation.\n```\nvariable (α : Type) (a b c d : α)\nvariable (hab : a = b) (hcb : c = b) (hcd : c = d)\n\nexample : a = d :=\n  Eq.trans (Eq.trans hab (Eq.symm hcb)) hcd\n```\nEquality is much more than an equivalence relation, however. It has the important property that every assertion\nrespects the equivalence, in the sense that we can substitute equal expressions without changing the truth value.\nThat is, given `h1 : a = b` and `h2 : p a`, we can construct a proof for `p b` using substitution: `Eq.subst h1 h2`.\nExample:\n```\nexample (α : Type) (a b : α) (p : α → Prop)\n        (h1 : a = b) (h2 : p a) : p b :=\n  Eq.subst h1 h2\n\nexample (α : Type) (a b : α) (p : α → Prop)\n    (h1 : a = b) (h2 : p a) : p b :=\n  h1 ▸ h2\n```\nThe triangle in the second presentation is a macro built on top of `Eq.subst` and `Eq.symm`, and you can enter it by typing `\\t`.\nFor more information: [Equality](https://lean-lang.org/theorem_proving_in_lean4/quantifiers_and_equality.html#equality)\n\n\nConventions for notations in identifiers:\n\n * The recommended spelling of `=` in identifiers is `eq`.</code>",
+ "24":
+ "<code>Matrix.det.{v, u_2} {n : Type u_2} [DecidableEq n] [Fintype n] {R : Type v} [CommRing R] (M : Matrix n n R) : R</code><span class=\"sep\"></span><code class=\"docstring\">The determinant of a matrix given by the Leibniz formula. </code>",
+ "23": "<code>Field F</code>",
+ "22":
+ "<code>CommRing.{u} (α : Type u) : Type u</code><span class=\"sep\"></span><code class=\"docstring\">A commutative ring is a ring with commutative multiplication. </code>",
+ "21": "<code>CommRing R</code>",
+ "20":
+ "<code class=\"docstring\">A type universe. `Type ≡ Type 0`, `Type u ≡ Sort (u + 1)`. </code>",
+ "2": "<code>Type u_2</code>",
+ "19":
+ "<code class=\"docstring\">`by tac` constructs a term of the expected type by running the tactic(s) `tac`. </code>",
+ "18":
+ "<code>Subtype.mk.{u} {α : Sort u} {p : α → Prop} (val : α) (property : p val) : Subtype p</code>",
+ "17": "<code>ℕ</code>",
+ "16":
+ "<code class=\"docstring\">`SpecialLinearGroup n R` is the group of `n` by `n` `R`-matrices with determinant equal to 1.\n</code>",
+ "15": "<code>Type u</code>",
+ "14": "<code>F</code>",
+ "13":
+ "<code>SpecialMatrices.s.{u} {F : Type u} [Field F] (σ : F) : SL(2, F)</code>",
+ "12":
+ "<code>Bijective_PSL_monoidHom_PGL.{u_1, u_2} (n : Type u_1) (F : Type u_2) [hn₁ : Fintype n] [DecidableEq n] [Field F]\n  [IsAlgClosed F] : Bijective ⇑(PSL_monoidHom_PGL n F)</code>",
+ "11":
+ "<code>PSL_monoidHom_PGL.{u_1, u_2} (n : Type u_1) (R : Type u_2) [Fintype n] [DecidableEq n] [CommRing R] : PSL n R →* PGL n R</code>",
+ "10":
+ "<code>MulEquiv.ofBijective.{u_10, u_11, u_9} {M : Type u_9} {N : Type u_10} {F : Type u_11} [Mul M] [Mul N] [FunLike F M N]\n  [MulHomClass F M N] (f : F) (hf : Bijective ⇑f) : M ≃* N</code><span class=\"sep\"></span><code class=\"docstring\">A bijective `Semigroup` homomorphism is an isomorphism </code>",
+ "1": "<code>Type u_1</code>",
+ "0":
+ "<code>PGL_iso_PSL.{u_1, u_2} (n : Type u_1) (F : Type u_2) [Fintype n] [DecidableEq n] [Field F] [IsAlgClosed F] :\n  PSL n F ≃* PGL n F</code>"}

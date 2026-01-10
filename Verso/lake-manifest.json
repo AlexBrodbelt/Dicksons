@@ -41,5 +41,5 @@
    "inputRev": "main",
    "inherited": true,
    "configFile": "lakefile.lean"}],
- "name": "polychromaticSite",
+ "name": "dicksonsSite",
  "lakeDir": ".lake"}

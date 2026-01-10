@@ -1,0 +1,1262 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Index | Dickson’s Classification Theorem</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="Index" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dickson&#39;s Classification Theorem Overview This repository provides a formalisation in the Lean 4 theorem prover of results related to Dickson&#39;s classification theorem for finite subgroups of \text{SL}(2, F) and \text{PGL}(2, F) over algebraically closed fields. The classification of finite subgroups of linear groups is a classical topic in group theory, with applications to algebraic geometry, representation theory, and number theory. Dickson&#39;s theorem provides a complete classification of finite subgroups of \text{SL}(2, F) when F is an algebraically closed field. Mathematical Background Special Linear Groups The special linear group \text{SL}(n, F) consists of all n \times n matrices with determinant 1 over the field F. For n = 2, this group has a rich structure that allows for a complete classification of its finite subgroups. Projective Linear Groups The projective general linear group \text{PGL}(n, F) is the quotient of the general linear group \text{GL}(n, F) by its center. Similarly, the projective special linear group \text{PSL}(n, F) is the quotient of \text{SL}(n, F) by its center. Over an algebraically closed field, these projective groups are isomorphic: noncomputable def PGL_iso_PSL (n F : Type*) [Fintype n] [DecidableEq n] [Field F] [IsAlgClosed F] : PSL n F ≃* PGL n F := MulEquiv.ofBijective (PSL_monoidHom_PGL n F) (Bijective_PSL_monoidHom_PGL n F) Special Matrices We define several important families of matrices in \text{SL}(2, F): Shear Matrices The shear matrix s(\sigma) for \sigma \in F: def s (σ : F) : SL(2,F) := ⟨!![1, 0; σ, 1], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field Fσ:F⊢ !![1, 0; σ, 1].det = 1 simpAll goals completed! 🐙⟩ These matrices satisfy s(\sigma) \cdot s(\mu) = s(\sigma + \mu). Diagonal Matrices The diagonal matrix d(\delta) for \delta \in F^\times: def d (δ : Fˣ) : SL(2, F) := ⟨!![(δ : F), 0; 0 , δ⁻¹], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field Fδ:Fˣ⊢ !![↑δ, 0; 0, (↑δ)⁻¹].det = 1 norm_numAll goals completed! 🐙⟩ These matrices satisfy d(\delta) \cdot d(\rho) = d(\delta \rho). Rotation Matrix The rotation matrix w: def w : SL(2, F) := ⟨!![0,1;-1,0], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field F⊢ !![0, 1; -1, 0].det = 1 norm_numAll goals completed! 🐙⟩ This satisfies w^2 = -1. Elementary Abelian Subgroups A subgroup H is called elementary abelian of exponent p if it is abelian and every non-identity element has order p: def IsElementaryAbelian {G : Type*} [Group G] (p : ℕ) (H : Subgroup G) : Prop := IsMulCommutative H ∧ ∀ h : H, h ≠ 1 → orderOf h = p Dickson&#39;s Classification Theorem Main Theorem Structure The classification divides finite subgroups of \text{SL}(2, F) into several cases based on the relationship between the group and its Sylow p-subgroups, where p is the characteristic of the field. The following diagram illustrates the structure of the classification: graph TD" />
+<meta property="og:description" content="Dickson&#39;s Classification Theorem Overview This repository provides a formalisation in the Lean 4 theorem prover of results related to Dickson&#39;s classification theorem for finite subgroups of \text{SL}(2, F) and \text{PGL}(2, F) over algebraically closed fields. The classification of finite subgroups of linear groups is a classical topic in group theory, with applications to algebraic geometry, representation theory, and number theory. Dickson&#39;s theorem provides a complete classification of finite subgroups of \text{SL}(2, F) when F is an algebraically closed field. Mathematical Background Special Linear Groups The special linear group \text{SL}(n, F) consists of all n \times n matrices with determinant 1 over the field F. For n = 2, this group has a rich structure that allows for a complete classification of its finite subgroups. Projective Linear Groups The projective general linear group \text{PGL}(n, F) is the quotient of the general linear group \text{GL}(n, F) by its center. Similarly, the projective special linear group \text{PSL}(n, F) is the quotient of \text{SL}(n, F) by its center. Over an algebraically closed field, these projective groups are isomorphic: noncomputable def PGL_iso_PSL (n F : Type*) [Fintype n] [DecidableEq n] [Field F] [IsAlgClosed F] : PSL n F ≃* PGL n F := MulEquiv.ofBijective (PSL_monoidHom_PGL n F) (Bijective_PSL_monoidHom_PGL n F) Special Matrices We define several important families of matrices in \text{SL}(2, F): Shear Matrices The shear matrix s(\sigma) for \sigma \in F: def s (σ : F) : SL(2,F) := ⟨!![1, 0; σ, 1], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field Fσ:F⊢ !![1, 0; σ, 1].det = 1 simpAll goals completed! 🐙⟩ These matrices satisfy s(\sigma) \cdot s(\mu) = s(\sigma + \mu). Diagonal Matrices The diagonal matrix d(\delta) for \delta \in F^\times: def d (δ : Fˣ) : SL(2, F) := ⟨!![(δ : F), 0; 0 , δ⁻¹], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field Fδ:Fˣ⊢ !![↑δ, 0; 0, (↑δ)⁻¹].det = 1 norm_numAll goals completed! 🐙⟩ These matrices satisfy d(\delta) \cdot d(\rho) = d(\delta \rho). Rotation Matrix The rotation matrix w: def w : SL(2, F) := ⟨!![0,1;-1,0], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field F⊢ !![0, 1; -1, 0].det = 1 norm_numAll goals completed! 🐙⟩ This satisfies w^2 = -1. Elementary Abelian Subgroups A subgroup H is called elementary abelian of exponent p if it is abelian and every non-identity element has order p: def IsElementaryAbelian {G : Type*} [Group G] (p : ℕ) (H : Subgroup G) : Prop := IsMulCommutative H ∧ ∀ h : H, h ≠ 1 → orderOf h = p Dickson&#39;s Classification Theorem Main Theorem Structure The classification divides finite subgroups of \text{SL}(2, F) into several cases based on the relationship between the group and its Sylow p-subgroups, where p is the characteristic of the field. The following diagram illustrates the structure of the classification: graph TD" />
+<link rel="canonical" href="https://alexbrodbelt.github.io/Dicksons/index" />
+<meta property="og:url" content="https://alexbrodbelt.github.io/Dicksons/index" />
+<meta property="og:site_name" content="Dickson’s Classification Theorem" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Index" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Dickson&#39;s Classification Theorem Overview This repository provides a formalisation in the Lean 4 theorem prover of results related to Dickson&#39;s classification theorem for finite subgroups of \\text{SL}(2, F) and \\text{PGL}(2, F) over algebraically closed fields. The classification of finite subgroups of linear groups is a classical topic in group theory, with applications to algebraic geometry, representation theory, and number theory. Dickson&#39;s theorem provides a complete classification of finite subgroups of \\text{SL}(2, F) when F is an algebraically closed field. Mathematical Background Special Linear Groups The special linear group \\text{SL}(n, F) consists of all n \\times n matrices with determinant 1 over the field F. For n = 2, this group has a rich structure that allows for a complete classification of its finite subgroups. Projective Linear Groups The projective general linear group \\text{PGL}(n, F) is the quotient of the general linear group \\text{GL}(n, F) by its center. Similarly, the projective special linear group \\text{PSL}(n, F) is the quotient of \\text{SL}(n, F) by its center. Over an algebraically closed field, these projective groups are isomorphic: noncomputable def PGL_iso_PSL (n F : Type*) [Fintype n] [DecidableEq n] [Field F] [IsAlgClosed F] : PSL n F ≃* PGL n F := MulEquiv.ofBijective (PSL_monoidHom_PGL n F) (Bijective_PSL_monoidHom_PGL n F) Special Matrices We define several important families of matrices in \\text{SL}(2, F): Shear Matrices The shear matrix s(\\sigma) for \\sigma \\in F: def s (σ : F) : SL(2,F) := ⟨!![1, 0; σ, 1], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field Fσ:F⊢ !![1, 0; σ, 1].det = 1 simpAll goals completed! 🐙⟩ These matrices satisfy s(\\sigma) \\cdot s(\\mu) = s(\\sigma + \\mu). Diagonal Matrices The diagonal matrix d(\\delta) for \\delta \\in F^\\times: def d (δ : Fˣ) : SL(2, F) := ⟨!![(δ : F), 0; 0 , δ⁻¹], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field Fδ:Fˣ⊢ !![↑δ, 0; 0, (↑δ)⁻¹].det = 1 norm_numAll goals completed! 🐙⟩ These matrices satisfy d(\\delta) \\cdot d(\\rho) = d(\\delta \\rho). Rotation Matrix The rotation matrix w: def w : SL(2, F) := ⟨!![0,1;-1,0], byR:Type uF:Type uinst✝¹:CommRing Rinst✝:Field F⊢ !![0, 1; -1, 0].det = 1 norm_numAll goals completed! 🐙⟩ This satisfies w^2 = -1. Elementary Abelian Subgroups A subgroup H is called elementary abelian of exponent p if it is abelian and every non-identity element has order p: def IsElementaryAbelian {G : Type*} [Group G] (p : ℕ) (H : Subgroup G) : Prop := IsMulCommutative H ∧ ∀ h : H, h ≠ 1 → orderOf h = p Dickson&#39;s Classification Theorem Main Theorem Structure The classification divides finite subgroups of \\text{SL}(2, F) into several cases based on the relationship between the group and its Sylow p-subgroups, where p is the characteristic of the field. The following diagram illustrates the structure of the classification: graph TD","headline":"Index","url":"https://alexbrodbelt.github.io/Dicksons/index"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/Dicksons/assets/css/style.css?v=94bf1e8a0008be40beac1a56850da4af0ac8061d">
+    <script src="/Dicksons/assets/js/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta charset="UTF-8"/>
+
+<!-- Check if the current page requires MathJax support -->
+
+
+
+<!-- Verso things -->
+<script>var __versoSiteRoot = "https://alexbrodbelt.github.io/Dicksons/";</script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<base href="./"><style>:root {
+    /** Typography **/
+    /* The font family used for headers, ToC entries, etc */
+    --verso-structure-font-family: "Helvetica Neue","Segoe UI", "Roboto", Arial,sans-serif;
+    /* The font family used for body text */
+    --verso-text-font-family: "Helvetica Neue","Segoe UI", "Roboto", Arial,sans-serif;
+    /* The font family used for code */
+    --verso-code-font-family: monospace;
+
+    /** Text colors **/
+    --verso-text-color: black;
+    --verso-code-color: black;
+    --verso-structure-color: black;
+
+    /** Selected items (e.g. search results) */
+    --verso-selected-color: #def;
+
+    /** Message colors **/
+    /*
+    These colors are used to render Lean's feedback. They come in three severities and two
+    variants. The raw color itself is used for the text of a message of the indicated severity,
+    while the presence of such a message is indicated using the indicator color (e.g. via a
+    wavy underline or a bar in the margin).
+    */
+    --verso-info-color: black;
+    --verso-info-indicator-color: #4777ff;
+    --verso-warning-color: black;
+    --verso-warning-indicator-color: #e7a71d; /* 2.11 contrast ratio for white, 9.94 for black */
+    --verso-error-color: #cc0000;
+    --verso-error-indicator-color: #ff0000;
+
+    /** Code Highlighting **/
+    /*
+    These variables control the rendering of Lean code emitted by Verso. Each category that can be
+    highlighted supports the customization of color, weight, style, and family.
+    */
+    /* Constants (e.g. `List` or `id` or `none`) */
+    --verso-code-const-color: var(--verso-code-color);
+    --verso-code-const-weight: normal;
+    --verso-code-const-style: normal;
+    --verso-code-const-font-family: var(--verso-code-font-family);
+
+    /* Keywords/atoms (e.g. `for` or `def` or `induction`) */
+    --verso-code-keyword-color: var(--verso-code-color);
+    --verso-code-keyword-weight: bold;
+    --verso-code-keyword-style: normal;
+    --verso-code-keyword-font-family: var(--verso-code-font-family);
+
+    /* Local bindings (e.g. `x` in `let x := 5`) */
+    --verso-code-var-color: var(--verso-code-color);
+    --verso-code-var-weight: normal;
+    --verso-code-var-style: italic;
+    --verso-code-kw-font-family: var(--verso-code-font-family);
+
+}
+</style><style>
+
+
+.hl.lean {
+  white-space: pre;
+  font-weight: normal;
+  font-style: normal;
+  font-size: inherit;
+}
+
+.hl.lean .keyword {
+  color: var(--verso-code-keyword-color,);
+  font-weight: var(--verso-code-keyword-weight, bold);
+  font-style: var(--verso-code-keyword-style, normal);
+  font-family: var(--verso-code-keyword-font-family,);
+}
+
+.hl.lean .const {
+  color: var(--verso-code-const-color,);
+  font-weight: var(--verso-code-const-weight, normal);
+  font-style: var(--verso-code-const-style, normal);
+  font-family: var(--verso-code-const-font-family,);
+}
+
+.hl.lean .var {
+  color: var(--verso-code-var-color,);
+  font-weight: var(--verso-code-var-weight, normal);
+  font-style: var(--verso-code-var-style, italic);
+  font-family: var(--verso-code-var-font-family,);
+
+  position: relative;
+}
+
+.hl.lean .literal, .hl.lean .unknown {
+  color: var(--verso-code-color,);
+  font-weight: normal;
+  font-style: normal;
+  font-family: var(--verso-code-font-family,);
+}
+
+.hover-container {
+  width: 0;
+  height: 0;
+  position: relative;
+  display: inline;
+}
+
+.hl.lean a {
+  color: inherit;
+  text-decoration: currentcolor underline dotted;
+}
+
+.hl.lean a:hover {
+  text-decoration: currentcolor underline solid;
+}
+
+.hl.lean .hover-info {
+  white-space: normal;
+}
+
+.hl.lean .token .hover-info {
+  display: none;
+  position: absolute;
+  background-color: #e5e5e5;
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 300;
+}
+
+.hl.lean .hover-info.messages {
+  max-height: 10rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  padding: 0 0.5rem 0 0;
+  display: block;
+}
+
+.hl.lean .hover-info code {
+  white-space: pre-wrap;
+  background: none;
+  color: black;
+}
+
+.hl.lean .hover-info.messages > code {
+  padding: 0.5rem;
+  display: block;
+  width: fit-content;
+}
+
+.hl.lean .hover-info.messages > code:only-child {
+  margin: 0;
+}
+
+.hl.lean .hover-info.messages > code {
+  margin: 0.1rem;
+}
+
+.hl.lean .hover-info.messages > code:not(:first-child) {
+  margin-top: 0rem;
+}
+
+.hl.lean {
+}
+
+.hl.lean.block {
+  display: block;
+}
+
+.hl.lean.inline {
+  display: inline;
+  white-space: pre-wrap;
+}
+
+.hl.lean * {
+}
+
+.hl.lean .token {
+  transition: all 0.25s; /* Slight fade for highlights */
+}
+
+@media (hover: hover) {
+  .hl.lean .token.binding-hl, .hl.lean .literal.string:hover, .hl.lean .token.typed:hover {
+    background-color: #eee;
+    border-radius: 2px;
+    transition: none;
+  }
+}
+
+
+.hl.lean .has-info .token:not(.tactic-state):not(.tactic-state *), .hl.lean .has-info .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-style: wavy;
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.hl.lean .has-info .hover-info {
+  display: none;
+  position: absolute;
+  transform: translate(0.25rem, 0.3rem);
+  border: 1px solid black;
+  padding: 0.5rem;
+  z-index: 400;
+  text-align: left;
+}
+
+.hl.lean .has-info.error :not(.tactic-state):not(.tactic-state *){
+  text-decoration-color: red;
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.error:hover {
+    background-color: #ffb3b3;
+  }
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #ffb3b3;
+}
+
+.tippy-box[data-theme~='error'] .hl.lean .hover-info.messages > code.error {
+  background: none;
+  border: none;
+}
+
+.error .verso-message, .error .verso-message .token, .error .verso-message label {
+  color: var(--verso-error-color);
+}
+
+.error .verso-message .case-label:has(input[type="checkbox"])::before {
+  background-color: var(--verso-error-color) !important;
+}
+
+.hl.lean .has-info.warning :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-warning-indicator-color);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.warning:hover {
+    background-color:var(--verso-warning-color);
+  }
+}
+
+.hl.lean .hover-info.messages > code.warning {
+  background-color: var(--verso-warning-color);
+}
+
+.lean-output {
+  border-left: 0.2em solid transparent;
+  padding: 0 0 0 0.5em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.lean-output.error {
+  border-color: var(--verso-error-indicator-color);
+}
+
+.lean-output.information {
+  border-color: var(--verso-info-indicator-color);
+}
+
+.lean-output.warning {
+  border-color: var(--verso-warning-indicator-color);
+}
+
+.hl.lean .hover-info.messages > code.error {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='warning'] .hl.lean .hover-info.messages > code.warning {
+  background: none;
+  border: none;
+}
+
+
+.hl.lean .has-info.information :not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: var(--verso-info-indicator-color, blue);
+}
+
+@media (hover: hover) {
+  .hl.lean .has-info.information:hover {
+    background-color: #4777ff;
+  }
+}
+
+
+.hl.lean .hover-info.messages > code.information {
+  background-color: #e5e5e5;
+  border-left: 0.2rem solid #4777ff;
+}
+
+.tippy-box[data-theme~='info'] .hl.lean .hover-info.messages > code.information {
+  background: none;
+  border: none;
+}
+
+.hl.lean div.docstring {
+  font-family: var(--verso-text-font-family, sans-serif);
+  white-space: normal;
+  max-width: calc(min(40rem, 90vw));
+  width: max-content;
+}
+
+.hl.lean div.docstring > :last-child {
+  margin-bottom: 0;
+}
+
+.hl.lean div.docstring > :first-child {
+  margin-top: 0;
+}
+
+.hl.lean .hover-info .sep {
+  display: block;
+  width: auto;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0;
+  height: 1px;
+  border-top: 1px solid #ccc;
+}
+
+.hl.lean code {
+  font-family: var(--verso-code-font-family);
+}
+
+.hl.lean .tactic-state {
+  display: none;
+  position: relative;
+  width: fit-content;
+  border: 1px solid #888888;
+  border-radius: 0.1rem;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+.hl.lean.popup .tactic-state {
+  position: static;
+  display: block;
+  width: auto;
+  border: none;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  background-color: #ffffff;
+}
+
+
+.hl.lean .tactic {
+  position: relative;
+  display: inline;
+  vertical-align: top;
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.hl.lean .tactic:has(.tactic-toggle:checked) {
+  display: inline-grid;
+  grid-template-columns: 1fr;
+}
+
+.hl.lean .tactic-toggle:checked ~ .tactic-state {
+  display: inline-block;
+  vertical-align: top;
+  grid-row: 2;
+  justify-self: start;
+}
+
+.hl.lean .tactic > label {
+  position: relative;
+  grid-row: 1;
+  display: inline;
+}
+
+@media (hover: hover) {
+  .hl.lean .tactic:has(.tactic-toggle:not(:checked)) > label:hover {
+    background-color: #eeeeee;
+  }
+}
+
+.hl.lean .tactic-toggle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .tactic > label::after {
+  content: "";
+  border: 1px solid #bbbbbb;
+  /* These need to be em, not rem, to scale with the font */
+  border-radius: 1em;
+  height: 0.25em;
+  vertical-align: middle;
+  width: 0.6em;
+  margin-left: 0.1em;
+  margin-right: 0.1em;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/*
+@media (hover: hover) {
+  .hl.lean .tactic > label:hover::after {
+    border: 1px solid #aaaaaa;
+    background-color: #aaaaaa;
+    transition: all 0.5s;
+  }
+}
+*/
+
+.hl.lean .tactic > label:has(+ .tactic-toggle:checked)::after {
+  border: 1px solid #999999;
+  background-color: #999999;
+  transition: all 0.5s;
+}
+
+.hl.lean .tactic-state .goal + .goal {
+  margin-top: 1.5em;
+}
+
+/*
+Some CSS frameworks customize details/summary in ways not compatible with Verso's output.
+*/
+
+.hl.lean details {
+  display: block !important;
+  margin: 0;
+}
+
+.hl.lean details summary {
+  display: list-item !important;
+  margin: 0;
+}
+
+.hl.lean details summary:focus {
+  outline: none;
+  outline-offset: none;
+  color: inherit;
+}
+
+.hl.lean ul > li {
+  margin-bottom: 0;
+}
+
+.hl.lean details summary::marker {
+  display: inline !important;
+}
+
+.hl.lean details > summary:first-of-type {
+  list-style-type: disclosure-closed;
+  list-style-position: inside;
+}
+
+.hl.lean details[open] > summary:first-of-type {
+  list-style-type: disclosure-open;
+}
+
+.hl.lean details summary::before, .hl.lean details summary::after {
+  content: "" !important;
+  background: none;
+  display: none;
+}
+
+.hl.lean .tactic-state summary {
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: -0.5em;
+}
+
+.hl.lean .tactic-state details {
+  /* These need to be em, not rem, to scale with the font */
+  padding-left: 0.5em;
+}
+
+.hl.lean .case-label {
+  display: block;
+  position: relative;
+}
+
+.hl.lean .case-label input[type="checkbox"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  z-index: -10;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"])::before {
+  display: inline-block;
+  background-color: black;
+  content: ' ';
+  transition: ease 0.2s;
+  margin-right: 0.7em;
+  clip-path: polygon(100% 0, 0 0, 50% 100%);
+  width: 0.6em;
+  height: 0.6em;
+  vertical-align: middle;
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:not(:checked))::before {
+  transform: rotate(-90deg);
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]) {
+
+}
+
+.hl.lean .case-label:has(input[type="checkbox"]:checked) {
+
+}
+
+
+.hl.lean .labeled-case > :not(:first-child) {
+  max-height: 0px;
+  display: block;
+  overflow: hidden;
+  transition: max-height 0.1s ease-in;
+  /* These need to be em, not rem, to scale with the font */
+  margin-left: 0.5em;
+  margin-top: 0.1em;
+}
+
+.hl.lean .labeled-case:has(.case-label input[type="checkbox"]:checked) > :not(:first-child) {
+  max-height: 100%;
+}
+
+
+.hl.lean .goal-name::before {
+  font-style: normal;
+  content: "case ";
+}
+
+.hl.lean .goal-name {
+  font-style: italic;
+  font-family: var(--verso-code-font-family);
+  color: inherit;
+}
+
+.hl.lean .hypotheses {
+  display: table;
+}
+
+.hl.lean .hypothesis {
+  display: table-row;
+}
+
+.hl.lean .hypothesis > * {
+  display: table-cell;
+}
+
+
+.hl.lean .hypotheses .colon {
+  text-align: center;
+  /* This needs to be em, not rem, to scale with the font */
+  min-width: 1em;
+}
+
+.hl.lean .hypotheses .name {
+  text-align: right;
+}
+
+.hl.lean .hypotheses .name,
+.hl.lean .hypotheses .type,
+.hl.lean .conclusion .type {
+  font-family: var(--verso-code-font-family);
+}
+
+.tippy-box {
+  /* Without these, mobile Safari will start making font sizes inconsistent when its text size adjustment feature is triggered.*/
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+
+}
+
+.tippy-box[data-theme~='lean'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='lean'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+}
+.tippy-box[data-theme~='lean'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #e5e5e5;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='top'] > .tippy-arrow::after {
+  bottom: -11px;
+  border-width: 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='bottom'] > .tippy-arrow::after {
+  top: -11px;
+  border-width: 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #e5e5e5;
+  border-width: 11px 0 11px 11px;
+}
+.tippy-box[data-theme~='message'][data-placement^='left'] > .tippy-arrow::after {
+  right: -11px;
+  border-width: 11px 0 11px 11px;
+}
+
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #e5e5e5;
+  border-width: 11px 11px 11px 0;
+}
+.tippy-box[data-theme~='message'][data-placement^='right'] > .tippy-arrow::after {
+  left: -11px;
+  border-width: 11px 11px 11px 0;
+}
+
+
+
+.tippy-box[data-theme~='warning'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid var(--verso-warning-color);
+}
+
+.tippy-box[data-theme~='error'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #f7a7af;
+}
+
+.tippy-box[data-theme~='info'] {
+  background-color: #e5e5e5;
+  color: black;
+  border: 3px solid #99b3c2;
+}
+
+.tippy-box[data-theme~='tactic'] {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: white;
+}
+.tippy-box[data-theme~='tactic'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: white;
+}
+
+.extra-doc-links {
+  list-style-type: none;
+  margin-left: 0;
+  padding: 0;
+}
+
+.extra-doc-links > li {
+  display: inline-block;
+}
+
+.extra-doc-links > li:not(:last-child)::after {
+  content: '|';
+  display: inline-block;
+  margin: 0 0.25em;
+}
+
+.verso-message .trace {
+  display: block;
+}
+
+.verso-message .trace > summary::marker {
+  color: var(--verso-text-color);
+}
+
+.verso-message .trace-children {
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .trace-children > li {
+  list-style-type: none;
+  margin-left: 1.5em;
+}
+
+.verso-message .trace-children > li:not(:has(.trace)) {
+  margin-left: 0;
+}
+
+.verso-message .trace-class {
+  color: color-mix(in srgb, currentColor 70%, transparent);
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.verso-message .text {
+  white-space: pre-wrap;
+}
+
+
+</style>
+<script>
+  
+document.addEventListener("DOMContentLoaded", () => {
+    for (const m of document.querySelectorAll(".math.inline")) {
+        katex.render(m.textContent, m, {throwOnError: false, displayMode: false});
+    }
+    for (const m of document.querySelectorAll(".math.display")) {
+        katex.render(m.textContent, m, {throwOnError: false, displayMode: true});
+    }
+});
+</script>
+
+<script>
+  
+
+window.onload = () => {
+
+    // Don't show hovers inside of closed tactic states
+    function blockedByTactic(elem) {
+      let parent = elem.parentNode;
+      while (parent && "classList" in parent) {
+        if (parent.classList.contains("tactic")) {
+          const toggle = parent.querySelector("input.tactic-toggle");
+          if (toggle) {
+            return !toggle.checked;
+          }
+        }
+        parent = parent.parentNode;
+      }
+      return false;
+    }
+
+    function blockedByTippy(elem) {
+      // Don't show a new hover until the old ones are all closed.
+      // Scoped to the nearest "top-level block" to avoid being O(n) in the size of the document.
+      var block = elem;
+      const topLevel = new Set(["section", "body", "html", "nav", "header"]);
+      while (block.parentNode && !topLevel.has(block.parentNode.nodeName.toLowerCase())) {
+        block = block.parentNode;
+      }
+      for (const child of block.querySelectorAll(".token, .has-info")) {
+        if (child._tippy && child._tippy.state.isVisible) { return true };
+      }
+      return false;
+    }
+
+    for (const c of document.querySelectorAll(".hl.lean .token")) {
+        if (c.dataset.binding != "") {
+            c.addEventListener("mouseover", (event) => {
+                if (blockedByTactic(c)) {return;}
+                const context = c.closest(".hl.lean").dataset.leanContext;
+                for (const example of document.querySelectorAll(".hl.lean")) {
+                    if (example.dataset.leanContext == context) {
+                        for (const tok of example.querySelectorAll(".token")) {
+                            if (c.dataset.binding == tok.dataset.binding) {
+                                tok.classList.add("binding-hl");
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        c.addEventListener("mouseout", (event) => {
+            for (const tok of document.querySelectorAll(".hl.lean .token")) {
+                tok.classList.remove("binding-hl");
+            }
+        });
+    }
+    /* Render docstrings */
+    if ('undefined' !== typeof marked) {
+        for (const d of document.querySelectorAll("code.docstring, pre.docstring")) {
+            const str = d.innerText;
+            const html = marked.parse(str);
+            const rendered = document.createElement("div");
+            rendered.classList.add("docstring");
+            rendered.innerHTML = html;
+            d.parentNode.replaceChild(rendered, d);
+        }
+    }
+    // Add hovers
+    let docsJson = "-verso-docs.json";
+    fetch(docsJson).then((resp) => resp.json()).then((versoDocData) => {
+
+      function hideParentTooltips(element) {
+        let parent = element.parentElement;
+        while (parent) {
+          const tippyInstance = parent._tippy;
+          if (tippyInstance) {
+            tippyInstance.hide();
+          }
+          parent = parent.parentElement;
+        }
+      }
+
+
+
+      const defaultTippyProps = {
+        /* DEBUG -- remove the space: * /
+        onHide(any) { return false; },
+        trigger: "click",
+        // */
+        /* theme: "lean", */
+        maxWidth: "none",
+        appendTo: () => document.body,
+        interactive: true,
+        delay: [100, null],
+        /* ignoreAttributes: true, */
+        followCursor: 'initial',
+        onShow(inst) {
+          if (inst.reference.className == 'tactic') {
+
+            const toggle = inst.reference.querySelector("input.tactic-toggle");
+            if (toggle && toggle.checked) {
+              return false;
+            }
+            hideParentTooltips(inst.reference);
+            //if (blockedByTippy(inst.reference)) { return false; }
+
+          } else if (inst.reference.querySelector(".hover-info") || "versoHover" in inst.reference.dataset) {
+            if (blockedByTactic(inst.reference)) { return false };
+            if (blockedByTippy(inst.reference)) { return false; }
+          } else { // Nothing to show here!
+            return false;
+          }
+        },
+        content (tgt) {
+          const content = document.createElement("span");
+          if (tgt.className == 'tactic') {
+            const state = tgt.querySelector(".tactic-state").cloneNode(true);
+            state.style.display = "block";
+            content.appendChild(state);
+            content.style.display = "block";
+            content.className = "hl lean popup";
+          } else {
+            content.className = "hl lean";
+            content.style.display = "block";
+            content.style.maxHeight = "300px";
+            content.style.overflowY = "auto";
+            content.style.overflowX = "hidden";
+            const hoverId = tgt.dataset.versoHover;
+            const hoverInfo = tgt.querySelector(".hover-info");
+            if (hoverId) { // Docstrings from the table
+              // TODO stop doing an implicit conversion from string to number here
+              let data = versoDocData[hoverId];
+              if (data) {
+                const info = document.createElement("span");
+                info.className = "hover-info";
+                info.style.display = "block";
+                info.innerHTML = data;
+                content.appendChild(info);
+                /* Render docstrings - TODO server-side */
+                if ('undefined' !== typeof marked) {
+                    for (const d of content.querySelectorAll("code.docstring, pre.docstring")) {
+                        const str = d.innerText;
+                        const html = marked.parse(str);
+                        const rendered = document.createElement("div");
+                        rendered.classList.add("docstring");
+                        rendered.innerHTML = html;
+                        d.parentNode.replaceChild(rendered, d);
+                    }
+                }
+              } else {
+                content.innerHTML = "Failed to load doc ID: " + hoverId;
+              }
+            } else if (hoverInfo) { // The inline info, still used for compiler messages
+              content.appendChild(hoverInfo.cloneNode(true));
+            }
+            const extraLinks = tgt.parentElement.dataset['versoLinks'];
+            if (extraLinks) {
+              try {
+                const extras = JSON.parse(extraLinks);
+                const links = document.createElement('ul');
+                links.className = 'extra-doc-links';
+                extras.forEach((l) => {
+                  const li = document.createElement('li');
+                  li.innerHTML = "<a href=\"" + l['href'] + "\" title=\"" + l.long + "\">" + l.short + "</a>";
+                  links.appendChild(li);
+                });
+                content.appendChild(links);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+          return content;
+        }
+      };
+
+
+      document.querySelectorAll('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'lean');
+      });
+      document.querySelectorAll('.hl.lean .has-info.warning').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'warning message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.information').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'info message');
+      });
+      document.querySelectorAll('.hl.lean .has-info.error').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'error message');
+      });
+      document.querySelectorAll('.hl.lean .tactic').forEach(element => {
+        element.setAttribute('data-tippy-theme', 'tactic');
+      });
+      let insts = tippy('.hl.lean .const.token, .hl.lean .keyword.token, .hl.lean .literal.token, .hl.lean .option.token, .hl.lean .var.token, .hl.lean .typed.token, .hl.lean .has-info, .hl.lean .tactic, .hl.lean .level-var, .hl.lean .level-const, .hl.lean .level-op, .hl.lean .sort', defaultTippyProps);
+  });
+}
+
+</script>
+
+<script src="-verso-js/popper.js"></script>
+<script src="-verso-js/tippy.js"></script>
+<script src="-verso-js/mermaid-init.js"></script>
+<link rel="stylesheet" href="-verso-css/tippy-border.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js" integrity="sha384-zbcZAIxlvJtNE3Dp5nxLXdXtXyxwOdnILY1TDPVmKFhl4r4nSUG1r8bcFXGVa4Te" crossorigin="anonymous"></script>
+
+
+
+<link rel="stylesheet" href="/Dicksons/-verso-css/highlighting.css">
+<link rel="stylesheet" href="/Dicksons/-verso-css/footnotes.css">
+<script src="/Dicksons/-verso-js/footnotes.js"></script>
+<!-- End verso things -->
+
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header"><a href="/Dicksons/">Dickson's Classification Theorem</a></h1>
+        <p class="header">Dickson's Classification Theorem</p>
+
+        <ul>
+          
+          <li><a class="buttons github" href="https://github.com/AlexBrodbelt/DicksonsVerso">View On GitHub</a></li>
+        </ul>
+
+        
+          <p class="header">This project is maintained by <a class="header name" href="https://github.com/AlexBrodbelt">AlexBrodbelt</a></p>
+        
+      </header>
+
+      <div class="content">
+        <body>
+  <div class="main" role="main">
+    <div class="wrap">
+      <h1>
+        Dickson's Classification Theorem</h1>
+      <section>
+        <h2>
+          Overview</h2>
+        <p>
+          This repository provides a formalisation in the Lean 4 theorem prover of results related to
+Dickson's classification theorem for finite subgroups of <code class="math inline">\text{SL}(2, F)</code> and
+<code class="math inline">\text{PGL}(2, F)</code> over algebraically closed fields.</p>
+        <p>
+          The classification of finite subgroups of linear groups is a classical topic in group theory,
+with applications to algebraic geometry, representation theory, and number theory.
+Dickson's theorem provides a complete classification of finite subgroups of <code class="math inline">\text{SL}(2, F)</code>
+when <code class="math inline">F</code> is an algebraically closed field.</p>
+        </section>
+      <section>
+        <h2>
+          Mathematical Background</h2>
+        <section>
+          <h3>
+            Special Linear Groups</h3>
+          <p>
+            The special linear group <code class="math inline">\text{SL}(n, F)</code> consists of all <code class="math inline">n \times n</code> matrices with
+determinant 1 over the field <code class="math inline">F</code>. For <code class="math inline">n = 2</code>, this group has a rich structure that allows
+for a complete classification of its finite subgroups.</p>
+          </section>
+        <section>
+          <h3>
+            Projective Linear Groups</h3>
+          <p>
+            The projective general linear group <code class="math inline">\text{PGL}(n, F)</code> is the quotient of the general linear
+group <code class="math inline">\text{GL}(n, F)</code> by its center. Similarly, the projective special linear group
+<code class="math inline">\text{PSL}(n, F)</code> is the quotient of <code class="math inline">\text{SL}(n, F)</code> by its center.</p>
+          <p>
+            Over an algebraically closed field, these projective groups are isomorphic:</p>
+          <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.noncomputable#doc" title="Declaration for Lean.Parser.Command.noncomputable"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.noncomputable-11557">noncomputable</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.definition#doc" title="Declaration for Lean.Parser.Command.definition"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-11571">def</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=PGL_iso_PSL#doc" title="Definition for PGL_iso_PSL"><span class="const token" data-binding="const-PGL_iso_PSL" data-verso-hover="0">PGL_iso_PSL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-2022587232982003368" data-verso-hover="3">Type*</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Fintype#doc" title="Documentation for Fintype"><span class="const token" data-binding="const-Fintype" data-verso-hover="4">Fintype</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=DecidableEq#doc" title="Documentation for DecidableEq"><span class="const token" data-binding="const-DecidableEq" data-verso-hover="5">DecidableEq</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=IsAlgClosed#doc" title="Documentation for IsAlgClosed"><span class="const token" data-binding="const-IsAlgClosed" data-verso-hover="7">IsAlgClosed</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=PSL#doc" title="Documentation for PSL"><span class="const token" data-binding="const-PSL" data-verso-hover="8">PSL</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="inter-text"> </span><span class="unknown token" data-binding="">≃*</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=PGL#doc" title="Documentation for PGL"><span class="const token" data-binding="const-PGL" data-verso-hover="9">PGL</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+    </span><a href="/Dicksons/docs/find/?pattern=MulEquiv.ofBijective#doc" title="Documentation for MulEquiv.ofBijective"><span class="const token" data-binding="const-MulEquiv.ofBijective" data-verso-hover="10">MulEquiv.ofBijective</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PSL_monoidHom_PGL#doc" title="Documentation for PSL_monoidHom_PGL"><span class="const token" data-binding="const-PSL_monoidHom_PGL" data-verso-hover="11">PSL_monoidHom_PGL</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Bijective_PSL_monoidHom_PGL#doc" title="Documentation for Bijective_PSL_monoidHom_PGL"><span class="const token" data-binding="const-Bijective_PSL_monoidHom_PGL" data-verso-hover="12">Bijective_PSL_monoidHom_PGL</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117098" data-verso-hover="1">n</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.117101" data-verso-hover="2">F</span><span class="unknown token" data-binding="">)</span></code></section>
+        <section>
+          <h3>
+            Special Matrices</h3>
+          <p>
+            We define several important families of matrices in <code class="math inline">\text{SL}(2, F)</code>:</p>
+          <section>
+            <h4>
+              Shear Matrices</h4>
+            <p>
+              The shear matrix <code class="math inline">s(\sigma)</code> for <code class="math inline">\sigma \in F</code>:</p>
+            <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.definition#doc" title="Declaration for Lean.Parser.Command.definition"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-957">def</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=SpecialMatrices.s#doc" title="Definition for SpecialMatrices.s"><span class="const token" data-binding="const-SpecialMatrices.s" data-verso-hover="13">s</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.3842" data-verso-hover="14">σ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-974" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">⟨</span><span class="unknown token" data-binding="">!![</span><span class="typed token" data-binding="" data-verso-hover="14">1</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="14">0</span><span class="unknown token" data-binding="">;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3842" data-verso-hover="14">σ</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="14">1</span><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">,</span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-8533823669039570066-1007-1009-0"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Term.byTactic#doc" title="Declaration for Lean.Parser.Term.byTactic"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.byTactic-1007" data-verso-hover="19">by</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-8533823669039570066-1007-1009-0"><span class="tactic-state"><span class="goal"><span class="hypotheses"><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.169852" data-verso-hover="15">R</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.3837" data-verso-hover="21">inst✝¹</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=CommRing#doc" title="Documentation for CommRing"><span class="const token" data-binding="const-CommRing" data-verso-hover="22">CommRing</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169852" data-verso-hover="15">R</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.3840" data-verso-hover="23">inst✝</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.3842" data-verso-hover="14">σ</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="inter-text"></span></span></span></span><span class="conclusion"><span class="prefix">⊢ </span><span class="type"><span class="unknown token" data-binding="">!![</span><span class="unknown token" data-binding="">1</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">0</span><span class="unknown token" data-binding="">;</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.3842" data-verso-hover="14">σ</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="">.</span><a href="/Dicksons/docs/find/?pattern=Matrix.det#doc" title="Documentation for Matrix.det"><span class="const token" data-binding="const-Matrix.det" data-verso-hover="24">det</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Eq#doc" title="Documentation for Eq"><span class="const token" data-binding="const-Eq" data-verso-hover="25">=</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span></span></span></span></span></span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-7-1010-1014-2"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Tactic.simp#doc" title="Declaration for Lean.Parser.Tactic.simp"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Tactic.simp-1010" data-verso-hover="26">simp</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7-1010-1014-2"><span class="tactic-state">All goals completed! 🐙</span></span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">⟩</span></code><p>
+              These matrices satisfy <code class="math inline">s(\sigma) \cdot s(\mu) = s(\sigma + \mu)</code>.</p>
+            </section>
+          <section>
+            <h4>
+              Diagonal Matrices</h4>
+            <p>
+              The diagonal matrix <code class="math inline">d(\delta)</code> for <code class="math inline">\delta \in F^\times</code>:</p>
+            <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.definition#doc" title="Declaration for Lean.Parser.Command.definition"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-2546">def</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=SpecialMatrices.d#doc" title="Definition for SpecialMatrices.d"><span class="const token" data-binding="const-SpecialMatrices.d" data-verso-hover="27">d</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.22398" data-verso-hover="28">δ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="unknown token" data-binding="">ˣ</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-2565" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">⟨</span><span class="unknown token" data-binding="">!![</span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.22398" data-verso-hover="28">δ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="14">0</span><span class="unknown token" data-binding="">;</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="14">0</span><span class="inter-text"> </span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.22398" data-verso-hover="28">δ</span><span class="unknown token" data-binding="">⁻¹</span><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">,</span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-16709110047510621278-2612-2614-3"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Term.byTactic#doc" title="Declaration for Lean.Parser.Term.byTactic"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.byTactic-2612" data-verso-hover="19">by</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-16709110047510621278-2612-2614-3"><span class="tactic-state"><span class="goal"><span class="hypotheses"><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.169852" data-verso-hover="15">R</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.22356" data-verso-hover="21">inst✝¹</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=CommRing#doc" title="Documentation for CommRing"><span class="const token" data-binding="const-CommRing" data-verso-hover="22">CommRing</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169852" data-verso-hover="15">R</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.22359" data-verso-hover="23">inst✝</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.22398" data-verso-hover="28">δ</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Units#doc" title="Documentation for Units"><span class="const token" data-binding="const-Units" data-verso-hover="29">ˣ</span></a></span></span></span><span class="conclusion"><span class="prefix">⊢ </span><span class="type"><span class="unknown token" data-binding="">!![</span><span class="unknown token" data-binding="">↑</span><span class="var token" data-binding="var-_uniq.22398" data-verso-hover="28">δ</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">0</span><span class="unknown token" data-binding="">;</span><span class="inter-text"> </span><span class="unknown token" data-binding="">0</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(↑</span><span class="var token" data-binding="var-_uniq.22398" data-verso-hover="28">δ</span><span class="unknown token" data-binding="">)</span><a href="/Dicksons/docs/find/?pattern=Inv.inv#doc" title="Documentation for Inv.inv"><span class="const token" data-binding="const-Inv.inv" data-verso-hover="30">⁻¹</span></a><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="">.</span><a href="/Dicksons/docs/find/?pattern=Matrix.det#doc" title="Documentation for Matrix.det"><span class="const token" data-binding="const-Matrix.det" data-verso-hover="24">det</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Eq#doc" title="Documentation for Eq"><span class="const token" data-binding="const-Eq" data-verso-hover="25">=</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span></span></span></span></span></span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-7-2615-2623-5"><a href="/Dicksons/docs/find/?pattern=Mathlib.Tactic.normNum#doc" title="Declaration for Mathlib.Tactic.normNum"><span class="keyword token" data-binding="kw-occ-Mathlib.Tactic.normNum-2615" data-verso-hover="31">norm_num</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7-2615-2623-5"><span class="tactic-state">All goals completed! 🐙</span></span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">⟩</span></code><p>
+              These matrices satisfy <code class="math inline">d(\delta) \cdot d(\rho) = d(\delta \rho)</code>.</p>
+            </section>
+          <section>
+            <h4>
+              Rotation Matrix</h4>
+            <p>
+              The rotation matrix <code class="math inline">w</code>:</p>
+            <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.definition#doc" title="Declaration for Lean.Parser.Command.definition"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-4103">def</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=SpecialMatrices.w#doc" title="Definition for SpecialMatrices.w"><span class="const token" data-binding="const-SpecialMatrices.w" data-verso-hover="32">w</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-4111" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">⟨</span><span class="unknown token" data-binding="">!![</span><span class="typed token" data-binding="" data-verso-hover="14">0</span><span class="unknown token" data-binding="">,</span><span class="typed token" data-binding="" data-verso-hover="14">1</span><span class="unknown token" data-binding="">;</span><span class="unknown token" data-binding="">-</span><span class="typed token" data-binding="" data-verso-hover="14">1</span><span class="unknown token" data-binding="">,</span><span class="typed token" data-binding="" data-verso-hover="14">0</span><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">,</span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-383619456569420486-4142-4144-6"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Term.byTactic#doc" title="Declaration for Lean.Parser.Term.byTactic"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.byTactic-4142" data-verso-hover="19">by</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-383619456569420486-4142-4144-6"><span class="tactic-state"><span class="goal"><span class="hypotheses"><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.169852" data-verso-hover="15">R</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.67468" data-verso-hover="21">inst✝¹</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=CommRing#doc" title="Documentation for CommRing"><span class="const token" data-binding="const-CommRing" data-verso-hover="22">CommRing</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169852" data-verso-hover="15">R</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.67471" data-verso-hover="23">inst✝</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.169854" data-verso-hover="15">F</span></span></span></span><span class="conclusion"><span class="prefix">⊢ </span><span class="type"><span class="unknown token" data-binding="">!![</span><span class="unknown token" data-binding="">0</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span><span class="unknown token" data-binding="">;</span><span class="inter-text"> </span><span class="unknown token" data-binding="">-</span><span class="unknown token" data-binding="">1</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">0</span><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="">.</span><a href="/Dicksons/docs/find/?pattern=Matrix.det#doc" title="Documentation for Matrix.det"><span class="const token" data-binding="const-Matrix.det" data-verso-hover="24">det</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Eq#doc" title="Documentation for Eq"><span class="const token" data-binding="const-Eq" data-verso-hover="25">=</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">1</span></span></span></span></span></span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-7-4145-4153-8"><a href="/Dicksons/docs/find/?pattern=Mathlib.Tactic.normNum#doc" title="Declaration for Mathlib.Tactic.normNum"><span class="keyword token" data-binding="kw-occ-Mathlib.Tactic.normNum-4145" data-verso-hover="31">norm_num</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7-4145-4153-8"><span class="tactic-state">All goals completed! 🐙</span></span><span class="unknown token" data-binding="const-Subtype.mk" data-verso-hover="18">⟩</span></code><p>
+              This satisfies <code class="math inline">w^2 = -1</code>.</p>
+            </section>
+          </section>
+        <section>
+          <h3>
+            Elementary Abelian Subgroups</h3>
+          <p>
+            A subgroup <code class="math inline">H</code> is called elementary abelian of exponent <code class="math inline">p</code> if it is abelian and every
+non-identity element has order <code class="math inline">p</code>:</p>
+          <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.definition#doc" title="Declaration for Lean.Parser.Command.definition"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.definition-498">def</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=IsElementaryAbelian#doc" title="Definition for IsElementaryAbelian"><span class="const token" data-binding="const-IsElementaryAbelian" data-verso-hover="33">IsElementaryAbelian</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.1224" data-verso-hover="1">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-2022587232982003368" data-verso-hover="3">Type*</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Group#doc" title="Documentation for Group"><span class="const token" data-binding="const-Group" data-verso-hover="34">Group</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1224" data-verso-hover="1">G</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.1229" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.1235" data-verso-hover="35">H</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1224" data-verso-hover="1">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-14430969920833713138" data-verso-hover="37">Prop</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=IsMulCommutative#doc" title="Documentation for IsMulCommutative"><span class="const token" data-binding="const-IsMulCommutative" data-verso-hover="38">IsMulCommutative</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1235" data-verso-hover="35">H</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∀</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1416" data-verso-hover="39">h</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1235" data-verso-hover="35">H</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1416" data-verso-hover="39">h</span><span class="inter-text"> </span><span class="unknown token" data-binding="">≠</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="39">1</span><span class="inter-text"> </span><span class="unknown token" data-binding="">→</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=orderOf#doc" title="Documentation for orderOf"><span class="const token" data-binding="const-orderOf" data-verso-hover="40">orderOf</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1416" data-verso-hover="39">h</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.1229" data-verso-hover="17">p</span></code></section>
+        </section>
+      <section>
+        <h2>
+          Dickson's Classification Theorem</h2>
+        <section>
+          <h3>
+            Main Theorem Structure</h3>
+          <p>
+            The classification divides finite subgroups of <code class="math inline">\text{SL}(2, F)</code> into several cases based on
+the relationship between the group and its Sylow <code class="math inline">p</code>-subgroups, where <code class="math inline">p</code> is the
+characteristic of the field.</p>
+          <p>
+            The following diagram illustrates the structure of the classification:</p>
+          <pre class="mermaid" markdown="0">graph TD
+
+A[Finite Subgroup G of SL₂F]
+B{Is p-coprime?}
+
+A --> B
+
+B -->|Yes| C[Class I: p ∤ |G|]
+B -->|No| D{Sylow structure}
+
+C --> C1[Cyclic groups]
+C --> C2[Dihedral groups]
+C --> C3["SL(2, F₃)"]
+C --> C4["SL(2, F₅)"]
+C --> C5["GL(2, F₃)"]
+
+D -->|Normal Sylow| E[Class II: Normal elementary abelian]
+D -->|Non-normal Sylow| F[Class III-VI]
+
+E --> E1[Semi-direct products]
+
+F --> F1["SL(2, Fₚᵏ)"]
+F --> F2[Extensions]
+F --> F3[Binary polyhedral groups]
+
+classDef green fill:#f0fdf4,stroke:#16a34a,stroke-width:1px,color:#14532d,rx:5px,ry:5px;
+classDef blue fill:#eff6ff,stroke:#2563eb,stroke-width:1px,color:#1e3a8a,rx:5px,ry:5px;
+
+class A,B,D green;
+class C,E,F,C1,C2,C3,C4,C5,E1,F1,F2,F3 blue
+</pre></section>
+        <section>
+          <h3>
+            Classification for Characteristic Coprime Groups</h3>
+          <p>
+            When the order of <code class="math inline">G</code> is coprime to the characteristic <code class="math inline">p</code> of the field:</p>
+          <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.theorem#doc" title="Declaration for Lean.Parser.Command.theorem"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.theorem-8761">theorem</span></a><span class="inter-text"> </span><span class="has-info warning"><span class="hover-container"><span class="hover-info messages"><code class="verso-message warning"><span class="text"></span><span class="text">declaration uses '</span><span class="highlighted"><span class="inter-text"></span><span class="unknown token" data-binding="">sorry</span><span class="inter-text"></span></span><span class="text">'</span></code></span></span><a href="/Dicksons/docs/find/?pattern=dicksons_classification_theorem_class_I#doc" title="Definition for dicksons_classification_theorem_class_I"><span class="const token" data-binding="const-dicksons_classification_theorem_class_I" data-verso-hover="41">dicksons_classification_theorem_class_I</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-2022587232982003368" data-verso-hover="3">Type*</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=IsAlgClosed#doc" title="Documentation for IsAlgClosed"><span class="const token" data-binding="const-IsAlgClosed" data-verso-hover="7">IsAlgClosed</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=CharP#doc" title="Documentation for CharP"><span class="const token" data-binding="const-CharP" data-verso-hover="42">CharP</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.104226" data-verso-hover="43">hp</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Prime#doc" title="Documentation for Prime"><span class="const token" data-binding="const-Prime" data-verso-hover="44">Prime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-8901" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">  </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.104754" data-verso-hover="47">hp'</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">0</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∨</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Nat.Coprime#doc" title="Documentation for Nat.Coprime"><span class="const token" data-binding="const-Nat.Coprime" data-verso-hover="48">Nat.Coprime</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Nat.card#doc" title="Documentation for Nat.card"><span class="const token" data-binding="const-Nat.card" data-verso-hover="49">Nat.card</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=IsCyclic#doc" title="Documentation for IsCyclic"><span class="const token" data-binding="const-IsCyclic" data-verso-hover="50">IsCyclic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=DihedralGroup#doc" title="Documentation for DihedralGroup"><span class="const token" data-binding="const-DihedralGroup" data-verso-hover="52">DihedralGroup</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="53">n</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-9043" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">3</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-9078" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">5</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Matrix.termGL#doc" title="Declaration for Matrix.termGL"><span class="keyword token" data-binding="kw-occ-Matrix.termGL-9114" data-verso-hover="55">GL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">3</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-13111581769402975794-9140-9142-9"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Term.byTactic#doc" title="Declaration for Lean.Parser.Term.byTactic"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.byTactic-9140" data-verso-hover="19">by</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-13111581769402975794-9140-9142-9"><span class="tactic-state"><span class="goal"><span class="hypotheses"><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="53">n</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=PNat#doc" title="Documentation for PNat"><span class="const token" data-binding="const-PNat" data-verso-hover="57">ℕ+</span></a><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u_1</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106019" data-verso-hover="23">inst✝³</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106020" data-verso-hover="58">inst✝²</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=IsAlgClosed#doc" title="Documentation for IsAlgClosed"><span class="const token" data-binding="const-IsAlgClosed" data-verso-hover="7">IsAlgClosed</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Nat#doc" title="Documentation for Nat"><span class="const token" data-binding="const-Nat" data-verso-hover="59">ℕ</span></a><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106022" data-verso-hover="60">inst✝¹</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=CharP#doc" title="Documentation for CharP"><span class="const token" data-binding="const-CharP" data-verso-hover="42">CharP</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.104226" data-verso-hover="43">hp</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Prime#doc" title="Documentation for Prime"><span class="const token" data-binding="const-Prime" data-verso-hover="44">Prime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">SL(</span></a><span class="unknown token" data-binding="">2</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">,</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104116" data-verso-hover="1">F</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">)</span></a></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106025" data-verso-hover="62">inst✝</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.104754" data-verso-hover="47">hp'</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Eq#doc" title="Documentation for Eq"><span class="const token" data-binding="const-Eq" data-verso-hover="25">=</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">0</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Nat.card#doc" title="Documentation for Nat.card"><span class="const token" data-binding="const-Nat.card" data-verso-hover="49">Nat.card</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">.</span><a href="/Dicksons/docs/find/?pattern=Nat.Coprime#doc" title="Documentation for Nat.Coprime"><span class="const token" data-binding="const-Nat.Coprime" data-verso-hover="48">Coprime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.104127" data-verso-hover="17">p</span></span></span></span><span class="conclusion"><span class="prefix">⊢ </span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=IsCyclic#doc" title="Documentation for IsCyclic"><span class="const token" data-binding="const-IsCyclic" data-verso-hover="50">IsCyclic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=DihedralGroup#doc" title="Documentation for DihedralGroup"><span class="const token" data-binding="const-DihedralGroup" data-verso-hover="52">DihedralGroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↑</span><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="53">n</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+    </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">SL(</span></a><span class="unknown token" data-binding="">2</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">,</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">3</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">)</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">SL(</span></a><span class="unknown token" data-binding="">2</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">,</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">)</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.104294" data-verso-hover="45">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Matrix.GeneralLinearGroup#doc" title="Documentation for Matrix.GeneralLinearGroup"><span class="const token" data-binding="const-Matrix.GeneralLinearGroup" data-verso-hover="64">GL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">3</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span></span></span></span></span></span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-7-9143-9148-11"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Tactic.tacticSorry#doc" title="Declaration for Lean.Parser.Tactic.tacticSorry"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Tactic.tacticSorry-9143" data-verso-hover="65">sorry</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7-9143-9148-11"><span class="tactic-state">All goals completed! 🐙</span></span></code></section>
+        <section>
+          <h3>
+            Classification for Characteristic Dividing Groups</h3>
+          <p>
+            When the characteristic <code class="math inline">p</code> divides the order of the group:</p>
+          <code class="hl lean block" data-lean-context="verso"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.theorem#doc" title="Declaration for Lean.Parser.Command.theorem"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.theorem-9666">theorem</span></a><span class="inter-text"> </span><span class="has-info warning"><span class="hover-container"><span class="hover-info messages"><code class="verso-message warning"><span class="text"></span><span class="text">declaration uses '</span><span class="highlighted"><span class="inter-text"></span><span class="unknown token" data-binding="">sorry</span><span class="inter-text"></span></span><span class="text">'</span></code></span></span><a href="/Dicksons/docs/find/?pattern=dicksons_classification_theorem_class_II#doc" title="Definition for dicksons_classification_theorem_class_II"><span class="const token" data-binding="const-dicksons_classification_theorem_class_II" data-verso-hover="66">dicksons_classification_theorem_class_II</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-2022587232982003368" data-verso-hover="3">Type*</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=IsAlgClosed#doc" title="Documentation for IsAlgClosed"><span class="const token" data-binding="const-IsAlgClosed" data-verso-hover="7">IsAlgClosed</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="unknown token" data-binding="">]</span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ</span><span class="unknown token" data-binding="">}</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Fact#doc" title="Documentation for Fact"><span class="const token" data-binding="const-Fact" data-verso-hover="67">Fact</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Nat.Prime#doc" title="Documentation for Nat.Prime"><span class="const token" data-binding="const-Nat.Prime" data-verso-hover="68">Nat.Prime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=CharP#doc" title="Documentation for CharP"><span class="const token" data-binding="const-CharP" data-verso-hover="42">CharP</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-9812" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.107304" data-verso-hover="69">hp</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∣</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Nat.card#doc" title="Documentation for Nat.card"><span class="const token" data-binding="const-Nat.card" data-verso-hover="49">Nat.card</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107369" data-verso-hover="45">Q</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-9878" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=IsElementaryAbelian#doc" title="Documentation for IsElementaryAbelian"><span class="const token" data-binding="const-IsElementaryAbelian" data-verso-hover="33">IsElementaryAbelian</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107369" data-verso-hover="45">Q</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Subgroup.Normal#doc" title="Documentation for Subgroup.Normal"><span class="const token" data-binding="const-Subgroup.Normal" data-verso-hover="70">Normal</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107369" data-verso-hover="45">Q</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.107369" data-verso-hover="45">Q</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=</span><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108716" data-verso-hover="17">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Odd#doc" title="Documentation for Odd"><span class="const token" data-binding="const-Odd" data-verso-hover="71">Odd</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108716" data-verso-hover="17">n</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=DihedralGroup#doc" title="Documentation for DihedralGroup"><span class="const token" data-binding="const-DihedralGroup" data-verso-hover="52">DihedralGroup</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.108716" data-verso-hover="17">n</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-10038" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">5</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109183" data-verso-hover="53">k</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ+</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-10087" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=GaloisField#doc" title="Documentation for GaloisField"><span class="const token" data-binding="const-GaloisField" data-verso-hover="72">GaloisField</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109183" data-verso-hover="53">k</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109487" data-verso-hover="53">k</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ+</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109665" data-verso-hover="73">x</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=GaloisField#doc" title="Documentation for GaloisField"><span class="const token" data-binding="const-GaloisField" data-verso-hover="72">GaloisField</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">*</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109487" data-verso-hover="53">k</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=orderOf#doc" title="Documentation for orderOf"><span class="const token" data-binding="const-orderOf" data-verso-hover="40">orderOf</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109665" data-verso-hover="73">x</span><span class="unknown token" data-binding="">^</span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="inter-text"> </span><span class="unknown token" data-binding="">=</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="unknown token" data-binding="">^</span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.109487" data-verso-hover="53">k</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">∧</span><span class="inter-text">
+    </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110283" data-verso-hover="74">φ</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">≃*</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=MatrixGroups.«termSL(_,_)»#doc" title="Declaration for MatrixGroups.«termSL(_,_)»"><span class="keyword token" data-binding="kw-occ-MatrixGroups.«termSL(_,_)»-10212" data-verso-hover="16">SL(</span></a><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=GaloisField#doc" title="Documentation for GaloisField"><span class="const token" data-binding="const-GaloisField" data-verso-hover="72">GaloisField</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.109487" data-verso-hover="53">k</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=True#doc" title="Documentation for True"><span class="const token" data-binding="const-True" data-verso-hover="75">True</span></a><span class="inter-text">
+  </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-12937172602340242420-10246-10248-12"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Term.byTactic#doc" title="Declaration for Lean.Parser.Term.byTactic"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.byTactic-10246" data-verso-hover="19">by</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-12937172602340242420-10246-10248-12"><span class="tactic-state"><span class="goal"><span class="hypotheses"><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u_1</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110512" data-verso-hover="23">inst✝⁴</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110513" data-verso-hover="58">inst✝³</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=IsAlgClosed#doc" title="Documentation for IsAlgClosed"><span class="const token" data-binding="const-IsAlgClosed" data-verso-hover="7">IsAlgClosed</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Nat#doc" title="Documentation for Nat"><span class="const token" data-binding="const-Nat" data-verso-hover="59">ℕ</span></a><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110515" data-verso-hover="76">inst✝²</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Fact#doc" title="Documentation for Fact"><span class="const token" data-binding="const-Fact" data-verso-hover="67">Fact</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Nat.Prime#doc" title="Documentation for Nat.Prime"><span class="const token" data-binding="const-Nat.Prime" data-verso-hover="68">Nat.Prime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110516" data-verso-hover="60">inst✝¹</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=CharP#doc" title="Documentation for CharP"><span class="const token" data-binding="const-CharP" data-verso-hover="42">CharP</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">SL(</span></a><span class="unknown token" data-binding="">2</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">,</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106726" data-verso-hover="1">F</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">)</span></a></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110518" data-verso-hover="62">inst✝</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.107304" data-verso-hover="69">hp</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Dvd.dvd#doc" title="Documentation for Dvd.dvd"><span class="const token" data-binding="const-Dvd.dvd" data-verso-hover="77">∣</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Nat.card#doc" title="Documentation for Nat.card"><span class="const token" data-binding="const-Nat.card" data-verso-hover="49">Nat.card</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span></span></span></span><span class="conclusion"><span class="prefix">⊢ </span><span class="type"><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110593" data-verso-hover="45">Q</span><span class="unknown token" data-binding="">,</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=IsElementaryAbelian#doc" title="Documentation for IsElementaryAbelian"><span class="const token" data-binding="const-IsElementaryAbelian" data-verso-hover="33">IsElementaryAbelian</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110593" data-verso-hover="45">Q</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">∧</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110593" data-verso-hover="45">Q</span><span class="unknown token" data-binding="">.</span><a href="/Dicksons/docs/find/?pattern=Subgroup.Normal#doc" title="Documentation for Subgroup.Normal"><span class="const token" data-binding="const-Subgroup.Normal" data-verso-hover="70">Normal</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">∧</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.110593" data-verso-hover="45">Q</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+    </span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">(</span></a><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Eq#doc" title="Documentation for Eq"><span class="const token" data-binding="const-Eq" data-verso-hover="25">=</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">∧</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="17">n</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Odd#doc" title="Documentation for Odd"><span class="const token" data-binding="const-Odd" data-verso-hover="71">Odd</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="17">n</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">∧</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=DihedralGroup#doc" title="Documentation for DihedralGroup"><span class="const token" data-binding="const-DihedralGroup" data-verso-hover="52">DihedralGroup</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="17">n</span><span class="unknown token" data-binding="">)</span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">)</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+      </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">SL(</span></a><span class="unknown token" data-binding="">2</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">,</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">)</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+        </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110572" data-verso-hover="53">k</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.106867" data-verso-hover="45">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">SL(</span></a><span class="unknown token" data-binding="">2</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">,</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=GaloisField#doc" title="Documentation for GaloisField"><span class="const token" data-binding="const-GaloisField" data-verso-hover="72">GaloisField</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">↑</span><span class="var token" data-binding="var-_uniq.110572" data-verso-hover="53">k</span><a href="/Dicksons/docs/find/?pattern=Matrix.SpecialLinearGroup#doc" title="Documentation for Matrix.SpecialLinearGroup"><span class="const token" data-binding="const-Matrix.SpecialLinearGroup" data-verso-hover="61">)</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110581" data-verso-hover="53">k</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110611" data-verso-hover="73">x</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=orderOf#doc" title="Documentation for orderOf"><span class="const token" data-binding="const-orderOf" data-verso-hover="40">orderOf</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110611" data-verso-hover="73">x</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=HPow.hPow#doc" title="Documentation for HPow.hPow"><span class="const token" data-binding="const-HPow.hPow" data-verso-hover="79">^</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Eq#doc" title="Documentation for Eq"><span class="const token" data-binding="const-Eq" data-verso-hover="25">=</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.106737" data-verso-hover="17">p</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=HPow.hPow#doc" title="Documentation for HPow.hPow"><span class="const token" data-binding="const-HPow.hPow" data-verso-hover="79">^</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↑</span><span class="var token" data-binding="var-_uniq.110581" data-verso-hover="53">k</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=And#doc" title="Documentation for And"><span class="const token" data-binding="const-And" data-verso-hover="78">∧</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110591" data-verso-hover="74">φ</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=True#doc" title="Documentation for True"><span class="const token" data-binding="const-True" data-verso-hover="75">True</span></a></span></span></span></span></span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-7-10249-10254-14"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Tactic.tacticSorry#doc" title="Declaration for Lean.Parser.Tactic.tacticSorry"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Tactic.tacticSorry-10249" data-verso-hover="65">sorry</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7-10249-10254-14"><span class="tactic-state">All goals completed! 🐙</span></span></code></section>
+        <section>
+          <h3>
+            Classification for PGL₂</h3>
+          <p>
+            The classification extends to finite subgroups of <code class="math inline">\text{PGL}(2, \overline{\mathbb{F}_p})</code>:</p>
+          <code class="hl lean block" data-lean-context="verso"><span class="has-info warning"><span class="hover-container"><span class="hover-info messages"><code class="verso-message warning"><span class="text"></span><span class="text">This line exceeds the 100 character limit, please shorten it!</span><span class="text"></span><span class="text">
+</span><span class="text">
+</span><span class="text">Note: </span><span class="text">This linter can be disabled with `set_option </span><span class="text">linter.style.longLine</span><span class="text"> false`</span></code></span></span><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Command.theorem#doc" title="Declaration for Lean.Parser.Command.theorem"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Command.theorem-10715">theorem</span></a><span class="inter-text"> </span><span class="has-info warning"><span class="hover-container"><span class="hover-info messages"><code class="verso-message warning"><span class="text"></span><span class="text">declaration uses '</span><span class="highlighted"><span class="inter-text"></span><span class="unknown token" data-binding="">sorry</span><span class="inter-text"></span></span><span class="text">'</span></code></span></span><a href="/Dicksons/docs/find/?pattern=FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod#doc" title="Definition for FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod"><span class="const token" data-binding="const-FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod" data-verso-hover="80">FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod</span></a></span><span class="inter-text"> </span><span class="unknown token" data-binding="">{</span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="unknown token" data-binding="">ℕ</span><span class="unknown token" data-binding="">}</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Fact#doc" title="Documentation for Fact"><span class="const token" data-binding="const-Fact" data-verso-hover="67">Fact</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Nat.Prime#doc" title="Documentation for Nat.Prime"><span class="const token" data-binding="const-Nat.Prime" data-verso-hover="68">Nat.Prime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><span class="sort token" data-binding="sort-2022587232982003368" data-verso-hover="3">Type*</span><span class="unknown token" data-binding="">)</span></span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=CharP#doc" title="Documentation for CharP"><span class="const token" data-binding="const-CharP" data-verso-hover="42">CharP</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="unknown token" data-binding="">]</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PGL#doc" title="Documentation for PGL"><span class="const token" data-binding="const-PGL" data-verso-hover="9">PGL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=AlgebraicClosure#doc" title="Documentation for AlgebraicClosure"><span class="const token" data-binding="const-AlgebraicClosure" data-verso-hover="83">AlgebraicClosure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">[</span><span class="var token" data-binding="var-_uniq.111159" data-verso-hover="62">hG</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="unknown token" data-binding="">]</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=IsCyclic#doc" title="Documentation for IsCyclic"><span class="const token" data-binding="const-IsCyclic" data-verso-hover="50">IsCyclic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.111380" data-verso-hover="17">n</span><span class="unknown token" data-binding="">,</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=DihedralGroup#doc" title="Documentation for DihedralGroup"><span class="const token" data-binding="const-DihedralGroup" data-verso-hover="52">DihedralGroup</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.111380" data-verso-hover="17">n</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=alternatingGroup#doc" title="Documentation for alternatingGroup"><span class="const token" data-binding="const-alternatingGroup" data-verso-hover="84">alternatingGroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">4</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Equiv.Perm#doc" title="Documentation for Equiv.Perm"><span class="const token" data-binding="const-Equiv.Perm" data-verso-hover="85">Equiv.Perm</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">5</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=alternatingGroup#doc" title="Documentation for alternatingGroup"><span class="const token" data-binding="const-alternatingGroup" data-verso-hover="84">alternatingGroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">5</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PSL#doc" title="Documentation for PSL"><span class="const token" data-binding="const-PSL" data-verso-hover="8">PSL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∨</span><span class="inter-text">
+  </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PGL#doc" title="Documentation for PGL"><span class="const token" data-binding="const-PGL" data-verso-hover="9">PGL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="typed token" data-binding="" data-verso-hover="17">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">:=</span><span class="inter-text"> </span><span class="tactic"><label for="tactic-state-7149039564187214678-11236-11238-15"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Term.byTactic#doc" title="Declaration for Lean.Parser.Term.byTactic"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Term.byTactic-11236" data-verso-hover="19">by</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7149039564187214678-11236-11238-15"><span class="tactic-state"><span class="goal"><span class="hypotheses"><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Nat#doc" title="Documentation for Nat"><span class="const token" data-binding="const-Nat" data-verso-hover="59">ℕ</span></a><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.113270" data-verso-hover="76">inst✝³</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Fact#doc" title="Documentation for Fact"><span class="const token" data-binding="const-Fact" data-verso-hover="67">Fact</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Nat.Prime#doc" title="Documentation for Nat.Prime"><span class="const token" data-binding="const-Nat.Prime" data-verso-hover="68">Nat.Prime</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><span class="sort token" data-binding="sort-7243200735919010059" data-verso-hover="20">Type u_3</span><span class="inter-text"></span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.113272" data-verso-hover="86">inst✝²</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Field#doc" title="Documentation for Field"><span class="const token" data-binding="const-Field" data-verso-hover="6">Field</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.113273" data-verso-hover="87">inst✝¹</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=CharP#doc" title="Documentation for CharP"><span class="const token" data-binding="const-CharP" data-verso-hover="42">CharP</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.113274" data-verso-hover="88">inst✝</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Subgroup#doc" title="Documentation for Subgroup"><span class="const token" data-binding="const-Subgroup" data-verso-hover="36">Subgroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PGL#doc" title="Documentation for PGL"><span class="const token" data-binding="const-PGL" data-verso-hover="9">PGL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=AlgebraicClosure#doc" title="Documentation for AlgebraicClosure"><span class="const token" data-binding="const-AlgebraicClosure" data-verso-hover="83">AlgebraicClosure</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=ZMod#doc" title="Documentation for ZMod"><span class="const token" data-binding="const-ZMod" data-verso-hover="54">ZMod</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110783" data-verso-hover="17">p</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span></span></span><span class="hypothesis"><span class="name"><span class="var token" data-binding="var-_uniq.111159" data-verso-hover="62">hG</span></span><span class="colon">:</span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=Finite#doc" title="Documentation for Finite"><span class="const token" data-binding="const-Finite" data-verso-hover="46">Finite</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span></span></span></span><span class="conclusion"><span class="prefix">⊢ </span><span class="type"><span class="inter-text"></span><a href="/Dicksons/docs/find/?pattern=IsCyclic#doc" title="Documentation for IsCyclic"><span class="const token" data-binding="const-IsCyclic" data-verso-hover="50">IsCyclic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+  </span><span class="unknown token" data-binding="">∃</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113301" data-verso-hover="17">n</span><span class="unknown token" data-binding="">,</span><span class="inter-text">
+    </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=DihedralGroup#doc" title="Documentation for DihedralGroup"><span class="const token" data-binding="const-DihedralGroup" data-verso-hover="52">DihedralGroup</span></a><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.113301" data-verso-hover="17">n</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+      </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=alternatingGroup#doc" title="Documentation for alternatingGroup"><span class="const token" data-binding="const-alternatingGroup" data-verso-hover="84">alternatingGroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">4</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+        </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Equiv.Perm#doc" title="Documentation for Equiv.Perm"><span class="const token" data-binding="const-Equiv.Perm" data-verso-hover="85">Equiv.Perm</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text">
+          </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="inter-text"> </span><span class="unknown token" data-binding="">↥</span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=alternatingGroup#doc" title="Documentation for alternatingGroup"><span class="const token" data-binding="const-alternatingGroup" data-verso-hover="84">alternatingGroup</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">5</span><span class="unknown token" data-binding="">)</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PSL#doc" title="Documentation for PSL"><span class="const token" data-binding="const-PSL" data-verso-hover="8">PSL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Or#doc" title="Documentation for Or"><span class="const token" data-binding="const-Or" data-verso-hover="63">∨</span></a><span class="inter-text"> </span><a href="/Dicksons/docs/find/?pattern=Isomorphic#doc" title="Documentation for Isomorphic"><span class="const token" data-binding="const-Isomorphic" data-verso-hover="51">Isomorphic</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(↥</span><span class="var token" data-binding="var-_uniq.110936" data-verso-hover="82">G</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=PGL#doc" title="Documentation for PGL"><span class="const token" data-binding="const-PGL" data-verso-hover="9">PGL</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">(</span><a href="/Dicksons/docs/find/?pattern=Fin#doc" title="Documentation for Fin"><span class="const token" data-binding="const-Fin" data-verso-hover="56">Fin</span></a><span class="inter-text"> </span><span class="unknown token" data-binding="">2</span><span class="unknown token" data-binding="">)</span><span class="inter-text"> </span><span class="var token" data-binding="var-_uniq.110788" data-verso-hover="81">𝕂</span><span class="unknown token" data-binding="">)</span></span></span></span></span></span><span class="inter-text">
+    </span><span class="tactic"><label for="tactic-state-7-11243-11248-17"><a href="/Dicksons/docs/find/?pattern=Lean.Parser.Tactic.tacticSorry#doc" title="Declaration for Lean.Parser.Tactic.tacticSorry"><span class="keyword token" data-binding="kw-occ-Lean.Parser.Tactic.tacticSorry-11243" data-verso-hover="65">sorry</span></a></label><input type="checkbox" class="tactic-toggle" id="tactic-state-7-11243-11248-17"><span class="tactic-state">All goals completed! 🐙</span></span></code></section>
+        </section>
+      <section>
+        <h2>
+          Repository Structure</h2>
+        <p>
+          The repository is organised as follows:</p>
+        <dl><dt> <code>Lean/Dicksons</code></dt><dd><p>
+              The formal Lean 4 proofs, including:</p>
+            <ul>
+              <li>
+                <p>
+                  <code>Ch4_PGLIsoPSLOverAlgClosedField/</code>: Isomorphism between PGL and PSL over algebraically closed fields</p>
+                </li>
+              <li>
+                <p>
+                  <code>Ch5_PropertiesOfSLOverAlgClosedField/</code>: Properties of SL₂ including special matrices and subgroups</p>
+                </li>
+              <li>
+                <p>
+                  <code>Ch6_MaximalAbelianSubgroupClassEquation/</code>: Maximal abelian subgroups and class equations</p>
+                </li>
+              <li>
+                <p>
+                  <code>Ch7_DicksonsClassificationTheorem.lean</code>: The main classification theorem</p>
+                </li>
+              </ul>
+            </dd><dt> <code>Verso</code></dt><dd><p>
+              Lean code for generating this documentation website using the Verso framework.</p>
+            </dd><dt> <code>site</code></dt><dd><p>
+              Jekyll website source files, completed by the Verso-generated content.</p>
+            </dd></dl></section>
+      <section>
+        <h2>
+          References</h2>
+        <ul>
+          <li>
+            <p>
+              Dickson, L.E. (1901). "Linear Groups with an Exposition of the Galois Field Theory".
+  <strong>Teubner</strong>, Leipzig.</p>
+            </li>
+          <li>
+            <p>
+              Suzuki, M. (1982). "Group Theory I". <strong>Grundlehren der mathematischen Wissenschaften</strong>,
+  vol. 247, Springer-Verlag.</p>
+            </li>
+          <li>
+            <p>
+              Huppert, B. (1967). "Endliche Gruppen I". <strong>Grundlehren der mathematischen Wissenschaften</strong>,
+  vol. 134, Springer-Verlag.
+</p>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+  </body>
+
+
+        <div id="footnotes-container"></div>
+      </div>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+  </body>
+</html>

@@ -2,8 +2,6 @@
 */.lake
 # Python things
 .python-version
-# MacOS things
-.DS_Store
 # Jeykll things
 */_site
 */.sass-cache

@@ -117,7 +117,7 @@ The formal Lean 4 proofs are organized as follows:
   - `S1_ElementaryAbelian.lean`: Elementary abelian groups
   - `S2_A_MaximalAbelianSubgroup.lean`: Maximal abelian subgroups (Part A)
   - `S2_B_MaximalAbelianSubgroup.lean`: Maximal abelian subgroups (Part B)
-  - `S3_NoncenterClassEquation.lean`: Non-center class equation
+  - `S3_NoncenterClassEquation.lean`: Non-center Maximal Class Equation
 
 - **Ch7_DicksonsClassificationTheorem.lean**: The main classification theorem
 

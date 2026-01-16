@@ -60,7 +60,8 @@ lemma normalizer_subgroup_S_le_L [DecidableEq F] { S₀ : Subgroup (SL(2,F)) }
     rw [neg_eq_zero] at β_eq_zero
     apply eq_zero_of_ne_zero_of_mul_right_eq_zero σ_ne_zero at β_eq_zero
     rw [sq_eq_zero_iff] at β_eq_zero
-    simp [x_eq]
+    simp only [x_eq, EmbeddingLike.apply_eq_iff_eq, vecCons_inj, and_true, exists_and_left,
+      ↓existsAndEq, exists_eq_left]
     exact β_eq_zero.symm
   · push_neg at h'
     have S₀_eq_bot : S₀ = ⊥ := by
@@ -135,10 +136,11 @@ lemma normalizer_subgroup_D_eq_DW { D₀ : Subgroup (SL(2,F)) }
       absurd zero_ne_one det_eq_one
       trivial
   · intro x hx
-    simp [DW] at hx
+    simp only [DW, mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_union,
+      Set.mem_setOf_eq] at hx
     rcases hx with (hx | hx)
     · obtain ⟨δ, rfl⟩ := hx
-      simp [mem_normalizer_iff]
+      simp only [mem_normalizer_iff, inv_d_eq_d_inv]
       intro y
       constructor
       · intro y_mem_D₀
@@ -191,4 +193,3 @@ lemma normalizer_subgroup_D_eq_DW { D₀ : Subgroup (SL(2,F)) }
 
 lemma normalizer_D_eq_DW {F : Type*} [Field F] : (D F).normalizer = DW F := by sorry
 
-#min_imports

@@ -80,9 +80,7 @@ lemma minpoly_eq_X_sub_C_implies_matrix_is_diagonal { n R : Type*} [Fintype n] [
     (hM : minpoly R M = (X - C a)) : M = diagonal (fun _ ↦ a) := by
     -- The minimal polynomial evaluated at M must be 0
     have M_eq_diagonal : aeval (M : Matrix n n R) (minpoly R M) = 0 := minpoly.aeval _ _
-    simp [hM, algebraMap, sub_eq_zero] at M_eq_diagonal
-    -- This shows M is diagonal
-    exact M_eq_diagonal
+    simpa [hM, algebraMap, sub_eq_zero] using M_eq_diagonal
 
 
 /-
@@ -227,7 +225,11 @@ A 2x2 upper triangular matrix is conjugate to a diagonal matrix if `a ≠ d`
 lemma upper_triangular_isConj_diagonal_of_nonzero_det  [DecidableEq F]
   {a b d : F} (had : a - d ≠ 0) : ∃ C : SL(2,F), C * !![a, b; 0, d] * C⁻¹ = !![a, 0; 0, d] := by
   use ⟨!![1, b / (a - d); 0, 1], by simp⟩
-  simp
+  simp only [cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd, vecMul_cons, head_cons, one_smul,
+    tail_cons, smul_cons, smul_eq_mul, mul_zero, smul_empty, empty_vecMul, add_zero, add_cons,
+    empty_add_empty, zero_smul, zero_add, empty_mul, Equiv.symm_apply_apply,
+    SpecialLinearGroup.coe_inv, adjugate_fin_two_of, neg_zero, mul_one, mul_neg,
+    EmbeddingLike.apply_eq_iff_eq, vecCons_inj, and_true, true_and]
   repeat'
   field_simp
   ring_nf
@@ -238,7 +240,7 @@ A 2x2 upper triangular matrix is conjugate to a jordan block if `b ≠ 0`
 lemma upper_triangular_isConj_jordan {a b : F} (hb : b ≠ 0) :
   IsConj !![a, b; 0, a] !![a, 1; 0, a] := by
   use GeneralLinearGroup.mk' !![1 / b, 0; 0, 1]
-    (by simp; apply invertibleOfNonzero <| inv_ne_zero hb)
+    (by simpa using invertibleOfNonzero <| inv_ne_zero hb)
   ext <;> simp <;> field_simp
 
 /-
@@ -309,17 +311,18 @@ theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [I
     simp only [det_mul, SpecialLinearGroup.det_coe, mul_one]
   have had := det_eq_one
   -- The determinant being equal to 1 implies a * d = 1
-  simp at had
+  simp only [det_fin_two_of, mul_zero, sub_zero] at had
   -- so the inverse of a is equal to d
   have d_eq_inv_a : d = a⁻¹ := Eq.symm (DivisionMonoid.inv_eq_of_mul a d had)
   -- Therefore a is a unit
   have a_is_unit : IsUnit a := IsUnit.of_mul_eq_one _ had
   -- Furthermore, a is nonzero
   have a_ne_zero : a ≠ 0 := by exact left_ne_zero_of_mul_eq_one had
-  have det_eq_one' : det !![a, 0; 0, d] = 1 := by simp [d_eq_inv_a]; rw [mul_inv_cancel₀ a_ne_zero]
+  have det_eq_one' : det !![a, 0; 0, d] = 1 := by simp [d_eq_inv_a, mul_inv_cancel₀ a_ne_zero]
   obtain rfl | had' := eq_or_ne a d
   · right
-    simp [← sq] at det_eq_one'
+    simp only [det_fin_two_of, ← sq, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow,
+      sub_zero, sq_eq_one_iff] at det_eq_one'
     rcases det_eq_one' with (a_eq_one | a_eq_neg_one)
     · left
       rw [a_eq_one] at h
@@ -368,6 +371,3 @@ theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [I
     simp only [SpecialMatrices.d, IsUnit.unit_spec]
     -- conjugation is transitive
     apply IsConj.trans isConj₂.symm isConj₁.symm
-
-
-#min_imports

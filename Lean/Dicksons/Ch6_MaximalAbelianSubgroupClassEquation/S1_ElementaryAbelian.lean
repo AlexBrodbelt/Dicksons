@@ -26,7 +26,7 @@ namespace IsElementaryAbelian
 
 lemma dvd_card {G : Type*} [Group G] {p : ℕ} {H : Subgroup G}
   [Finite H] (hH : IsElementaryAbelian p H) (bot_lt_H: ⊥ < H) : p ∣ (Nat.card H) := by
-  simp [@SetLike.lt_iff_le_and_exists] at bot_lt_H
+  simp only [SetLike.lt_iff_le_and_exists, bot_le, mem_bot, true_and] at bot_lt_H
   obtain ⟨h, h_in_H, h_ne_one⟩ := bot_lt_H
   have order_eq_p : @orderOf H _ ⟨h, h_in_H⟩ = p := by
     apply hH.right ⟨h, h_in_H⟩
@@ -34,24 +34,24 @@ lemma dvd_card {G : Type*} [Group G] {p : ℕ} {H : Subgroup G}
   rw [← order_eq_p]
   let inst : Fintype (H :) := Fintype.ofFinite ↥H
   have order_dvd_card := @orderOf_dvd_card H _ _ ⟨h, h_in_H⟩
-  simp at order_dvd_card ⊢
+  simp only [orderOf_mk, Nat.card_eq_fintype_card] at order_dvd_card ⊢
   exact order_dvd_card
 
 
 lemma primeFac_eq {G : Type*} [Group G] (p : ℕ)
   (hp : Nat.Prime p) (H : Subgroup G) [Finite H] (hH : IsElementaryAbelian p H) (bot_lt_H : ⊥ < H):
   Nat.primeFactors (Nat.card H) = {p} := by
-  rw [@Finset.Subset.antisymm_iff]
+  rw [Finset.Subset.antisymm_iff]
   constructor
   -- Suppose the set of prime factors is not contained in {p}
   · by_contra! h
-    rw [@Finset.not_subset] at h
+    rw [Finset.not_subset] at h
     obtain ⟨q, hq, q_ne_p⟩ := h
-    simp [← ne_eq] at q_ne_p
+    simp only [Finset.mem_singleton, ← ne_eq] at q_ne_p
     rw [Nat.mem_primeFactors] at hq
     obtain ⟨hq, q_dvd_card, -⟩ := hq
     let Fintype_H : Fintype H := Fintype.ofFinite ↥H
-    simp at q_dvd_card
+    simp only [Nat.card_eq_fintype_card] at q_dvd_card
     obtain ⟨x, order_eq_q⟩ := @exists_prime_orderOf_dvd_card H _ _ q ({out := hq}) q_dvd_card
     have q_ne_one : q ≠ 1 := Nat.Prime.ne_one hq
     have x_ne_one : x ≠ 1 := by
@@ -61,8 +61,7 @@ lemma primeFac_eq {G : Type*} [Group G] (p : ℕ)
     have order_eq_p : orderOf x = p := hH.right x x_ne_one
     absurd q_ne_p (order_eq_q ▸ order_eq_p)
     trivial
-  · simp
-    exact
+  · simpa using
       ⟨hp, dvd_card hH bot_lt_H, Nat.ne_zero_iff_zero_lt.mpr Nat.card_pos⟩
 
 
@@ -84,7 +83,7 @@ lemma IsPGroup {G : Type*} [hG : Group G] (p : ℕ) (hp : Nat.Prime p)
   have p_eq_p' : p' ∈ (Nat.card ↥H).primeFactors := by
     rw [@Nat.mem_primeFactors]
     exact ⟨hp', p'_dvd_card, Nat.ne_zero_iff_zero_lt.mpr Nat.card_pos⟩
-  simp [this] at p_eq_p'
+  simp only [this, Finset.mem_singleton] at p_eq_p'
   use k, p_eq_p'▸ card_eq.symm
 
 
@@ -98,14 +97,12 @@ lemma subgroupOf {G : Type*} [Group G]
   case orderOf_eq_p =>
     rintro ⟨h, hh⟩ h_ne_one
     have h_in_H := hh
-    simp [mem_subgroupOf] at h_in_H
+    simp only [mem_subgroupOf] at h_in_H
     have h_ne_one' : ⟨(h : G), h_in_H⟩ ≠ (1 : H) := by
-      simp
+      simp only [ne_eq, mk_eq_one, OneMemClass.coe_eq_one]
       rintro rfl
       simp_all
     have order_of_eq_p' := hH.right ⟨(h : G), h_in_H⟩ h_ne_one'
     simp [← order_of_eq_p']
 
 end IsElementaryAbelian
-
-#min_imports

@@ -56,7 +56,7 @@ lemma s_inv (σ : F) : (s σ)⁻¹ = s (-σ) := by
 
 @[simp]
 lemma inv_neg_t_eq (σ : F) : (- s σ)⁻¹ = - s (-σ) := by
-  simp [Matrix.SpecialLinearGroup.SL2_inv_expl]
+  simp only [inv_neg, SpecialLinearGroup.SL2_inv_expl, Fin.isValue, neg_inj]
   ext <;> simp [s]
 
 -- (ii)
@@ -129,9 +129,11 @@ lemma s_eq_d_iff {δ : Fˣ} {σ : F} : d δ = s σ ↔ δ = 1 ∧ σ = 0 := by
   constructor
   · intro h
     have δ_eq_one : d δ 0 0 = 1 := by simp [h, s]
-    simp [d] at δ_eq_one
+    simp only [d, Fin.isValue, of_apply, cons_val', cons_val_zero, cons_val_fin_one,
+      Units.val_eq_one] at δ_eq_one
     have σ_eq_zero : s σ 1 0 = 0 := by simp [← h, d]
-    simp [s] at σ_eq_zero
+    simp only [s, Fin.isValue, of_apply, cons_val', cons_val_zero, cons_val_fin_one,
+      cons_val_one] at σ_eq_zero
     exact ⟨δ_eq_one, σ_eq_zero⟩
   · rintro ⟨rfl, rfl⟩
     simp
@@ -159,7 +161,7 @@ def ds (δ : Fˣ) (σ : F) : SL(2, F) :=
 
 -- Lemma 1.1.iii
 lemma d_mul_s_mul_d_inv_eq_s (δ : Fˣ) (σ : F) : d δ * s σ * (d δ)⁻¹ = s (σ * δ⁻¹ * δ⁻¹) := by
-  simp; ext <;> simp [s, d, mul_comm]
+  simp only [inv_d_eq_d_inv, Units.val_inv_eq_inv_val]; ext <;> simp [s, d, mul_comm]
 
 def dw (δ : Fˣ) : SL(2,F) :=
   ⟨!![0, δ; -δ⁻¹, 0], by norm_num⟩
@@ -170,12 +172,12 @@ lemma d_mul_w_eq_dw (δ : Fˣ) : d δ * w = dw δ := by ext <;> simp [d, w, dw]
 
 @[simp]
 lemma inv_of_d_mul_w (δ : Fˣ) : (d δ * w)⁻¹ = d (-δ) * w := by
-  simp [mul_inv_rev]
+  simp only [mul_inv_rev, inv_w_eq_neg_w, inv_d_eq_d_inv, neg_mul]
   ext <;> simp [d, w, inv_neg]
 
 -- (iv)
 lemma w_mul_d_mul_inv_w_eq_inv_d (δ : Fˣ) : w * (d δ) * w⁻¹ = (d δ)⁻¹ := by
-  simp; ext <;> simp [d, w]
+  simp only [inv_w_eq_neg_w, mul_neg, inv_d_eq_d_inv]; ext <;> simp [d, w]
 
 @[simp]
 lemma w_mul_d_eq_d_inv_w  (δ : Fˣ):  w * (d δ) = (d δ)⁻¹ * w :=  by
@@ -188,5 +190,3 @@ lemma neg_d_mul_w (δ : Fˣ) : -(d δ * w) = d (-δ) * w := by rw [← neg_mul, 
 end Interactions
 
 end SpecialMatrices
-
-#min_imports

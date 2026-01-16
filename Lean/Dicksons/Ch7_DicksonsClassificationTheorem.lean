@@ -62,7 +62,7 @@ theorem SL_card {q : ℕ} {F : Type*} [Field F] [Fintype F]
     (hq : Fintype.card F = q) (hqone: q > 1): Fintype.card SL(2, F) = (q ^ 2 - 1) * q := by
   rw [← Nat.card_eq_fintype_card]
   rw [card_SL_field]
-  simp [hq]
+  simp only [Nat.card_eq_fintype_card, hq]
   rw [GL_card hq]
   have : q ^ 2 - q = q * (q - 1) := by
     rw [Nat.mul_sub_left_distrib, pow_two]
@@ -146,7 +146,7 @@ lemma GaloisField.splits_of_dvd (hn : n ∣ m) :
     obtain ⟨m, hm⟩ := hd
     simp_rw [hm, pow_mul]
     suffices Y - 1 ∣ Y^m -1 by
-      simp [Y] at this
+      simp only [Y] at this
       exact this
     exact sub_one_dvd_pow_sub_one Y m
   have hs' : Splits (algebraMap (ZMod p) (GaloisField p (n * k))) (X ^ (p ^ n.val - 1) - 1) := by
@@ -165,11 +165,11 @@ lemma GaloisField.splits_of_dvd (hn : n ∣ m) :
       exact Ne.symm (NeZero.ne' (p ^ n.val))
     -- product of X * (X^(p^n - 1) - 1) splits if each term in the product splits
     rw [splits_mul_iff]
-    exact ⟨splits_X _, hs'⟩
-    exact X_ne_zero
-    refine Monic.ne_zero_of_ne (zero_ne_one' (ZMod p)) ?_
-    refine monic_X_pow_sub ?_
-    simp [hp.out.one_lt]
+    · exact ⟨splits_X _, hs'⟩
+    · exact X_ne_zero
+    · refine Monic.ne_zero_of_ne (zero_ne_one' (ZMod p)) ?_
+      refine monic_X_pow_sub ?_
+      simp [hp.out.one_lt]
   exact hs
 
 
@@ -190,7 +190,8 @@ noncomputable def SL2_monoidHom_SL2  {p : ℕ} [Fact (Nat.Prime p)] {k : ℕ+} :
 
 open SpecialMatrices
 
-noncomputable def SL2_join_d (p : ℕ) [Fact (Nat.Prime p)] (k : ℕ+) (π : (GaloisField p (2* k.val))ˣ ) :=
+noncomputable def SL2_join_d (p : ℕ) [Fact (Nat.Prime p)] (k : ℕ+)
+  (π : (GaloisField p (2* k.val))ˣ ) :=
  (Subgroup.map (@SL2_monoidHom_SL2 p _ k) (⊤ : Subgroup SL(2, GaloisField p k.val)))
   ⊔
   Subgroup.closure { d π }
@@ -251,7 +252,6 @@ theorem dicksons_classification_theorem_class_I {F : Type*} [Field F] [IsAlgClos
 -- ANCHOR_END: dicksons_classification_theorem_class_I
 
 -- Ŝ₄ is isomorphic to GL₂(F₃)
-
 lemma card_GaloisField_dvd_card_GaloisField (p : ℕ) [Fact (Nat.Prime p)] {m n : ℕ+}
   (m_dvd_n : m ∣ n) :  Nat.card (GaloisField p m.val) ∣ Nat.card (GaloisField p n.val) := by
   rw [GaloisField.card p m m.ne_zero, GaloisField.card p n n.ne_zero]
@@ -277,7 +277,6 @@ theorem dicksons_classification_theorem_class_II {F : Type*} [Field F] [IsAlgClo
 
 
 
-#check ZMod
 
 variable (n : Type*) [DecidableEq n] [Fintype n] (R : Type*) [CommRing R]
 
@@ -293,8 +292,8 @@ abbrev ProjectiveGeneralLinearGroup' : Type _ :=
 
 
 -- ANCHOR: FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod
-theorem FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod {p : ℕ} [Fact (Nat.Prime p)] (𝕂 : Type*)
-  [Field 𝕂] [CharP 𝕂 p] [Finite 𝕂]
+theorem FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod {p : ℕ}
+  [Fact (Nat.Prime p)] (𝕂 : Type*) [Field 𝕂] [CharP 𝕂 p] [Finite 𝕂]
   (G : Subgroup (PGL (Fin 2) (AlgebraicClosure (ZMod p)))) [hG : Finite G] :
   IsCyclic G
   ∨

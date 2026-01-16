@@ -1,6 +1,7 @@
 import Dicksons.Ch6_MaximalAbelianSubgroupClassEquation.S2_A_MaximalAbelianSubgroup
 
-open MaximalAbelianSubgroup Subgroup MulAction MulAut Pointwise Function SpecialSubgroups SpecialMatrices
+open MaximalAbelianSubgroup Subgroup MulAction MulAut Pointwise
+  Function SpecialSubgroups SpecialMatrices
 
 open scoped MatrixGroups
 
@@ -8,8 +9,9 @@ open scoped MatrixGroups
 
 #check normalizer_inf_le_eq_normalizer_subgroupOf
 
-lemma Nonempty_normalizer_A'_inf_G_diff_A' {F : Type*} [Field F] (A' G' : Subgroup SL(2,F)) (hA' : A' ∈ MaximalAbelianSubgroupsOf G')
-  (A'_le_D : A' ≤ D F) : Set.Nonempty ((A'.normalizer ⊓ G').carrier \ A') := by
+lemma Nonempty_normalizer_A'_inf_G_diff_A' {F : Type*} [Field F] (A' G' : Subgroup SL(2,F))
+  (hA' : A' ∈ MaximalAbelianSubgroupsOf G') (A'_le_D : A' ≤ D F) :
+    Set.Nonempty ((A'.normalizer ⊓ G').carrier \ A') := by
   by_contra! h
   rw [Set.diff_eq_empty] at h
   have : A'.normalizer ⊓ G' ≤ D F := by
@@ -54,13 +56,15 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
         A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D
     -- let := Equiv.ofInjective
     --   (A_subgroupOf_G_MonoidHom_ZMod_two A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D)
-    --   (injective_A_subgroupOf_G_MonoidHom_ZMod_two A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D)
+    --   (injective_A_subgroupOf_G_MonoidHom_ZMod_two
+    -- A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D)
 
     have card_multiplicative_ZMod_two_eq_two : Nat.card (Multiplicative (ZMod 2)) = 2 := by
       rw [Nat.card_eq_fintype_card, Fintype.card_multiplicative]; rfl
     -- let := Equiv.mulEquiv (Equiv.ofInjective
     --   (A_subgroupOf_G_MonoidHom_ZMod_two A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D)
-    --   (injective_A_subgroupOf_G_MonoidHom_ZMod_two A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D))
+    --   (injective_A_subgroupOf_G_MonoidHom_ZMod_two
+    -- A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D))
 
     rw [index] at hNA
     have key := ((Nat.bijective_iff_injective_and_card f).mpr
@@ -108,13 +112,21 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
         symm at hδ'
         rw [smul_eq_iff_eq_inv_smul, map_inv, inv_inv] at hδ'
         simp only [smul_mul', MulAut.smul_def, conj_apply, conj_mul, hδ', mul_inv_rev, inv_inv,
-          inv_w_eq_neg_w, inv_d_eq_d_inv, neg_mul, w_mul_d_eq_d_inv_w, neg_d_mul_w, InvMemClass.coe_inv]
+          inv_w_eq_neg_w, inv_d_eq_d_inv, neg_mul, w_mul_d_eq_d_inv_w, neg_d_mul_w,
+          InvMemClass.coe_inv]
         group
         simp only [Int.reduceNeg, zpow_neg, zpow_one, mul_left_inj]
-        rw [← neg_d_eq_d_neg, show (c * d δ * w * d δ') * -d δ * w = (c * d δ * w * d δ') * d δ * -w by simp [- neg_d_eq_d_neg],
-          ← inv_w_eq_neg_w, show c * d δ * w * d δ' * d δ * w⁻¹ = c * d δ * w * (d δ' * d δ) * w⁻¹ by group, d_mul_d_eq_d_mul,
-          show c * d δ * w * d (δ' * δ) * w⁻¹ = c * d δ * (w * d (δ' * δ) * w⁻¹) by group, w_mul_d_mul_inv_w_eq_inv_d,  ← d_mul_d_eq_d_mul,
-          show c * d δ * (d δ' * d δ)⁻¹ = c * (d δ * (d δ' * d δ)⁻¹) by group]
+        rw [← neg_d_eq_d_neg,
+          show (c * d δ * w * d δ') * -d δ * w
+            = (c * d δ * w * d δ') * d δ * -w by simp [- neg_d_eq_d_neg],
+          ← inv_w_eq_neg_w,
+          show c * d δ * w * d δ' * d δ * w⁻¹
+            = c * d δ * w * (d δ' * d δ) * w⁻¹ by group, d_mul_d_eq_d_mul,
+          show c * d δ * w * d (δ' * δ) * w⁻¹
+            = c * d δ * (w * d (δ' * δ) * w⁻¹) by group,
+            w_mul_d_mul_inv_w_eq_inv_d,  ← d_mul_d_eq_d_mul,
+          show c * d δ * (d δ' * d δ)⁻¹
+            = c * (d δ * (d δ' * d δ)⁻¹) by group]
         congr
         simp
     sorry
@@ -166,12 +178,9 @@ theorem exists_IsCyclic_K_normalizer_eq_Q_join_K {F : Type*} [Field F] { p : ℕ
 /-
 Theorem 2.3 (v b)If |K| > |Z|, then K ∈ M.
 -/
-theorem K_mem_MaximalAbelianSubgroups_of_center_lt_card_K {F : Type*} [Field F] { p : ℕ } [hp' : Fact (Nat.Prime p)] (G : Subgroup SL(2,F))
+theorem K_mem_MaximalAbelianSubgroups_of_center_lt_card_K {F : Type*} [Field F]
+  { p : ℕ } [hp' : Fact (Nat.Prime p)] (G : Subgroup SL(2,F))
   (Q : Sylow p G) (h : Q.toSubgroup ≠ ⊥) (K : Subgroup G)(hK : IsCyclic K)
   (hNG : normalizer Q.toSubgroup = Q.toSubgroup ⊔ K) (h : Nat.card K > Nat.card (center SL(2,F))) :
-  map G.subtype K ∈ MaximalAbelianSubgroupsOf G := by
+    map G.subtype K ∈ MaximalAbelianSubgroupsOf G := by
   sorry
-
-
-
-#min_imports

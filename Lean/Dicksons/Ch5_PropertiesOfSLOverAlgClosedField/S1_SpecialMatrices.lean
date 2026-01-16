@@ -61,8 +61,10 @@ lemma inv_neg_t_eq (σ : F) : (- s σ)⁻¹ = - s (-σ) := by
 
 -- (ii)
 @[simp]
+-- ANCHOR: SpecialMatrices.s_mul_s_eq_s_add
 lemma s_mul_s_eq_s_add (σ μ : F) : s σ * s μ = s (σ + μ) := by
   ext <;> simp [s]
+-- ANCHOR_END: SpecialMatrices.s_mul_s_eq_s_add
 
 @[simp]
 lemma s_pow_eq_s_mul (σ : F) (n : ℕ) : (s σ)^n = s (n • σ) := by
@@ -120,8 +122,10 @@ lemma d_0_0_is_unit (δ : Fˣ) : IsUnit ((d δ) 0 0) := by simp [d]
 
 -- (i)
 @[simp]
+-- ANCHOR: SpecialMatrices.d_mul_d_eq_d_mul
 lemma d_mul_d_eq_d_mul (δ ρ : Fˣ) : d δ * d ρ = d (δ * ρ) := by
   ext <;> simp [d, mul_comm]
+-- ANCHOR_END: SpecialMatrices.d_mul_d_eq_d_mul
 
 end Diagonal
 
@@ -147,8 +151,10 @@ def w : SL(2, F) :=
 -- ANCHOR_END: SpecialMatrices.w
 
 @[simp]
+-- ANCHOR: SpecialMatrices.inv_w_eq_neg_w
 lemma inv_w_eq_neg_w {F : Type*} [Field F] :
   (w : SL(2,F))⁻¹  = - w := by ext <;> simp [w]
+-- ANCHOR_END: SpecialMatrices.inv_w_eq_neg_w
 
 lemma w_mul_w_eq_neg_one : w * w = (-1 : SL(2, F)) := by ext <;> simp [w]
 
@@ -166,7 +172,8 @@ lemma d_mul_s_mul_d_inv_eq_s (δ : Fˣ) (σ : F) : d δ * s σ * (d δ)⁻¹ = s
 def dw (δ : Fˣ) : SL(2,F) :=
   ⟨!![0, δ; -δ⁻¹, 0], by norm_num⟩
 
-lemma d_mul_s_eq_ds (δ : Fˣ) (σ : F) : d δ * s σ = ds δ σ := by ext <;> simp [d, s, ds, mul_comm]
+lemma d_mul_s_eq_ds (δ : Fˣ) (σ : F) : d δ * s σ = ds δ σ := by
+  ext <;> simp [d, s, ds, mul_comm]
 
 lemma d_mul_w_eq_dw (δ : Fˣ) : d δ * w = dw δ := by ext <;> simp [d, w, dw]
 

@@ -82,9 +82,9 @@ When working over an algebraically closed field it turns out that $`\text{PGL}(n
 $`\text{PSL}(n, F)` :
 
 ```anchor PGL_mulEquiv_PSL (module := Dicksons.Ch4_PGLIsoPSLOverAlgClosedField.ProjectiveGeneralLinearGroup)
-noncomputable def PGL_mulEquiv_PSL (n F : Type*) [Fintype n] [DecidableEq n] [Field F]
-  [IsAlgClosed F] : PSL n F ≃* PGL n F :=
-    MulEquiv.ofBijective (PSL_monoidHom_PGL n F) (Bijective_PSL_monoidHom_PGL n F)
+noncomputable def PGL_mulEquiv_PSL (n F : Type*) [Fintype n]
+  [DecidableEq n] [Field F] [IsAlgClosed F] : PSL n F ≃* PGL n F :=
+  MulEquiv.ofBijective (PSL_monoidHom_PGL n F) (Bijective_PSL_monoidHom_PGL n F)
 ```
 
 Therefore, considering this isomorphism to classify the finite subgroups of $`\text{PGL}_2(F)` over an algebraically closed field

@@ -236,7 +236,6 @@ lemma case_VI {F : Type*} {p : ℕ} [Fact (Nat.Prime p)] [Field F] [CharP F p]
 instance five_prime : Fact (Nat.Prime 5) := { out := by decide }
 
 /- Theorem 3.6 -/
--- ANCHOR: dicksons_classification_theorem_class_I
 theorem dicksons_classification_theorem_class_I {F : Type*} [Field F] [IsAlgClosed F]
   {p : ℕ} [CharP F p] (hp : Prime p) (G : Subgroup (SL(2,F)))  [Finite G]
   (hp' : p = 0 ∨ Nat.Coprime (Nat.card G) p) :
@@ -249,7 +248,6 @@ theorem dicksons_classification_theorem_class_I {F : Type*} [Field F] [IsAlgClos
   ∨
   Isomorphic G (GL (Fin 2) (ZMod 3))
   := by sorry
--- ANCHOR_END: dicksons_classification_theorem_class_I
 
 -- Ŝ₄ is isomorphic to GL₂(F₃)
 lemma card_GaloisField_dvd_card_GaloisField (p : ℕ) [Fact (Nat.Prime p)] {m n : ℕ+}
@@ -259,7 +257,6 @@ lemma card_GaloisField_dvd_card_GaloisField (p : ℕ) [Fact (Nat.Prime p)] {m n 
   suffices m.val ∣ n.val by exact Nat.le_of_dvd n.prop this
   exact PNat.dvd_iff.mp m_dvd_n
 
--- ANCHOR: dicksons_classification_theorem_class_II
 theorem dicksons_classification_theorem_class_II {F : Type*} [Field F] [IsAlgClosed F]{p : ℕ}
   [Fact (Nat.Prime p)] [CharP F p] (G : Subgroup (SL(2,F))) [Finite G] (hp : p ∣ Nat.card G) :
   ∃ Q : Subgroup SL(2,F), IsElementaryAbelian p Q ∧ Normal Q ∧ Isomorphic G Q
@@ -273,7 +270,6 @@ theorem dicksons_classification_theorem_class_II {F : Type*} [Field F] [IsAlgClo
   ∃ k : ℕ+, ∃ x : GaloisField p (2* k), orderOf x^2 = p^(k : ℕ) ∧
     ∃ φ : G ≃* SL(2, GaloisField p k), True
   := by sorry
--- ANCHOR_END: dicksons_classification_theorem_class_II
 
 
 
@@ -291,7 +287,6 @@ abbrev ProjectiveGeneralLinearGroup' : Type _ :=
 
 
 
--- ANCHOR: FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod
 theorem FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod {p : ℕ}
   [Fact (Nat.Prime p)] (𝕂 : Type*) [Field 𝕂] [CharP 𝕂 p] [Finite 𝕂]
   (G : Subgroup (PGL (Fin 2) (AlgebraicClosure (ZMod p)))) [hG : Finite G] :
@@ -309,6 +304,5 @@ theorem FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod {p : ℕ}
   ∨
   Isomorphic G (PGL (Fin 2) (𝕂)) := by
     sorry
--- ANCHOR_END: FLT_classification_fin_subgroups_of_PGL2_over_AlgClosure_ZMod
 
 #min_imports

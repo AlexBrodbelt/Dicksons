@@ -15,8 +15,12 @@ variable
   (R : Type u) [CommRing R]
   {G : Type u} [Group G]
 
-/- Proposition 1.6.ii C_L(± s σ) = T × Z where σ ≠ 0 -/
+/--
+The centralizer of `s σ` for `σ ≠ 0` is exactly `S F ⊔ Z F`
+-/
+-- ANCHOR: centralizer_s_eq_SZ
 theorem centralizer_s_eq_SZ {σ : F} (hσ : σ ≠ 0) : centralizer { s σ } = SZ F := by
+-- ANCHOR_END: centralizer_s_eq_SZ
   ext x
   constructor
   · intro hx
@@ -33,17 +37,16 @@ theorem centralizer_s_eq_SZ {σ : F} (hσ : σ ≠ 0) : centralizer { s σ } = S
       add_cons, zero_add, empty_add_empty, empty_mul, Equiv.symm_apply_apply, of_apply, cons_val',
       cons_val_fin_one, left_eq_add, mul_eq_zero, hσ, or_false,
       cons_val_one] at top_right bottom_left
-    rw [add_comm γ] at bottom_left
-    have α_eq_δ : σ * α = σ * δ := by rw [mul_comm σ δ, eq_iff_eq_of_add_eq_add bottom_left]
-    rw [mul_eq_mul_left_iff, or_iff_not_imp_right] at α_eq_δ
-    specialize α_eq_δ hσ
+    rw [add_comm γ, add_left_inj, mul_comm δ, mul_eq_mul_left_iff,
+      or_iff_not_imp_right] at bottom_left
+    specialize bottom_left hσ
     simp only [SZ, mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_union, Set.mem_setOf_eq]
-    -- is a shear matrix if diagonal entries are equal and top right entry is zero
+    /- is a shear matrix if diagonal entries are equal and top right entry is zero -/
     rw [← SpecialLinearGroup.fin_two_shear_iff]
     constructor
-    -- diagonal entries are equal
-    · rw [← hα, ← hδ, α_eq_δ]
-    -- top right entry is zero
+    /- diagonal entries are equal -/
+    · rw [← hα, ← hδ, bottom_left]
+    /- top right entry is zero -/
     · rw [← hβ, top_right]
   · rintro (⟨σ, rfl⟩ | ⟨σ, rfl⟩)
     repeat
@@ -62,8 +65,13 @@ lemma Units.val_neg_one : ((-1 : Fˣ) : F) = -1 := by simp only [Units.val_neg, 
 lemma Units.val_eq_neg_one (x : Fˣ) : (x : F) = -1 ↔ x = (-1 : Fˣ) := by
   rw [← Units.val_neg_one, val_inj]
 
+/--
+The centralizer of `d δ` for `δ ≠ 1` is exactly `D F`
+-/
+-- ANCHOR: centralizer_d_eq_D
 lemma centralizer_d_eq_D (δ : Fˣ) (δ_ne_one : δ ≠ 1) (δ_ne_neg_one : δ ≠ -1) :
   centralizer {d δ} = D F := by
+-- ANCHOR_END: centralizer_d_eq_D
   ext x
   constructor
   · intro hx
@@ -108,12 +116,13 @@ open MulAction MulAut
 lemma centralizer_neg_eq_centralizer {x : SL(2,F)} : centralizer {x} = centralizer {-x} := by
   ext; constructor <;> simp [mem_centralizer_iff_commutator_eq_one]
 
-/-
-Proposition 1.8.
-Let a and b be conjugate elements in a group G. Then ∃ x ∈ G such that x C_G(a) x⁻¹ = C_G (b).
+/--
+Conjugate elements have conjugate centralizers.
 -/
+-- ANCHOR: conjugate_centralizers_of_IsConj
 lemma conjugate_centralizers_of_IsConj  (a b : G) (hab : IsConj a b) :
   ∃ x : G, conj x • (centralizer { a }) = centralizer { b } := by
+-- ANCHOR_END: conjugate_centralizers_of_IsConj
   rw [isConj_iff] at hab
   obtain ⟨x, hc⟩ := hab
   use x
@@ -121,13 +130,13 @@ lemma conjugate_centralizers_of_IsConj  (a b : G) (hab : IsConj a b) :
   simp only [conj, MonoidHom.coe_mk, OneHom.coe_mk, centralizer, mem_mk, Submonoid.mem_mk,
     Subsemigroup.mem_mk]
   constructor
-  · rintro ⟨y', y'_in_cen, hy'⟩
+  · rintro ⟨y', y'_in_centralizer, hy'⟩
     simp only [MulDistribMulAction.toMonoidEnd_apply, MulDistribMulAction.toMonoidHom_apply,
       MulAut.smul_def, MulEquiv.coe_mk, Equiv.coe_fn_mk, coe_set_mk, Submonoid.coe_set_mk,
-      Subsemigroup.coe_set_mk] at hy' y'_in_cen ⊢
+      Subsemigroup.coe_set_mk] at hy' y'_in_centralizer ⊢
     rw [Set.mem_centralizer_iff]
     rintro m ⟨rfl⟩
-    have : a * y' = y' * a := by exact y'_in_cen a rfl
+    have : a * y' = y' * a := y'_in_centralizer a rfl
     rw [← hy', ← hc]
     group
     rw [mul_assoc x a, this]
@@ -154,11 +163,12 @@ lemma conjugate_centralizers_of_IsConj  (a b : G) (hab : IsConj a b) :
 lemma MulAut.conj_smul_symm {G : Type*} [Group G] (H K : Subgroup G) (c : G)
  (h : conj c • H = K) : ∃ c' : G, conj c' • K = H := ⟨c⁻¹, by simp [← h]⟩
 
-/-
-Corollary 1.9.
-The centraliser of an element x in L is abelian unless x belongs to the centre of L.
+/--
+The centraliser of a non-central element in `SL(2,F)` over an algebraically closed field `F`
+is abelian.
 -/
-lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableEq F](x : SL(2,F))
+-- ANCHOR: IsMulCommutative_centralizer_of_not_mem_center
+lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableEq F] (x : SL(2,F))
   (hx : x ∉ center SL(2,F)) : IsMulCommutative (centralizer { x }) := by
   rcases SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed x with
     (⟨δ, x_IsConj_d⟩ | ⟨σ, x_IsConj_s⟩ | ⟨σ, x_IsConj_neg_s⟩ )
@@ -193,3 +203,4 @@ lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableE
       simp at hx
     rw [← centralizer_S_eq,  ← centralizer_neg_eq_centralizer, centralizer_s_eq_SZ σ_ne_zero]
     exact map_isMulCommutative _ _
+-- ANCHOR_END: IsMulCommutative_centralizer_of_not_mem_center

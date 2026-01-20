@@ -251,10 +251,10 @@ lemma lower_triangular_isConj_upper_triangular {a b : F} :
   use w
   simp [w]
 
-/-
+/--
 If M is semiconjugate to N by a unit in a monoid if and only if M is conjugate to N by a unit
 -/
-lemma mul_left_eq_mul_right_iff {α : Type*} [Monoid α]{N M : α}(c : αˣ) :
+lemma mul_left_eq_mul_right_iff {α : Type*} [Monoid α] {N M : α}(c : αˣ) :
   ((c : α) * M = N * (c : α)) ↔ M = c⁻¹ * N * c := by
   constructor
   · intro h
@@ -270,7 +270,7 @@ lemma det_eq_det_IsConj {n : ℕ} {M N : Matrix (Fin n) (Fin n) R} (h : IsConj N
   rw [SemiconjBy, mul_left_eq_mul_right_iff] at hc
   rw [hc, Matrix.coe_units_inv, det_conj' c.isUnit N]
 
-/-
+/--
 If the underlying matrices are the same then the matrices
 as subtypes of the special linear group are also the same
 -/
@@ -285,38 +285,34 @@ lemma IsConj_coe {M N : Matrix (Fin 2) (Fin 2) F} (hM : det M = 1) (hN : det N =
   rw [SpecialLinearGroup.coe_mul, SpecialLinearGroup.coe_mul, hC]
 
 
-/-
-Lemma 1.5.
-Each element of SL(2,F) is conjugate to either
-`D δ` for some `δ ∈ Fˣ`, or to  `± s σ` for some `σ ∈ F` if
-`F` is algebraically closed.
+/--
+If `F` is algebraically closed then *every* element of SL(2,F) is conjugate to either
+`d δ` for some `δ ∈ Fˣ`, or to  `± s σ` for some `σ ∈ F`.
 -/
+-- ANCHOR: SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed
 theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [IsAlgClosed F]
   (S : SL(2, F)) :
-  (∃ δ : Fˣ, IsConj (d δ) S)
-  ∨
-  (∃ σ : F, IsConj (s σ) S)
-  ∨
-  (∃ σ : F, IsConj (- s σ) S) := by
-  -- S is conjugate to an upper triangular matrix
+    (∃ δ : Fˣ, IsConj (d δ) S) ∨ (∃ σ : F, IsConj (s σ) S) ∨ (∃ σ : F, IsConj (- s σ) S) := by
+-- ANCHOR_END: SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed
+  /- S is conjugate to an upper triangular matrix -/
   have S_IsConj_upper_triangular :=
     isTriangularizable_of_algClosed (S : Matrix (Fin 2) (Fin 2) F)
   have det_coe_S_eq_one : det (S : Matrix (Fin 2) (Fin 2) F ) = 1 := by simp
   obtain ⟨C, h⟩ := S_IsConj_upper_triangular
   rw [upper_triangular_iff] at h
   obtain ⟨a, b, d, h⟩ := h
-  -- Because !![a, b; 0, d] is conjugate to S it also has determinant 1
+  /- Because !![a, b; 0, d] is conjugate to S it also has determinant 1 -/
   have det_eq_one : det !![a, b; 0, d] = 1 := by
     rw [← det_coe_S_eq_one, h]
     simp only [det_mul, SpecialLinearGroup.det_coe, mul_one]
   have had := det_eq_one
-  -- The determinant being equal to 1 implies a * d = 1
+  /- The determinant being equal to 1 implies a * d = 1 -/
   simp only [det_fin_two_of, mul_zero, sub_zero] at had
-  -- so the inverse of a is equal to d
+  /- so the inverse of a is equal to d -/
   have d_eq_inv_a : d = a⁻¹ := Eq.symm (DivisionMonoid.inv_eq_of_mul a d had)
-  -- Therefore a is a unit
+  /- Therefore a is a unit -/
   have a_is_unit : IsUnit a := IsUnit.of_mul_eq_one _ had
-  -- Furthermore, a is nonzero
+  /- Furthermore, a is nonzero -/
   have a_ne_zero : a ≠ 0 := by exact left_ne_zero_of_mul_eq_one had
   have det_eq_one' : det !![a, 0; 0, d] = 1 := by simp [d_eq_inv_a, mul_inv_cancel₀ a_ne_zero]
   obtain rfl | had' := eq_or_ne a d
@@ -351,7 +347,7 @@ theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [I
         apply SpecialLinearGroup.eq_of
         simp only [SpecialLinearGroup.coe_mul, h]
       rw [← isConj_iff] at isConj₁ isConj₂
-      -- conjugation is transitive
+      /- conjugation is transitive -/
       apply IsConj.trans isConj₁ isConj₂.symm
   · left
     use a_is_unit.unit
@@ -361,7 +357,7 @@ theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [I
       simp only [SpecialLinearGroup.coe_mul]
       rw [h]
     have isConj₂ :
-      ∃ C : SL(2,F), C * ⟨!![a, b; 0,d], det_eq_one⟩ * C⁻¹ = ⟨!![a,0;0,d], det_eq_one'⟩ := by
+      ∃ C : SL(2,F), C * ⟨!![a, b; 0, d], det_eq_one⟩ * C⁻¹ = ⟨!![a, 0; 0, d], det_eq_one'⟩ := by
       apply IsConj_coe
       refine upper_triangular_isConj_diagonal_of_nonzero_det ?a_ne_d
       intro h
@@ -369,5 +365,5 @@ theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [I
       contradiction
     simp_rw [← isConj_iff, d_eq_inv_a] at isConj₁ isConj₂
     simp only [SpecialMatrices.d, IsUnit.unit_spec]
-    -- conjugation is transitive
+    /- conjugation is transitive -/
     apply IsConj.trans isConj₂.symm isConj₁.symm

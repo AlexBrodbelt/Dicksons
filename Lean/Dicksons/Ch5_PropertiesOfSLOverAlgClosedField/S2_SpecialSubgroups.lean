@@ -731,6 +731,7 @@ end IsPGroup
 
 end Center
 
+-- ANCHOR: SpecialSubgroups.SZ
 def SZ (F : Type*) [Field F] : Subgroup SL(2,F) where
   carrier := { s σ | σ : F } ∪ { - s σ | σ : F }
   mul_mem' := by
@@ -741,6 +742,7 @@ def SZ (F : Type*) [Field F] : Subgroup SL(2,F) where
   inv_mem' :=  by
     rintro x (⟨σ, rfl⟩ | ⟨σ, rfl⟩)
     repeat' simp
+-- ANCHOR_END: SpecialSubgroups.SZ
 
 
 def SZ' (F : Type*) [Field F] : Subgroup SL(2,F) where
@@ -904,7 +906,6 @@ lemma ex_of_card_D_gt_two {D₀ : Subgroup SL(2,F) }(hD₀ : 2 < Nat.card D₀) 
 
 lemma mem_D_iff {x : SL(2,F)} : x ∈ D F ↔ ∃ δ : Fˣ, d δ = x := by rfl
 
-
 lemma mem_D_w_iff {x : SL(2,F)} : x ∈ (D F : Set SL(2,F)) * {w} ↔ ∃ δ : Fˣ, d δ * w = x := by
   constructor
   · rintro ⟨d', ⟨δ, rfl⟩, w, ⟨rfl⟩, rfl⟩
@@ -915,6 +916,7 @@ lemma mem_D_w_iff {x : SL(2,F)} : x ∈ (D F : Set SL(2,F)) * {w} ↔ ∃ δ : F
     use δ
     rw [mul_assoc, w_mul_w_eq_neg_one, mul_neg, mul_one, neg_neg]
 
+-- ANCHOR: S_join_Z_eq_SZ
 lemma S_join_Z_eq_SZ : S F ⊔ Z F = SZ F := by
   ext x
   constructor
@@ -922,22 +924,23 @@ lemma S_join_Z_eq_SZ : S F ⊔ Z F = SZ F := by
     rw [sup_eq_closure_mul, mem_closure] at hx
     exact hx (SZ F) (S_mul_Z_subset_SZ)
   · rintro (⟨σ, rfl⟩ | ⟨σ, rfl⟩) <;> rw [sup_eq_closure_mul]
-    · have mem_Z_mul_S : s σ ∈ ((S F) : Set SL(2,F)) * (Z F) := by
+    · have mem_S_mul_Z : s σ ∈ ((S F) : Set SL(2,F)) * (Z F) := by
         rw [Set.mem_mul]
         use s σ
         split_ands
         · simp only [SetLike.mem_coe]
           use σ
         · simp
-      apply Subgroup.subset_closure mem_Z_mul_S
-    · have mem_Z_mul_T : -s σ ∈ ((S F) : Set SL(2,F)) * (Z F) := by
+      apply Subgroup.subset_closure mem_S_mul_Z
+    · have mem_S_mul_Z : -s σ ∈ ((S F) : Set SL(2,F)) * (Z F) := by
         rw [Set.mem_mul]
         use s σ
         split_ands
         · simp only [SetLike.mem_coe]
           use σ
         · simp
-      apply Subgroup.subset_closure mem_Z_mul_T
+      apply Subgroup.subset_closure mem_S_mul_Z
+-- ANCHOR_END: S_join_Z_eq_SZ
 
 
 end SpecialSubgroups

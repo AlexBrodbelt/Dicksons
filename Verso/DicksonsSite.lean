@@ -259,6 +259,155 @@ def D_iso_units (F : Type*) [Field F] : SpecialSubgroups.D F ≃* Fˣ where
                 simp [SpecialMatrices.d, mul_comm]
 ```
 
+Another subgroup which will come into play is the pointwise product of $`S(F)` and $`Z(F)`:
+
+```anchor SpecialSubgroups.SZ (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S2_SpecialSubgroups)
+def SZ (F : Type*) [Field F] : Subgroup SL(2,F) where
+  carrier := { s σ | σ : F } ∪ { - s σ | σ : F }
+  mul_mem' := by
+    rintro x y (⟨σ₁, rfl⟩ | ⟨σ₁, rfl⟩) (⟨σ₂, rfl⟩ | ⟨σ₂, rfl⟩)
+    repeat' simp
+  one_mem' := by
+    rw [← s_zero_eq_one]; left; use 0
+  inv_mem' :=  by
+    rintro x (⟨σ, rfl⟩ | ⟨σ, rfl⟩)
+    repeat' simp
+```
+
+So far we have defined some very concrete subgroups with no apparent motivation, but we will
+soon see that understanding properties and interactions of these two family of subgroups alongside the center
+will allow us to characterise an arbitrary finite subgroup.
+
+## Classification of elements of the Special Linear Group up to conjugation
+
+Another neat result concerning elements of $`\text{SL}_2(F)` is that, over an *algebraically closed field*,
+every one of its elements is conjugate to either $`d(\delta)` for some $`\delta \in F^{\times}` or
+is conjugate to $`\pm s(\sigma)` for some $`\sigma \in F`:
+
+```anchor SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S3_JordanNormalFormOfSL)
+theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [IsAlgClosed F]
+  (S : SL(2, F)) :
+    (∃ δ : Fˣ, IsConj (d δ) S) ∨ (∃ σ : F, IsConj (s σ) S) ∨ (∃ σ : F, IsConj (- s σ) S) := by
+```
+
+### The subgroup SZ
+
+The subgroup $`SZ(F)` is defined as the join of the shear subgroup $`S(F)` and the center $`Z(F)`:
+
+```anchor S_join_Z_eq_SZ (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S2_SpecialSubgroups)
+lemma S_join_Z_eq_SZ : S F ⊔ Z F = SZ F := by
+  ext x
+  constructor
+  · intro hx
+    rw [sup_eq_closure_mul, mem_closure] at hx
+    exact hx (SZ F) (S_mul_Z_subset_SZ)
+  · rintro (⟨σ, rfl⟩ | ⟨σ, rfl⟩) <;> rw [sup_eq_closure_mul]
+    · have mem_S_mul_Z : s σ ∈ ((S F) : Set SL(2,F)) * (Z F) := by
+        rw [Set.mem_mul]
+        use s σ
+        split_ands
+        · simp only [SetLike.mem_coe]
+          use σ
+        · simp
+      apply Subgroup.subset_closure mem_S_mul_Z
+    · have mem_S_mul_Z : -s σ ∈ ((S F) : Set SL(2,F)) * (Z F) := by
+        rw [Set.mem_mul]
+        use s σ
+        split_ands
+        · simp only [SetLike.mem_coe]
+          use σ
+        · simp
+      apply Subgroup.subset_closure mem_S_mul_Z
+```
+
+An important property is that the centralizer of any non-zero shear matrix $`s(\sigma)` is precisely $`SZ(F)`:
+
+```anchor centralizer_s_eq_SZ (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S4_PropertiesOfCentralizers)
+theorem centralizer_s_eq_SZ {σ : F} (hσ : σ ≠ 0) : centralizer { s σ } = SZ F := by
+```
+
+Similarly, the centralizer of a diagonal matrix $`d(\delta)` (for $`\delta \neq 1`) is exactly $`D(F)`:
+
+```anchor centralizer_d_eq_D (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S4_PropertiesOfCentralizers)
+lemma centralizer_d_eq_D (δ : Fˣ) (δ_ne_one : δ ≠ 1) (δ_ne_neg_one : δ ≠ -1) :
+  centralizer {d δ} = D F := by
+```
+
+Furthermore, given conjugate elements have conjugate centralizers:
+
+```anchor conjugate_centralizers_of_IsConj (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S4_PropertiesOfCentralizers)
+lemma conjugate_centralizers_of_IsConj  (a b : G) (hab : IsConj a b) :
+  ∃ x : G, conj x • (centralizer { a }) = centralizer { b } := by
+```
+
+Since every element is conjugate to either $`\pm s(\sigma)` or $`d(\delta)`, and the centralizers of these elements are either $`S(F) \sqcup Z(F)` or $`D(F)`,
+we can conclude that the centralizer of any non-central element of $`\text{SL}_2(F)` is abelian:
+
+```anchor IsMulCommutative_centralizer_of_not_mem_center (module := Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S4_PropertiesOfCentralizers)
+lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableEq F] (x : SL(2,F))
+  (hx : x ∉ center SL(2,F)) : IsMulCommutative (centralizer { x }) := by
+  rcases SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed x with
+    (⟨δ, x_IsConj_d⟩ | ⟨σ, x_IsConj_s⟩ | ⟨σ, x_IsConj_neg_s⟩ )
+  · obtain ⟨x, centralizer_x_eq⟩ := conjugate_centralizers_of_IsConj (d δ) x x_IsConj_d
+    have δ_ne_one : δ ≠ 1 := by
+      rintro rfl
+      simp only [d_one_eq_one, isConj_iff, mul_one, mul_inv_cancel, exists_const] at x_IsConj_d
+      rw [← x_IsConj_d, center_SL2_eq_Z] at hx
+      simp at hx
+    have δ_ne_neg_one : δ ≠ -1 := by
+      rintro rfl
+      simp only [d_neg_one_eq_neg_one, isConj_iff, mul_neg, mul_one, neg_mul, mul_inv_cancel,
+        exists_const] at x_IsConj_d
+      rw [← x_IsConj_d, center_SL2_eq_Z] at hx
+      simp at hx
+    rw [← centralizer_x_eq, centralizer_d_eq_D _ δ_ne_one δ_ne_neg_one]
+    exact map_isMulCommutative _ _
+  · obtain ⟨x, centralizer_S_eq⟩ := conjugate_centralizers_of_IsConj (s σ) x x_IsConj_s
+    have σ_ne_zero : σ ≠ 0 := by
+      rintro rfl
+      simp only [s_zero_eq_one, isConj_iff, mul_one, mul_inv_cancel, exists_const] at x_IsConj_s
+      rw [← x_IsConj_s, center_SL2_eq_Z] at hx
+      simp at hx
+    rw [← centralizer_S_eq, centralizer_s_eq_SZ σ_ne_zero]
+    exact map_isMulCommutative _ _
+  · obtain ⟨x, centralizer_S_eq⟩ := conjugate_centralizers_of_IsConj (-s σ) x x_IsConj_neg_s
+    have σ_ne_zero : σ ≠ 0 := by
+      rintro rfl
+      simp only [s_zero_eq_one, isConj_iff, mul_neg, mul_one, neg_mul, mul_inv_cancel,
+        exists_const] at x_IsConj_neg_s
+      rw [← x_IsConj_neg_s, center_SL2_eq_Z] at hx
+      simp at hx
+    rw [← centralizer_S_eq,  ← centralizer_neg_eq_centralizer, centralizer_s_eq_SZ σ_ne_zero]
+    exact map_isMulCommutative _ _
+```
+
+This fact will foreshadow a result to come, namely, how most maximal abelian subgroups arise are the centralizers of
+non-central elements.
+
+# The Maximal Abelian Subgroup Class Equation
+
+You may be wondering why there has not yet been any appeal to the group class equation, considering this is a classifiation problem. The reason for this is because
+we first want to inject as many of the key properties of the two dimensional special linear group into the class equation as we can and for this we must define the notion
+of maximal abelian subgroups of a subgroup.
+
+## Maximal Abelian Subgroups of a subgroup
+
+First we must define the notion of maximal abelianness, namely:
+
+```anchor IsMaximalAbelian (module := Dicksons.Ch6_MaximalAbelianSubgroupClassEquation.S2_A_MaximalAbelianSubgroup)
+def IsMaximalAbelian {L : Type*} [Group L] (G : Subgroup L) : Prop :=
+  Maximal (P := fun (K : Subgroup L)  => IsMulCommutative K) G
+```
+
+and from this definition we are ready to define the set of maximal abelian subgroups of a subgroup:
+
+```anchor MaximalAbelianSubgroupsOf (module := Dicksons.Ch6_MaximalAbelianSubgroupClassEquation.S2_A_MaximalAbelianSubgroup)
+def MaximalAbelianSubgroupsOf { L : Type*} [Group L] (G : Subgroup L) : Set (Subgroup L) :=
+  { K : Subgroup L | IsMaximalAbelian (K.subgroupOf G) ∧ K ≤ G}
+```
+
+
+
 ## Elementary Abelian Subgroups
 
 A subgroup $`H` is called elementary abelian of exponent $`p` if it is abelian and every

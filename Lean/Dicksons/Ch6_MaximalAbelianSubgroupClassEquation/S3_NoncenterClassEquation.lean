@@ -80,6 +80,10 @@ def Partition_lift_noncenter_MaximalAbelianSubgroupsOf {F : Type*} [Field F]
 
 #check Setoid.IsPartition.sUnion_eq_univ
 
+
+
+
+
 -- #check sUnion_memPartition
 
 /-
@@ -397,7 +401,7 @@ lemma union_noncenter_C_eq_G_diff_center {F : Type*} [Field F] [IsAlgClosed F] [
         dsimp [noncenter_MaximalAbelianSubgroupsOf]
         use centralizer {x} ⊓ G
         constructor
-        · exact centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral G x hx
+        · exact centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G x hx
         · rw [Set.inter_diff_distrib_left]
           have center_le_centralizer : center SL(2,F) ≤ centralizer {x} := center_le_centralizer {x}
           rw [Set.inter_eq_self_of_subset_right center_le_centralizer]
@@ -471,10 +475,7 @@ lemma union_lift_union_conj_noncenter_MaximalAbelianSubgroupsOf_eq_G_diff_center
       rw [← hM'] at hM
       exact hM
 
-def equivalence_classes {F : Type*} [Field F]
-  (G : Subgroup SL(2,F)) := Setoid.isPartition_classes <|lift_noncenter_MaximalAbelianSubgroupsOf G
 
-#check Setoid.IsPartition.sUnion_eq_univ
 
 /-
 Theorem 2.4 i b)
@@ -572,6 +573,10 @@ def C {F : Type*} [Field F] (G : Subgroup SL(2,F)) [Finite G]
   (A : MaximalAbelianSubgroupsOf G) := ⋃ x ∈ G, conj x • A.val.carrier
 
 
+def noncenter_MaximalAbelianSubgroupOf_IsPartition {F : Type*} [Field F]
+  (G : Subgroup SL(2,F)) := Setoid.isPartition_classes <|lift_noncenter_MaximalAbelianSubgroupsOf G
+
+#check Setoid.IsPartition.sUnion_eq_univ
 
 /-
 We compute the cardinality of the noncenter conjugacy class
@@ -589,6 +594,8 @@ lemma card_noncenter_C_eq_noncenter_MaximalAbelianSubgroup_mul_noncenter_ConjCla
   dsimp [union_conj_noncenter_MaximalAbelianSubgroupsOf]
   have card_A_eq_card_conj_A (A : noncenter_MaximalAbelianSubgroupsOf G) (c : SL(2,F)) :
     Nat.card A.val = Nat.card (conj c • A.val :) := by simp
+  -- this is not quite what I need
+  have := (noncenter_MaximalAbelianSubgroupOf_IsPartition G).sUnion_eq_univ
   -- rw [Set.Finite.ncard_biUnion]
 
 

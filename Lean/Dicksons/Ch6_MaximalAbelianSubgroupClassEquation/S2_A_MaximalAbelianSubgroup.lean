@@ -13,11 +13,15 @@ set_option linter.unusedTactic false
 
 open Subgroup
 
+-- ANCHOR: IsMaximalAbelian
 def IsMaximalAbelian {L : Type*} [Group L] (G : Subgroup L) : Prop :=
   Maximal (P := fun (K : Subgroup L)  => IsMulCommutative K) G
+-- ANCHOR_END: IsMaximalAbelian
 
+-- ANCHOR: MaximalAbelianSubgroupsOf
 def MaximalAbelianSubgroupsOf { L : Type*} [Group L] (G : Subgroup L) : Set (Subgroup L) :=
   { K : Subgroup L | IsMaximalAbelian (K.subgroupOf G) ∧ K ≤ G}
+-- ANCHOR_END: MaximalAbelianSubgroupsOf
 
 structure MaximalAbelian {G : Type*} [Group G] (H : Subgroup G) extends Subgroup G where
   is_maximal' : Maximal (P := fun (K : Subgroup G)  => IsMulCommutative K) H
@@ -382,8 +386,12 @@ lemma eq_center_of_card_le_two {p : ℕ} [Fact (Nat.Prime p)] {F : Type*} [Field
 
 
 
-/- Theorem 2.3 (i) If x ∈ G\Z then we have CG (x) ∈ M. -/
-theorem centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral {F : Type*} [Field F]
+/--
+The centralizer of a noncentral element of `SL(2,F)` restricted to subgroup `G` is
+a maximal abelian subgroup of `G`.
+-/
+-- ANCHOR: centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
+theorem centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral {F : Type*} [Field F]
   [IsAlgClosed F] [DecidableEq F] (G : Subgroup SL(2,F)) (x : SL(2,F))
   (hx : x ∈ (G.carrier \ (center SL(2,F)))) :
   centralizer {x} ⊓ G ∈ MaximalAbelianSubgroupsOf G := by
@@ -408,9 +416,12 @@ theorem centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral {F : Type*} 
     have := mul_comm_of_mem_isMulCommutative J x_in_J j_in_J
     exact SetLike.coe_eq_coe.mpr this
   exact inf_le_right
+-- ANCHOR_END: centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
 
 
-/- Theorem 2.3 (ii) For any two distinct subgroups A and B of M, we have A ∩ B = Z. -/
+/--
+Two distinct maximal abelian subgroups containing the center intersect at the center
+-/
 theorem center_eq_meet_of_ne_MaximalAbelianSubgroups {F : Type*} [Field F] [IsAlgClosed F]
   [DecidableEq F] (A B G : Subgroup SL(2,F)) (hA : A ∈ MaximalAbelianSubgroupsOf G)
   (hB : B ∈ MaximalAbelianSubgroupsOf G) (A_ne_B: A ≠ B)(center_le_G : center SL(2,F) ≤ G) :
@@ -421,7 +432,7 @@ theorem center_eq_meet_of_ne_MaximalAbelianSubgroups {F : Type*} [Field F] [IsAl
     simp only [coe_toSubmonoid, SetLike.mem_coe] at x_in_A x_in_B
     by_cases hx : x ∈ G.carrier \ (center SL(2,F))
     · have cen_meet_G_in_MaximalAbelianSubgroups :=
-        centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral G x hx
+        centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G x hx
       obtain ⟨⟨cen_meet_G_IsMulCommutative, _h⟩, -⟩ :=
         cen_meet_G_in_MaximalAbelianSubgroups
       rw [inf_subgroupOf_right] at cen_meet_G_IsMulCommutative
@@ -449,9 +460,6 @@ theorem center_eq_meet_of_ne_MaximalAbelianSubgroups {F : Type*} [Field F] [IsAl
     have cen_le_A := center_le G A hA center_le_G
     have cen_le_B := center_le G B hB center_le_G
     exact le_inf cen_le_A cen_le_B hx
-
--- lemma NeZero_neg_CharP [CharP F p] : ∀ (x : F), NeZero x ↔ p • (1 : F) ≠ x := by
-
 
 
 /- Theorem 2.3 (iii) An element A of M is either a cyclic group whose order is relatively prime
@@ -497,7 +505,7 @@ lemma center_not_mem_of_center_ne {F : Type*} [Field F] [IsAlgClosed F] [Decidab
       · exact le_inf (Subgroup.center_le_centralizer ({x} : Set SL(2,F))) h'
       · exact ⟨x, ⟨mem_centralizer_self x, x_in_G⟩, x_not_in_cen⟩
     have centra_mem_MaxAbSub :=
-      centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral
+      centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
         G x (Set.mem_diff_of_mem x_in_G x_not_in_cen)
     have cen_le_centra : center SL(2, F) ≤ centralizer {x} ⊓ G :=
       le_inf (center_le_centralizer {x}) h'
@@ -521,7 +529,7 @@ lemma eq_centralizer_meet_of_center_lt {F : Type*} [Field F] [IsAlgClosed F] [De
   obtain ⟨-, x, x_in_A, x_not_in_center⟩ := center_lt
   have hx : x ∈ G.carrier \ center SL(2,F) := Set.mem_diff_of_mem (hA.right x_in_A) x_not_in_center
   obtain ⟨⟨centra_meet_G_IsComm, -⟩, -⟩ :=
-    centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral G x hx
+    centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G x hx
   -- We show centralizer {x} ⊓ G ≤ A
   have A_le_centralizer_meet_G := (le_centralizer_meet A G hA x x_in_A)
   have A_le_centralizer_meet_G' : A.subgroupOf G ≤ (centralizer {x} ⊓ G).subgroupOf G := by
@@ -1124,7 +1132,7 @@ theorem A_eq_Q_join_Z_of_IsConj_s_or_neg_s {F : Type*} [Field F]
         · exact y_in_G
         · exact y_not_in_center
       have centra_y_meet_G_in_MaxAbSub :=
-        centralizer_meet_G_in_MaximalAbelianSubgroups_of_noncentral G
+        centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G
       have A_le_centra_meet_G : A ≤ centralizer {y} ⊓ G := by
         apply le_trans <| le_of_eq A_eq_Q_join_Z
         apply le_trans Q_join_Z_le_S_join_Z

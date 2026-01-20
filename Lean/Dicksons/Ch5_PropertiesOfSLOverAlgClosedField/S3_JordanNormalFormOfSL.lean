@@ -289,11 +289,9 @@ lemma IsConj_coe {M N : Matrix (Fin 2) (Fin 2) F} (hM : det M = 1) (hN : det N =
 If `F` is algebraically closed then *every* element of SL(2,F) is conjugate to either
 `d δ` for some `δ ∈ Fˣ`, or to  `± s σ` for some `σ ∈ F`.
 -/
--- ANCHOR: SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed
 theorem SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed [DecidableEq F] [IsAlgClosed F]
   (S : SL(2, F)) :
     (∃ δ : Fˣ, IsConj (d δ) S) ∨ (∃ σ : F, IsConj (s σ) S) ∨ (∃ σ : F, IsConj (- s σ) S) := by
--- ANCHOR_END: SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed
   /- S is conjugate to an upper triangular matrix -/
   have S_IsConj_upper_triangular :=
     isTriangularizable_of_algClosed (S : Matrix (Fin 2) (Fin 2) F)

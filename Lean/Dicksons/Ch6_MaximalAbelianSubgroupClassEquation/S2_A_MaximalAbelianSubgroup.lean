@@ -13,15 +13,11 @@ set_option linter.unusedTactic false
 
 open Subgroup
 
--- ANCHOR: IsMaximalAbelian
 def IsMaximalAbelian {L : Type*} [Group L] (G : Subgroup L) : Prop :=
   Maximal (P := fun (K : Subgroup L)  => IsMulCommutative K) G
--- ANCHOR_END: IsMaximalAbelian
 
--- ANCHOR: MaximalAbelianSubgroupsOf
 def MaximalAbelianSubgroupsOf { L : Type*} [Group L] (G : Subgroup L) : Set (Subgroup L) :=
   { K : Subgroup L | IsMaximalAbelian (K.subgroupOf G) ∧ K ≤ G}
--- ANCHOR_END: MaximalAbelianSubgroupsOf
 
 structure MaximalAbelian {G : Type*} [Group G] (H : Subgroup G) extends Subgroup G where
   is_maximal' : Maximal (P := fun (K : Subgroup G)  => IsMulCommutative K) H
@@ -390,7 +386,6 @@ lemma eq_center_of_card_le_two {p : ℕ} [Fact (Nat.Prime p)] {F : Type*} [Field
 The centralizer of a noncentral element of `SL(2,F)` restricted to subgroup `G` is
 a maximal abelian subgroup of `G`.
 -/
--- ANCHOR: centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
 theorem centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral {F : Type*} [Field F]
   [IsAlgClosed F] [DecidableEq F] (G : Subgroup SL(2,F)) (x : SL(2,F))
   (hx : x ∈ (G.carrier \ (center SL(2,F)))) :
@@ -416,7 +411,6 @@ theorem centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral {F : Type*
     have := mul_comm_of_mem_isMulCommutative J x_in_J j_in_J
     exact SetLike.coe_eq_coe.mpr this
   exact inf_le_right
--- ANCHOR_END: centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
 
 
 /--

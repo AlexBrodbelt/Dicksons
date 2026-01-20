@@ -18,9 +18,7 @@ variable
 /--
 The centralizer of `s σ` for `σ ≠ 0` is exactly `S F ⊔ Z F`
 -/
--- ANCHOR: centralizer_s_eq_SZ
 theorem centralizer_s_eq_SZ {σ : F} (hσ : σ ≠ 0) : centralizer { s σ } = SZ F := by
--- ANCHOR_END: centralizer_s_eq_SZ
   ext x
   constructor
   · intro hx
@@ -68,10 +66,8 @@ lemma Units.val_eq_neg_one (x : Fˣ) : (x : F) = -1 ↔ x = (-1 : Fˣ) := by
 /--
 The centralizer of `d δ` for `δ ≠ 1` is exactly `D F`
 -/
--- ANCHOR: centralizer_d_eq_D
 lemma centralizer_d_eq_D (δ : Fˣ) (δ_ne_one : δ ≠ 1) (δ_ne_neg_one : δ ≠ -1) :
   centralizer {d δ} = D F := by
--- ANCHOR_END: centralizer_d_eq_D
   ext x
   constructor
   · intro hx
@@ -119,10 +115,8 @@ lemma centralizer_neg_eq_centralizer {x : SL(2,F)} : centralizer {x} = centraliz
 /--
 Conjugate elements have conjugate centralizers.
 -/
--- ANCHOR: conjugate_centralizers_of_IsConj
 lemma conjugate_centralizers_of_IsConj  (a b : G) (hab : IsConj a b) :
   ∃ x : G, conj x • (centralizer { a }) = centralizer { b } := by
--- ANCHOR_END: conjugate_centralizers_of_IsConj
   rw [isConj_iff] at hab
   obtain ⟨x, hc⟩ := hab
   use x
@@ -167,7 +161,6 @@ lemma MulAut.conj_smul_symm {G : Type*} [Group G] (H K : Subgroup G) (c : G)
 The centraliser of a non-central element in `SL(2,F)` over an algebraically closed field `F`
 is abelian.
 -/
--- ANCHOR: IsMulCommutative_centralizer_of_not_mem_center
 lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableEq F] (x : SL(2,F))
   (hx : x ∉ center SL(2,F)) : IsMulCommutative (centralizer { x }) := by
   rcases SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed x with
@@ -203,4 +196,3 @@ lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableE
       simp at hx
     rw [← centralizer_S_eq,  ← centralizer_neg_eq_centralizer, centralizer_s_eq_SZ σ_ne_zero]
     exact map_isMulCommutative _ _
--- ANCHOR_END: IsMulCommutative_centralizer_of_not_mem_center

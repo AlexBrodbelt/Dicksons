@@ -28,10 +28,8 @@ namespace SpecialMatrices
 The shear matrix with $\sigma \in F$ as the bottom left entry.
 This is $t_\lambda$ in the notes.
 -/
--- ANCHOR: SpecialMatrices.s
 def s (σ : F) : SL(2,F) :=
   ⟨!![1, 0; σ, 1], by simp⟩
--- ANCHOR_END: SpecialMatrices.s
 
 section Shear
 
@@ -61,10 +59,8 @@ lemma inv_neg_t_eq (σ : F) : (- s σ)⁻¹ = - s (-σ) := by
 
 -- (ii)
 @[simp]
--- ANCHOR: SpecialMatrices.s_mul_s_eq_s_add
 lemma s_mul_s_eq_s_add (σ μ : F) : s σ * s μ = s (σ + μ) := by
   ext <;> simp [s]
--- ANCHOR_END: SpecialMatrices.s_mul_s_eq_s_add
 
 @[simp]
 lemma s_pow_eq_s_mul (σ : F) (n : ℕ) : (s σ)^n = s (n • σ) := by
@@ -89,10 +85,8 @@ section Diagonal
 /-
 The diagonal matrix with $\delta \in F^\times$ as the top left entry.
 -/
--- ANCHOR: SpecialMatrices.d
 def d (δ : Fˣ) : SL(2, F) :=
   ⟨!![(δ : F), 0; 0 , δ⁻¹], by norm_num⟩
--- ANCHOR_END: SpecialMatrices.d
 
 @[simp]
 lemma inv_d_eq_d_inv (δ : Fˣ) : (d δ)⁻¹ = d (δ⁻¹) := by
@@ -122,10 +116,8 @@ lemma d_0_0_is_unit (δ : Fˣ) : IsUnit ((d δ) 0 0) := by simp [d]
 
 -- (i)
 @[simp]
--- ANCHOR: SpecialMatrices.d_mul_d_eq_d_mul
 lemma d_mul_d_eq_d_mul (δ ρ : Fˣ) : d δ * d ρ = d (δ * ρ) := by
   ext <;> simp [d, mul_comm]
--- ANCHOR_END: SpecialMatrices.d_mul_d_eq_d_mul
 
 end Diagonal
 
@@ -145,16 +137,12 @@ lemma s_eq_d_iff {δ : Fˣ} {σ : F} : d δ = s σ ↔ δ = 1 ∧ σ = 0 := by
 section Rotation
 
 -- Defines the matrix which corresponds to a rotation by `π / 2` radians
--- ANCHOR: SpecialMatrices.w
 def w : SL(2, F) :=
   ⟨!![0,1;-1,0], by norm_num⟩
--- ANCHOR_END: SpecialMatrices.w
 
 @[simp]
--- ANCHOR: SpecialMatrices.inv_w_eq_neg_w
 lemma inv_w_eq_neg_w {F : Type*} [Field F] :
   (w : SL(2,F))⁻¹  = - w := by ext <;> simp [w]
--- ANCHOR_END: SpecialMatrices.inv_w_eq_neg_w
 
 lemma w_mul_w_eq_neg_one : w * w = (-1 : SL(2, F)) := by ext <;> simp [w]
 

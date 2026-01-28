@@ -42,7 +42,7 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
   · let G' := conj c⁻¹ • G
     have G_eq_conj_G' : G = conj c • G' := by simp [G']
     have hA' : A' ∈ MaximalAbelianSubgroupsOf G' := by
-      rw [iff_conj_MaximalAbelianSubgroupsOf_conj A' G' c, ← A_eq_conj_A', ← G_eq_conj_G']
+      rw [mem_iff_conj_smul_mem_MaximalAbelianSubgroupsOf_conj_smul A' G' c, ← A_eq_conj_A', ← G_eq_conj_G']
       exact hA
     rw [relIndex,
       ← relIndex_MaximalAbelianSubgroupOf_normalizer_eq_relIndex_conj_MaxAbelianSubgroupOf

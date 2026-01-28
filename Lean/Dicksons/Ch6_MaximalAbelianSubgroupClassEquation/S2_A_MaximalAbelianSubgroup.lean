@@ -391,7 +391,7 @@ The centralizer of a noncentral element of `SL(2,F)` restricted to subgroup `G` 
 a maximal abelian subgroup of `G`.
 -/
 -- ANCHOR: centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
-theorem centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral {F : Type*} [Field F]
+theorem centralizer_meet_G_mem_MaximalAbelianSubgroupsOf_of_noncentral {F : Type*} [Field F]
   [IsAlgClosed F] [DecidableEq F] (G : Subgroup SL(2,F)) (x : SL(2,F))
   (hx : x ∈ (G.carrier \ (center SL(2,F)))) :
   centralizer {x} ⊓ G ∈ MaximalAbelianSubgroupsOf G := by
@@ -424,7 +424,7 @@ Two distinct maximal abelian subgroups containing the center intersect at the ce
 -/
 theorem center_eq_meet_of_ne_MaximalAbelianSubgroups {F : Type*} [Field F] [IsAlgClosed F]
   [DecidableEq F] (A B G : Subgroup SL(2,F)) (hA : A ∈ MaximalAbelianSubgroupsOf G)
-  (hB : B ∈ MaximalAbelianSubgroupsOf G) (A_ne_B: A ≠ B)(center_le_G : center SL(2,F) ≤ G) :
+  (hB : B ∈ MaximalAbelianSubgroupsOf G) (A_ne_B: A ≠ B) (center_le_G : center SL(2,F) ≤ G) :
   A ⊓ B = center SL(2,F) := by
   ext x
   constructor
@@ -432,7 +432,7 @@ theorem center_eq_meet_of_ne_MaximalAbelianSubgroups {F : Type*} [Field F] [IsAl
     simp only [coe_toSubmonoid, SetLike.mem_coe] at x_in_A x_in_B
     by_cases hx : x ∈ G.carrier \ (center SL(2,F))
     · have cen_meet_G_in_MaximalAbelianSubgroups :=
-        centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G x hx
+        centralizer_meet_G_mem_MaximalAbelianSubgroupsOf_of_noncentral G x hx
       obtain ⟨⟨cen_meet_G_IsMulCommutative, _h⟩, -⟩ :=
         cen_meet_G_in_MaximalAbelianSubgroups
       rw [inf_subgroupOf_right] at cen_meet_G_IsMulCommutative
@@ -505,7 +505,7 @@ lemma center_not_mem_of_center_ne {F : Type*} [Field F] [IsAlgClosed F] [Decidab
       · exact le_inf (Subgroup.center_le_centralizer ({x} : Set SL(2,F))) h'
       · exact ⟨x, ⟨mem_centralizer_self x, x_in_G⟩, x_not_in_cen⟩
     have centra_mem_MaxAbSub :=
-      centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral
+      centralizer_meet_G_mem_MaximalAbelianSubgroupsOf_of_noncentral
         G x (Set.mem_diff_of_mem x_in_G x_not_in_cen)
     have cen_le_centra : center SL(2, F) ≤ centralizer {x} ⊓ G :=
       le_inf (center_le_centralizer {x}) h'
@@ -529,7 +529,7 @@ lemma eq_centralizer_meet_of_center_lt {F : Type*} [Field F] [IsAlgClosed F] [De
   obtain ⟨-, x, x_in_A, x_not_in_center⟩ := center_lt
   have hx : x ∈ G.carrier \ center SL(2,F) := Set.mem_diff_of_mem (hA.right x_in_A) x_not_in_center
   obtain ⟨⟨centra_meet_G_IsComm, -⟩, -⟩ :=
-    centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G x hx
+    centralizer_meet_G_mem_MaximalAbelianSubgroupsOf_of_noncentral G x hx
   -- We show centralizer {x} ⊓ G ≤ A
   have A_le_centralizer_meet_G := (le_centralizer_meet A G hA x x_in_A)
   have A_le_centralizer_meet_G' : A.subgroupOf G ≤ (centralizer {x} ⊓ G).subgroupOf G := by
@@ -1132,7 +1132,7 @@ theorem A_eq_Q_join_Z_of_IsConj_s_or_neg_s {F : Type*} [Field F]
         · exact y_in_G
         · exact y_not_in_center
       have centra_y_meet_G_in_MaxAbSub :=
-        centralizer_meet_G_in_MaximalAbelianSubgroupsOf_of_noncentral G
+        centralizer_meet_G_mem_MaximalAbelianSubgroupsOf_of_noncentral G
       have A_le_centra_meet_G : A ≤ centralizer {y} ⊓ G := by
         apply le_trans <| le_of_eq A_eq_Q_join_Z
         apply le_trans Q_join_Z_le_S_join_Z
@@ -1204,10 +1204,6 @@ theorem A_eq_Q_join_Z_of_IsConj_s_or_neg_s {F : Type*} [Field F]
       simp only [Subgroup.subgroupOf, ← this]
       rw [comap_map_eq_self ker_G_subtype_le_S]
 
--- theorem IsConj_fin_subgroup_D : {F : Type*}
---   [Field F] [IsAlgClosed F] [DecidableEq F] {p : ℕ} [hp' : Fact (Nat.Prime p)] [hC : CharP F p]
---   (G : Subgroup SL(2, F)) [hG₀ : Finite ↥G] (A : Subgroup SL(2, F))
---   (hA : A ∈ MaximalAbelianSubgroupsOf G) (center_le_G : center SL(2, F) ≤ G)
 
 theorem IsCyclic_and_card_coprime_CharP_or_eq_Q_join_Z_of_center_ne
   {F : Type*} [Field F] [IsAlgClosed F] [DecidableEq F] (p : ℕ) [hp' : Fact (Nat.Prime p)]
@@ -1283,7 +1279,7 @@ theorem IsCyclic_and_card_coprime_CharP_or_eq_Q_join_Z {F : Type*}
 
 
 -- could probably generalise to any map with some structure or maybe none at all
-lemma iff_conj_MaximalAbelianSubgroupsOf_conj {G : Type* } [Group G]
+lemma mem_iff_conj_smul_mem_MaximalAbelianSubgroupsOf_conj_smul {G : Type* } [Group G]
   (A H : Subgroup G) (c : G) : A ∈ MaximalAbelianSubgroupsOf H
     ↔ conj c • A ∈ MaximalAbelianSubgroupsOf (conj c • H) := by
   constructor
@@ -1929,7 +1925,8 @@ theorem index_normalizer_le_two {p : ℕ} [hp : Fact (Nat.Prime p)]
     · let G' := conj c⁻¹ • G
       have G_eq_conj_G' : G = conj c • G' := by simp [G']
       have hA' : A' ∈ MaximalAbelianSubgroupsOf G' := by
-        rw [iff_conj_MaximalAbelianSubgroupsOf_conj A' G' c, ← A_eq_conj_A', ← G_eq_conj_G']
+        rw [mem_iff_conj_smul_mem_MaximalAbelianSubgroupsOf_conj_smul A' G' c,
+          ← A_eq_conj_A', ← G_eq_conj_G']
         exact hA
       -- factor out lemma for lemma 2.3 iv b)
       have index_eq : ((A'.subgroupOf G').subgroupOf (A'.subgroupOf G').normalizer).index =
@@ -1938,9 +1935,7 @@ theorem index_normalizer_le_two {p : ℕ} [hp : Fact (Nat.Prime p)]
           A_eq_conj_A' G_eq_conj_G']
       have two_lt_card_A' : 2 < Nat.card A' := by rwa [card_conj_eq_card A_eq_conj_A']
       have normalizer_A'_le_DW := normalizer_subgroup_D_eq_DW two_lt_card_A' A'_le_D
-
       have A'_eq_G'_inf_D : A' = G' ⊓ D F := A_eq_G_inf_D A' G' A'_le_D hA'
-
       have A'_eq_normalizer_inf_D : A' = map G'.subtype (A'.subgroupOf G').normalizer ⊓ (D F) := by
         apply le_antisymm
         · apply le_inf

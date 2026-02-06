@@ -124,7 +124,7 @@ The formal Lean 4 proofs are organized as follows:
 
 ## Components of project relevant to the Bonn Winter Semester 2025 Lean Course
 
-For a description of Mara Silge's contributions see `Project2_MaraSilge.pdf`
+For a description of Mara Silge's contributions see `Project2_MaraSilge.pdf` and is the entirety of `Ch5_PropertiesOfSLOverAlgClosedField/S6_TripleTransitivity.lean`
 
 ### Main results completed throughout the Lean Course
 

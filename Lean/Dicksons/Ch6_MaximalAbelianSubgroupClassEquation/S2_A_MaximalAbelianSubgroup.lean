@@ -13,15 +13,11 @@ set_option linter.unusedTactic false
 
 open Subgroup
 
--- ANCHOR: IsMaximalAbelian
 def IsMaximalAbelian {L : Type*} [Group L] (G : Subgroup L) : Prop :=
   Maximal (P := fun (K : Subgroup L)  => IsMulCommutative K) G
--- ANCHOR_END: IsMaximalAbelian
 
--- ANCHOR: MaximalAbelianSubgroupsOf
 def MaximalAbelianSubgroupsOf { L : Type*} [Group L] (G : Subgroup L) : Set (Subgroup L) :=
   { K : Subgroup L | IsMaximalAbelian (K.subgroupOf G) ∧ K ≤ G}
--- ANCHOR_END: MaximalAbelianSubgroupsOf
 
 structure MaximalAbelian {G : Type*} [Group G] (H : Subgroup G) extends Subgroup G where
   is_maximal' : Maximal (P := fun (K : Subgroup G)  => IsMulCommutative K) H
@@ -390,7 +386,6 @@ lemma eq_center_of_card_le_two {p : ℕ} [Fact (Nat.Prime p)] {F : Type*} [Field
 The centralizer of a noncentral element of `SL(2,F)` restricted to subgroup `G` is
 a maximal abelian subgroup of `G`.
 -/
--- ANCHOR: centralizer_inf_mem_MaximalAbelianSubgroupsOf_of_noncentral
 theorem centralizer_inf_mem_maximalAbelianSubgroupsOf_of_noncentral {F : Type*} [Field F]
   [IsAlgClosed F] [DecidableEq F] (G : Subgroup SL(2,F)) (x : SL(2,F))
   (hx : x ∈ (G.carrier \ (center SL(2,F)))) :
@@ -416,7 +411,6 @@ theorem centralizer_inf_mem_maximalAbelianSubgroupsOf_of_noncentral {F : Type*} 
     have := mul_comm_of_mem_isMulCommutative J x_in_J j_in_J
     exact SetLike.coe_eq_coe.mpr this
   exact inf_le_right
--- ANCHOR_END: centralizer_inf_mem_MaximalAbelianSubgroupsOf_of_noncentral
 
 
 /--
@@ -522,7 +516,6 @@ lemma center_not_mem_of_center_ne {F : Type*} [Field F] [IsAlgClosed F] [Decidab
 
 open SpecialSubgroups SpecialMatrices
 
--- ANCHOR: eq_centralizer_inf_of_center_lt
 lemma eq_centralizer_inf_of_center_lt {F : Type*} [Field F] [IsAlgClosed F] [DecidableEq F]
   (A G : Subgroup SL(2,F)) (center_lt : center SL(2,F) < A) (hA : A ∈ MaximalAbelianSubgroupsOf G) :
   ∃ x : SL(2,F), x ∈ G.carrier \ center SL(2,F) ∧ A = centralizer {x} ⊓ G := by
@@ -543,7 +536,6 @@ lemma eq_centralizer_inf_of_center_lt {F : Type*} [Field F] [IsAlgClosed F] [Dec
     inf_le_right, and_true] at centralizer_meet_G_le_A
   /- We show A = centralizer {x} ⊓ G -/
   exact ⟨x, hx, le_antisymm A_le_centralizer_meet_G centralizer_meet_G_le_A⟩
--- ANCHOR_END: eq_centralizer_inf_of_center_lt
 
 open MulAut
 
@@ -1251,7 +1243,6 @@ an algebraically closed field `F`, `A` is either cyclic and has cardinality
 coprime to the characteristic of the field, `p`; or is equal to the pointwise product of a `p`
 elementary abelian `p`-Sylow subgroup with the center of `SL(2,F)`
 -/
--- ANCHOR: isCyclic_and_card_coprime_charP_or_eq_Q_sup_Z
 theorem isCyclic_and_card_coprime_charP_or_eq_Q_sup_Z {F : Type*}
   [Field F] [IsAlgClosed F] [DecidableEq F] {p : ℕ} [hp' : Fact (Nat.Prime p)] [hC : CharP F p]
   (G : Subgroup SL(2, F)) [hG₀ : Finite ↥G] (A : Subgroup SL(2, F))
@@ -1273,7 +1264,6 @@ theorem isCyclic_and_card_coprime_charP_or_eq_Q_sup_Z {F : Type*}
       exact ⟨h₂, h₁⟩
     · right
       exact h₃
--- ANCHOR_END: isCyclic_and_card_coprime_charP_or_eq_Q_sup_Z
 
 
 -- could probably generalise to any map with some structure or maybe none at all

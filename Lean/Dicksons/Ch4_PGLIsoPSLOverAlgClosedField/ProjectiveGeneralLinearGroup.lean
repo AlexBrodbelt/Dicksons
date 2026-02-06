@@ -287,10 +287,8 @@ theorem Bijective_PSL_monoidHom_PGL (n F : Type*) [hn₁ : Fintype n] [Decidable
 
 -- We define the isomorphism between
 -- the projective general linear group and the projective special linear group
--- ANCHOR: PGL_mulEquiv_PSL
 noncomputable def PGL_mulEquiv_PSL (n F : Type*) [Fintype n]
   [DecidableEq n] [Field F] [IsAlgClosed F] : PSL n F ≃* PGL n F :=
   MulEquiv.ofBijective (PSL_monoidHom_PGL n F) (Bijective_PSL_monoidHom_PGL n F)
--- ANCHOR_END: PGL_mulEquiv_PSL
 
 end Isomorphism

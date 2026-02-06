@@ -101,6 +101,15 @@ lemma inv_d_eq_d_inv (δ : Fˣ) : (d δ)⁻¹ = d (δ⁻¹) := by
 lemma d_eq_inv_d_inv (δ : Fˣ) : d δ = (d δ⁻¹)⁻¹ := by
   rw [inv_d_eq_d_inv, inv_inv]
 
+lemma d_eq_d_iff (δ δ' : Fˣ) : d δ = d δ' ↔ δ = δ' := by
+  constructor
+  · intro h
+    rw [SpecialLinearGroup.fin_two_ext_iff] at h
+    obtain ⟨h, -, -, -⟩ := h
+    simpa [d, Units.ext_iff] using h
+  · exact fun a ↦ congrArg d a
+
+
 lemma d_eq_diagonal (δ : Fˣ) :
   (d δ : Matrix (Fin 2) (Fin 2) F) = diagonal (fun i ↦ if i.val = 0 then (δ : F) else δ.inv) := by
   ext <;> simp [d]

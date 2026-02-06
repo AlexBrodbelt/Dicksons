@@ -1,40 +1,17 @@
 import Dicksons.Ch5_PropertiesOfSLOverAlgClosedField.S3_JordanNormalFormOfSL
 
-
-
 set_option autoImplicit false
 set_option linter.style.longLine true
 
-open Matrix MatrixGroups Subgroup Pointwise
+open Matrix MatrixGroups Subgroup
 
 open SpecialMatrices SpecialSubgroups MatrixShapes
-
-universe u
-
-
-variable
-  {F : Type u} [Field F]
-  (n : Type u) [Fintype n]
-  (R : Type u) [CommRing R]
-  {G : Type u} [Group G]
-
-
-
-/- Lemma 1.2.2.2 H ⧸ T = D -/
--- def quot_iso_subgroupGeneratedByD {F : Type* } [Field F] :
---   H F ⧸ T F ≃* D F := by sorry -- needs HasQuotient
-
-/- Lemma 1.3. Z(SL(2,F)) = ⟨ -I ⟩ .-/
--- def center_of_SL_2_F : center SL(2,F) ≃* rootsOfUnity 2 F  :=
---   Matrix.SpecialLinearGroup.center_equiv_rootsOfUnity' 2
-
-
 
 /-
 Proposition 1.6.i
 N_{SL(2,F)}(S₀) ⊆ L, where S₀ is any subgroup of S with order greater than 1.
 -/
-lemma normalizer_subgroup_S_le_L [DecidableEq F] { S₀ : Subgroup (SL(2,F)) }
+lemma normalizer_subgroup_S_le_L {F : Type*} [Field F] [DecidableEq F] { S₀ : Subgroup (SL(2,F)) }
  (hT₀ : 1 < Nat.card S₀ ) (h : S₀ ≤ S F) : normalizer S₀ ≤ L F := by
   intro x hx
   rw [mem_normalizer_iff] at hx
@@ -50,7 +27,6 @@ lemma normalizer_subgroup_S_le_L [DecidableEq F] { S₀ : Subgroup (SL(2,F)) }
     have : x * s σ * x⁻¹ ∈ S F := by exact h hσ
     obtain ⟨σ' , hσ'⟩ := this
     simp only at hσ'
-    -- uses decidable equality
     rw [SpecialSubgroups.mem_L_iff_lower_triangular]
     rw [lower_triangular_iff]
     have β_eq_zero : s σ' 0 1 = 0 := by simp [s]
@@ -76,16 +52,71 @@ lemma normalizer_subgroup_S_le_L [DecidableEq F] { S₀ : Subgroup (SL(2,F)) }
     -- contradiction with the assumption that Nat.card S₀ > 1
     linarith
 
-/-
-Proposition 1.7.
-(i) N_L (D₀) = ⟨D, W⟩, where D₀ is any subgroup of D with order greater than 2.
--/
-lemma normalizer_subgroup_D_eq_DW { D₀ : Subgroup (SL(2,F)) }
- (hD₀ : 2 < Nat.card D₀ ) (D₀_le_D : D₀ ≤ D F) : normalizer D₀ = DW F := by
-  apply le_antisymm
-  · intro x hx
+lemma DW_le_normalizer_subgroup_D {F : Type*} [Field F] { D₀ : Subgroup (SL(2,F)) }
+ (D₀_le_D : D₀ ≤ D F) : DW F ≤ D₀.normalizer := by
+  intro x hx
+  simp only [DW, mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_union,
+    Set.mem_setOf_eq] at hx
+  rcases hx with (hx | hx)
+  · obtain ⟨δ, rfl⟩ := hx
+    simp only [mem_normalizer_iff, inv_d_eq_d_inv]
+    intro y
+    constructor
+    · intro y_mem_D₀
+      have y_mem_D := D₀_le_D y_mem_D₀
+      rw [mem_D_iff] at y_mem_D
+      obtain ⟨δ₀, rfl⟩ := y_mem_D
+      simpa
+    · intro conj_mem_D₀
+      obtain ⟨δ₀, hδ₀⟩ := D₀_le_D conj_mem_D₀
+      have y_eq_conj : y = d δ * y * d δ⁻¹ := by
+        suffices y = d δ₀ by simp [this]
+        rw [← mul_left_inj (d δ⁻¹), ← mul_right_inj (d δ)]
+        group at hδ₀ ⊢
+        rw [← hδ₀]
+        simp
+      rwa [y_eq_conj]
+  · obtain ⟨δ, rfl⟩ := hx
+    rw [mem_normalizer_iff]
+    intro y
+    constructor
+    · intro y_mem_D₀
+      group
+      nth_rewrite 1 [d_eq_inv_d_inv,  ← w_mul_d_eq_d_inv_w]
+      rw [_root_.zpow_neg, _root_.zpow_neg, zpow_one, zpow_one,
+        inv_w_eq_neg_w, mul_neg, neg_mul, inv_d_eq_d_inv,
+        show -(w * d δ⁻¹ * y * w * d δ⁻¹) = -(w * d δ⁻¹ * y * (w * d δ⁻¹)) by group]
+      nth_rewrite 2 [w_mul_d_eq_d_inv_w δ⁻¹]
+      rw [← d_eq_inv_d_inv]
+      obtain ⟨δ₀, rfl⟩ := D₀_le_D y_mem_D₀
+      rw [show -(w * d δ⁻¹ * d δ₀ * (d δ * w)) = -(w * ((d δ⁻¹ * d δ₀) * d δ) * w) by group,
+        d_mul_d_eq_d_mul, d_mul_d_eq_d_mul, inv_mul_cancel_comm,
+        w_mul_d_eq_d_inv_w, inv_d_eq_d_inv]
+      rw [show -(d δ₀⁻¹ * w * w) = -(d δ₀⁻¹ * (w * w)) by group, w_mul_w_eq_neg_one,
+        mul_neg, mul_one, neg_d_eq_d_neg, neg_d_eq_d_neg, neg_neg, ← inv_d_eq_d_inv]
+      exact Subgroup.inv_mem D₀ y_mem_D₀
+    · intro conj_mem_D₀
+      obtain ⟨δ₀, hδ₀⟩ := D₀_le_D conj_mem_D₀
+      rw [eq_mul_inv_iff_mul_eq, ← inv_mul_eq_iff_eq_mul] at hδ₀
+      rw [_root_.mul_inv_rev, inv_w_eq_neg_w, inv_d_eq_d_inv, ← mul_assoc (d δ₀),
+        d_mul_d_eq_d_mul, mul_assoc, ← mul_assoc (d δ⁻¹), d_mul_d_eq_d_mul, ← mul_assoc δ⁻¹,
+        inv_mul_cancel_comm, neg_mul, ← mul_assoc, w_mul_d_eq_d_inv_w, mul_assoc,
+        w_mul_w_eq_neg_one, mul_neg_one, neg_neg, inv_d_eq_d_inv] at hδ₀
+      rw [← hδ₀] at conj_mem_D₀ ⊢
+      rw [mul_assoc, mul_assoc, ← mul_assoc w, w_mul_d_eq_d_inv_w,
+        ← d_eq_inv_d_inv, _root_.mul_inv_rev, mul_assoc, ← mul_assoc w,
+        mul_inv_cancel, one_mul, inv_d_eq_d_inv, d_mul_d_eq_d_mul,
+          d_mul_d_eq_d_mul, ← mul_assoc, mul_inv_cancel_comm] at conj_mem_D₀
+      rw [← inv_d_eq_d_inv]
+      exact Subgroup.inv_mem D₀ conj_mem_D₀
+
+lemma normalizer_subgroup_D_eq_DW_of_exists_noncentral {F : Type*} [Field F]
+  {D₀ : Subgroup (SL(2,F))} (D₀_le_D : D₀ ≤ D F) (hD₀ : ∃ x ∈ D₀, x ∉ Z F) :
+    normalizer D₀ ≤ DW F := by
+  suffices ∃ δ : Fˣ, δ.val ≠ 1 ∧ δ.val ≠ -1 ∧ d δ ∈ D₀ by
+    intro x hx
     rw [mem_normalizer_iff] at hx
-    have ⟨δ', h₀, h₁, hδ'⟩ := ex_of_card_D_gt_two hD₀ D₀_le_D
+    have ⟨δ', h₀, h₁, hδ'⟩ := this
     specialize hx (d δ')
     rw [hx] at hδ'
     have mem_D := D₀_le_D hδ'
@@ -135,61 +166,69 @@ lemma normalizer_subgroup_D_eq_DW { D₀ : Subgroup (SL(2,F)) }
       rw [det_eq_zero] at det_eq_one
       absurd zero_ne_one det_eq_one
       trivial
-  · intro x hx
-    simp only [DW, mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_union,
-      Set.mem_setOf_eq] at hx
-    rcases hx with (hx | hx)
-    · obtain ⟨δ, rfl⟩ := hx
-      simp only [mem_normalizer_iff, inv_d_eq_d_inv]
-      intro y
-      constructor
-      · intro y_mem_D₀
-        have y_mem_D := D₀_le_D y_mem_D₀
-        rw [mem_D_iff] at y_mem_D
-        obtain ⟨δ₀, rfl⟩ := y_mem_D
-        simpa
-      · intro conj_mem_D₀
-        obtain ⟨δ₀, hδ₀⟩ := D₀_le_D conj_mem_D₀
-        have y_eq_conj : y = d δ * y * d δ⁻¹ := by
-          suffices y = d δ₀ by simp [this]
-          rw [← mul_left_inj (d δ⁻¹), ← mul_right_inj (d δ)]
-          group at hδ₀ ⊢
-          rw [← hδ₀]
-          simp
-        rwa [y_eq_conj]
-    · obtain ⟨δ, rfl⟩ := hx
-      rw [mem_normalizer_iff]
-      intro y
-      constructor
-      · intro y_mem_D₀
-        group
-        nth_rewrite 1 [d_eq_inv_d_inv,  ← w_mul_d_eq_d_inv_w]
-        rw [_root_.zpow_neg, _root_.zpow_neg, zpow_one, zpow_one,
-          inv_w_eq_neg_w, mul_neg, neg_mul, inv_d_eq_d_inv,
-          show -(w * d δ⁻¹ * y * w * d δ⁻¹) = -(w * d δ⁻¹ * y * (w * d δ⁻¹)) by group]
-        nth_rewrite 2 [w_mul_d_eq_d_inv_w δ⁻¹]
-        rw [← d_eq_inv_d_inv]
-        obtain ⟨δ₀, rfl⟩ := D₀_le_D y_mem_D₀
-        rw [show -(w * d δ⁻¹ * d δ₀ * (d δ * w)) = -(w * ((d δ⁻¹ * d δ₀) * d δ) * w) by group,
-          d_mul_d_eq_d_mul, d_mul_d_eq_d_mul, inv_mul_cancel_comm,
-          w_mul_d_eq_d_inv_w, inv_d_eq_d_inv]
-        rw [show -(d δ₀⁻¹ * w * w) = -(d δ₀⁻¹ * (w * w)) by group, w_mul_w_eq_neg_one,
-          mul_neg, mul_one, neg_d_eq_d_neg, neg_d_eq_d_neg, neg_neg, ← inv_d_eq_d_inv]
-        exact Subgroup.inv_mem D₀ y_mem_D₀
-      · intro conj_mem_D₀
-        obtain ⟨δ₀, hδ₀⟩ := D₀_le_D conj_mem_D₀
-        rw [eq_mul_inv_iff_mul_eq, ← inv_mul_eq_iff_eq_mul] at hδ₀
-        rw [_root_.mul_inv_rev, inv_w_eq_neg_w, inv_d_eq_d_inv, ← mul_assoc (d δ₀),
-          d_mul_d_eq_d_mul, mul_assoc, ← mul_assoc (d δ⁻¹), d_mul_d_eq_d_mul, ← mul_assoc δ⁻¹,
-          inv_mul_cancel_comm, neg_mul, ← mul_assoc, w_mul_d_eq_d_inv_w, mul_assoc,
-          w_mul_w_eq_neg_one, mul_neg_one, neg_neg, inv_d_eq_d_inv] at hδ₀
-        rw [← hδ₀] at conj_mem_D₀ ⊢
-        rw [mul_assoc, mul_assoc, ← mul_assoc w, w_mul_d_eq_d_inv_w,
-          ← d_eq_inv_d_inv, _root_.mul_inv_rev, mul_assoc, ← mul_assoc w,
-          mul_inv_cancel, one_mul, inv_d_eq_d_inv, d_mul_d_eq_d_mul,
-            d_mul_d_eq_d_mul, ← mul_assoc, mul_inv_cancel_comm] at conj_mem_D₀
-        rw [← inv_d_eq_d_inv]
-        exact Subgroup.inv_mem D₀ conj_mem_D₀
+  obtain ⟨x, x_mem_D₀, hx⟩ := hD₀
+  obtain ⟨δ, rfl⟩ := D₀_le_D x_mem_D₀
+  rw [mem_Z_iff] at hx
+  contrapose! hx
+  specialize hx δ
+  rw [show (δ.val ≠ 1 → δ.val ≠ -1 → d δ ∉ D₀)
+    ↔ (δ.val = 1 ∨ δ.val = -1 ) by tauto] at hx
+  rcases hx with (δ_eq_one | δ_eq_neg_one)
+  · left
+    ext <;> simp [d, δ_eq_one]
+  · right
+    ext <;> simp [d, δ_eq_neg_one]
 
-lemma normalizer_D_eq_DW {F : Type*} [Field F] : (D F).normalizer = DW F := by sorry
+/-
+Proposition 1.7.
+(i) N_L (D₀) = ⟨D, W⟩, where D₀ is any subgroup of D with order greater than 2.
+-/
+lemma normalizer_subgroup_D_eq_DW_of_two_lt_card {F : Type*} [Field F] {D₀ : Subgroup (SL(2,F))}
+ (hD₀ : 2 < Nat.card D₀) (D₀_le_D : D₀ ≤ D F) : normalizer D₀ = DW F := by
+  refine le_antisymm ?_ ?_
+  · suffices ∃ x ∈ D₀, x ∉ Z F by
+      apply normalizer_subgroup_D_eq_DW_of_exists_noncentral D₀_le_D this
+    have ⟨δ', h₀, h₁, hδ'⟩ := ex_of_card_D_gt_two hD₀ D₀_le_D
+    use d δ'
+    split_ands
+    · grind
+    · simp only [mem_Z_iff, not_or]
+      by_contra! h
+      rw [show (d δ' ≠ 1 → d δ' = -1) ↔ (d δ' = 1 ∨ d δ' = -1) by tauto] at h
+      rcases h with (h | h)
+      · apply h₀
+        simpa [← d_one_eq_one, d_eq_d_iff] using h
+      · apply h₁
+        simpa [← d_neg_one_eq_neg_one, d_eq_d_iff, Units.ext_iff] using h
+  · exact DW_le_normalizer_subgroup_D D₀_le_D
 
+instance {G : Type*} [GroupWithZero G] [hG : Infinite G] : Infinite Gˣ := by
+  let units_equiv : (Set.univ : Set Gˣ) ≃ Units.val '' Set.univ :=
+    Equiv.Set.image Units.val Set.univ (@Units.val_injective G _)
+  have units_ne_zero : Units.val '' Set.univ = Set.univ \ {(0 : G)} := by
+    ext x
+    constructor
+    · grind [Units.ne_zero]
+    · intro hx
+      exists Units.mk0 x (by simpa using hx.right)
+  rw [← Set.infinite_univ_iff, ← Set.infinite_coe_iff,
+        Equiv.infinite_iff (units_equiv), Set.infinite_coe_iff,
+        units_ne_zero]
+  exact Set.Infinite.diff (Set.infinite_univ_iff.mpr hG) (Set.finite_singleton 0)
+
+
+lemma normalizer_D_eq_DW {F : Type*} [Field F] [IsAlgClosed F] :
+    (D F).normalizer = DW F := by
+  refine le_antisymm ?_ ?_
+  · let infinite_F : Infinite F := IsAlgClosed.instInfinite
+    let infinite_F_units : Infinite Fˣ := inferInstance
+    let D_infinite : Infinite (D F) := Infinite.of_injective
+      (D_mulEquiv_units F).symm.toMonoidHom.toFun
+      (by simp [MulEquiv.injective (D_mulEquiv_units F).symm])
+    let fintype_Z : Fintype (Z F) := Fintype.ofFinite ↥(Z F)
+    obtain ⟨x, hx, hx'⟩ := Set.Infinite.exists_notMem_finset
+      (Set.infinite_coe_iff.mp D_infinite) (Z F).carrier.toFinset
+    refine normalizer_subgroup_D_eq_DW_of_exists_noncentral (le_refl _) ?_
+    use x, hx
+    simpa using hx'
+  · exact DW_le_normalizer_subgroup_D (le_refl _)

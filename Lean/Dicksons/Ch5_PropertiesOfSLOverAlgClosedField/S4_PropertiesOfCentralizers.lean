@@ -119,10 +119,10 @@ lemma centralizer_neg_eq_centralizer {x : SL(2,F)} : centralizer {x} = centraliz
 /--
 Conjugate elements have conjugate centralizers.
 -/
--- ANCHOR: conjugate_centralizers_of_IsConj
-lemma conjugate_centralizers_of_IsConj  (a b : G) (hab : IsConj a b) :
+-- ANCHOR: conjugate_centralizers_of_isConj
+lemma conjugate_centralizers_of_isConj  (a b : G) (hab : IsConj a b) :
   ∃ x : G, conj x • (centralizer { a }) = centralizer { b } := by
--- ANCHOR_END: conjugate_centralizers_of_IsConj
+-- ANCHOR_END: conjugate_centralizers_of_isConj
   rw [isConj_iff] at hab
   obtain ⟨x, hc⟩ := hab
   use x
@@ -167,12 +167,12 @@ lemma MulAut.conj_smul_symm {G : Type*} [Group G] (H K : Subgroup G) (c : G)
 The centraliser of a non-central element in `SL(2,F)` over an algebraically closed field `F`
 is abelian.
 -/
--- ANCHOR: IsMulCommutative_centralizer_of_not_mem_center
-lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableEq F] (x : SL(2,F))
+-- ANCHOR: isMulCommutative_centralizer_of_not_mem_center
+lemma isMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableEq F] (x : SL(2,F))
   (hx : x ∉ center SL(2,F)) : IsMulCommutative (centralizer { x }) := by
-  rcases SL2_IsConj_d_or_IsConj_s_or_IsConj_neg_s_of_AlgClosed x with
+  rcases SL2_isConj_d_or_isConj_s_or_isConj_neg_s_of_algClosed x with
     (⟨δ, x_IsConj_d⟩ | ⟨σ, x_IsConj_s⟩ | ⟨σ, x_IsConj_neg_s⟩ )
-  · obtain ⟨x, centralizer_x_eq⟩ := conjugate_centralizers_of_IsConj (d δ) x x_IsConj_d
+  · obtain ⟨x, centralizer_x_eq⟩ := conjugate_centralizers_of_isConj (d δ) x x_IsConj_d
     have δ_ne_one : δ ≠ 1 := by
       rintro rfl
       simp only [d_one_eq_one, isConj_iff, mul_one, mul_inv_cancel, exists_const] at x_IsConj_d
@@ -186,7 +186,7 @@ lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableE
       simp at hx
     rw [← centralizer_x_eq, centralizer_d_eq_D _ δ_ne_one δ_ne_neg_one]
     exact map_isMulCommutative _ _
-  · obtain ⟨x, centralizer_S_eq⟩ := conjugate_centralizers_of_IsConj (s σ) x x_IsConj_s
+  · obtain ⟨x, centralizer_S_eq⟩ := conjugate_centralizers_of_isConj (s σ) x x_IsConj_s
     have σ_ne_zero : σ ≠ 0 := by
       rintro rfl
       simp only [s_zero_eq_one, isConj_iff, mul_one, mul_inv_cancel, exists_const] at x_IsConj_s
@@ -194,7 +194,7 @@ lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableE
       simp at hx
     rw [← centralizer_S_eq, centralizer_s_eq_SZ σ_ne_zero]
     exact map_isMulCommutative _ _
-  · obtain ⟨x, centralizer_S_eq⟩ := conjugate_centralizers_of_IsConj (-s σ) x x_IsConj_neg_s
+  · obtain ⟨x, centralizer_S_eq⟩ := conjugate_centralizers_of_isConj (-s σ) x x_IsConj_neg_s
     have σ_ne_zero : σ ≠ 0 := by
       rintro rfl
       simp only [s_zero_eq_one, isConj_iff, mul_neg, mul_one, neg_mul, mul_inv_cancel,
@@ -203,4 +203,4 @@ lemma IsMulCommutative_centralizer_of_not_mem_center [IsAlgClosed F] [DecidableE
       simp at hx
     rw [← centralizer_S_eq,  ← centralizer_neg_eq_centralizer, centralizer_s_eq_SZ σ_ne_zero]
     exact map_isMulCommutative _ _
--- ANCHOR_END: IsMulCommutative_centralizer_of_not_mem_center
+-- ANCHOR_END: isMulCommutative_centralizer_of_not_mem_center

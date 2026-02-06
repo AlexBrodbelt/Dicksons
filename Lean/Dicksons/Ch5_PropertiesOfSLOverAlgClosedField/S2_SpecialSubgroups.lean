@@ -111,8 +111,8 @@ def D (F : Type*) [Field F] : Subgroup SL(2,F) where
 The subgroup of diagonal matrices `D F` is isomorphic to the multiplicative group of units of the
 underlying field `F`
 -/
--- ANCHOR: SpecialSubgroups.D_iso_units
-def D_iso_units (F : Type*) [Field F] : SpecialSubgroups.D F ≃* Fˣ where
+-- ANCHOR: SpecialSubgroups.D_mulEquiv_units
+def D_mulEquiv_units (F : Type*) [Field F] : SpecialSubgroups.D F ≃* Fˣ where
   toFun d := ⟨
               d.val 0 0,
               d.val 1 1,
@@ -130,7 +130,7 @@ def D_iso_units (F : Type*) [Field F] : SpecialSubgroups.D F ≃* Fˣ where
               repeat'
                 simp_rw [← hδ₁, ← hδ₂]
                 simp [SpecialMatrices.d, mul_comm]
--- ANCHOR_END: SpecialSubgroups.D_iso_units
+-- ANCHOR_END: SpecialSubgroups.D_mulEquiv_units
 
 @[simp]
 lemma d_mem_D {F : Type*} [Field F] {δ : Fˣ} : d δ ∈ D F := by
@@ -156,8 +156,8 @@ def S (F : Type*) [Field F] : Subgroup SL(2,F) where
 /--
 The subgroup of shear matrices `S F` is isomorphic to the additive group of `F`
 -/
--- ANCHOR: SpecialSubgroups.S_iso_F
-def S_iso_F (F : Type*) [Field F]: S F ≃* (Multiplicative F) where
+-- ANCHOR: SpecialSubgroups.S_mulEquiv_multiplicative
+def S_mulEquiv_multiplicative (F : Type*) [Field F]: S F ≃* (Multiplicative F) where
   toFun T := T.val 1 0
   invFun σ := ⟨s σ, by use σ⟩
   left_inv := by
@@ -169,7 +169,7 @@ def S_iso_F (F : Type*) [Field F]: S F ≃* (Multiplicative F) where
               simp only [Subgroup.coe_mul, Fin.isValue, SpecialLinearGroup.coe_mul, ← hσ₁, ← hσ₂]
               simp [s]
               rfl
--- ANCHOR_END: SpecialSubgroups.S_iso_F
+-- ANCHOR_END: SpecialSubgroups.S_mulEquiv_multiplicative
 
 end Shear
 
@@ -916,8 +916,8 @@ lemma mem_D_w_iff {x : SL(2,F)} : x ∈ (D F : Set SL(2,F)) * {w} ↔ ∃ δ : F
     use δ
     rw [mul_assoc, w_mul_w_eq_neg_one, mul_neg, mul_one, neg_neg]
 
--- ANCHOR: S_join_Z_eq_SZ
-lemma S_join_Z_eq_SZ : S F ⊔ Z F = SZ F := by
+-- ANCHOR: S_sup_Z_eq_SZ
+lemma S_sup_Z_eq_SZ : S F ⊔ Z F = SZ F := by
   ext x
   constructor
   · intro hx
@@ -940,7 +940,7 @@ lemma S_join_Z_eq_SZ : S F ⊔ Z F = SZ F := by
           use σ
         · simp
       apply Subgroup.subset_closure mem_S_mul_Z
--- ANCHOR_END: S_join_Z_eq_SZ
+-- ANCHOR_END: S_sup_Z_eq_SZ
 
 
 end SpecialSubgroups

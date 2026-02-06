@@ -5,7 +5,7 @@ open MaximalAbelianSubgroup Subgroup MulAction MulAut Pointwise
 
 open scoped MatrixGroups
 
-#check A_subgroupOf_normalizer_MulEquiv_conj_A_subgroupOf_conj_quot_eq
+#check map_normalizer_subgroupOf_eq_normalizer_conj_subgroupOf
 
 #check normalizer_inf_le_eq_normalizer_subgroupOf
 
@@ -15,7 +15,7 @@ lemma Nonempty_normalizer_A'_inf_G_diff_A' {F : Type*} [Field F] (A' G' : Subgro
   by_contra! h
   rw [Set.diff_eq_empty] at h
   have : A'.normalizer ⊓ G' ≤ D F := by
-    rw [normalizer_subgroup_D_eq_DW sorry sorry]
+    rw [normalizer_subgroup_D_eq_DW_of_two_lt_card sorry sorry]
     sorry
   sorry
 /-
@@ -29,7 +29,7 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
   (hNA : relIndex (A.subgroupOf G) (A.subgroupOf G).normalizer = 2) (x : A) :
     ∃ y ∈ (A.normalizer ⊓ G).carrier \ A, y * x * y⁻¹ = x⁻¹ := by
   have two_lt_card_A : 2 < Nat.card A := by
-    have key := card_normalizer_inf_G_eq_one_of_card_le_two p_ne_two A G center_le_G hA
+    have key := relIndex_eq_one_of_card_le_two p_ne_two A G center_le_G hA
     contrapose! key
     constructor
     · exact key
@@ -37,22 +37,24 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
       norm_num
   have G_ne_center : G ≠ center SL(2,F) := G_ne_center_of_two_lt_card A G hA two_lt_card_A
 
-  rcases IsCyclic_and_card_coprime_CharP_or_eq_Q_join_Z_of_center_ne p G A hA
+  rcases isCyclic_and_card_coprime_charP_or_eq_Q_sup_Z_of_center_ne p G A hA
       center_le_G G_ne_center with (⟨⟨c, A', Finite_A', A'_le_D, A_eq_conj_A'⟩, -⟩ | h)
   · let G' := conj c⁻¹ • G
     have G_eq_conj_G' : G = conj c • G' := by simp [G']
     have hA' : A' ∈ MaximalAbelianSubgroupsOf G' := by
-      rw [mem_iff_conj_smul_mem_MaximalAbelianSubgroupsOf_conj_smul A' G' c, ← A_eq_conj_A', ← G_eq_conj_G']
+      rw [mem_iff_conj_smul_mem_MaximalAbelianSubgroupsOf_conj_smul A' G' c,
+        ← A_eq_conj_A', ← G_eq_conj_G']
       exact hA
     rw [relIndex,
       ← relIndex_MaximalAbelianSubgroupOf_normalizer_eq_relIndex_conj_MaxAbelianSubgroupOf
       A_eq_conj_A' G_eq_conj_G'] at hNA
     have two_lt_card_A' : 2 < Nat.card A' := by rwa [card_conj_eq_card A_eq_conj_A']
-    have A'_eq_G'_inf_D : A' = G' ⊓ D F := A_eq_G_inf_D A' G' A'_le_D hA'
+    have A'_eq_G'_inf_D : A' = G' ⊓ D F := eq_G_inf_D_of_le_D A' G' A'_le_D hA'
 
-    let f := A_subgroupOf_G_MonoidHom_ZMod_two A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D
+    let f := subgroupOf_normalizer_quot_monoidHom_ZMod_two
+      A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D
     have Injective_f : Injective f :=
-      injective_A_subgroupOf_G_MonoidHom_ZMod_two
+      injective_subgroupOf_normalizer_quot_monoidHom_ZMod_two
         A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D
     -- let := Equiv.ofInjective
     --   (A_subgroupOf_G_MonoidHom_ZMod_two A' G' A'_le_D hA'.right two_lt_card_A' A'_eq_G'_inf_D)
@@ -70,7 +72,7 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
     have key := ((Nat.bijective_iff_injective_and_card f).mpr
       ⟨Injective_f, by rwa [card_multiplicative_ZMod_two_eq_two]⟩).2
 
-    dsimp [f, A_subgroupOf_G_MonoidHom_ZMod_two] at key
+    dsimp [f, subgroupOf_normalizer_quot_monoidHom_ZMod_two] at key
     rw [← comp_assoc] at key
     -- want surjectivity of the second map on the left in the composition
 
@@ -88,7 +90,7 @@ theorem of_index_normalizer_eq_two {F : Type*} [Field F] [IsAlgClosed F] [Decida
           apply inf_le_of_left_le
           -- for a suitable characteristic this should follow easily,
           -- or should generalise the result for the case when card D₀ ≤ 2
-          rw [normalizer_subgroup_D_eq_DW (by sorry) inf_le_right,
+          rw [normalizer_subgroup_D_eq_DW_of_two_lt_card (by sorry) inf_le_right,
             normalizer_D_eq_DW]
         · exact le_normalizer
       · sorry

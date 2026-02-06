@@ -124,6 +124,8 @@ The formal Lean 4 proofs are organized as follows:
 
 ## Components of project relevant to the Bonn Winter Semester 2025 Lean Course
 
+For a description of Mara Silge's contributions see `Project2_MaraSilge.pdf`
+
 ### Main results completed throughout the Lean Course
 
 Using Butler's exposition as reference, the main efforts went into formalising Lemma 2.3.iv a) and b) and
@@ -185,14 +187,14 @@ Furthermore, starting from previous worksto begin stating the maximal abelian cl
 
 - Theorem 2.4.ii which states that $|\{x A^* x^{-1} \}| = |x A x^{-1}|$ which corresponds to `card_noncenter_ConjClassOfSet_eq_card_ConjClassOfSet` in `Ch6_MaximalAbelianSubgroupClassEquation/S3_NoncenterClassEquation.lean` 
 
-- Theorem 2.4.iii which states that $|\{ x A x^{-1} \; | \; x \in G \}| = |G : N_G(A)|$ which corresponds to  `card_ConjClassOf_eq_index_normalizer` in  `Ch6_MaximalAbelianSubgroupClassEquation/S3_NoncenterClassEquation.lean`
+- Theorem 2.4.iii which states that $|\{ x A x^{-1} \; | \; x \in G \}| = |G : N_G(A)|$ which corresponds to `card_ConjClassOf_eq_index_normalizer` in  `Ch6_MaximalAbelianSubgroupClassEquation/S3_NoncenterClassEquation.lean`
 
+The lemmas and definitions immediately involved are also part of the formalization.
 
 
 ### Work still in progress
 
-Despite a lot of the pen and paper proof having been made more precise, and having found suitable theorems in `Mathlib` which will allow the results in sight. There are still theorems which remain with sorries or not stated the correct way, namely, lemma 2.3.iv b) and the maximal abelian subgroup class equation where again I am using Butler's exposition as reference. However, a lot of the pen and paper proofs have been clarified and have a  
-
+Despite a lot of the pen and paper proof having been made more precise, and having found suitable theorems in `Mathlib` which will allow the results in sight. There are still theorems which remain with sorries or not stated the correct way, namely, lemma 2.3.iv b) and the maximal abelian subgroup class equation where again I am using Butler's exposition as reference. However, a lot of the pen and paper proofs have been clarified and there is much clearer strategy towards their formalization using mathlib.
 
 
 ### Use of AI
